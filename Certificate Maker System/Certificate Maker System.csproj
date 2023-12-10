@@ -119,6 +119,7 @@
     <Compile Include="AddStudent.Designer.cs">
       <DependentUpon>AddStudent.cs</DependentUpon>
     </Compile>
+    <Compile Include="AddStudentHelpers.cs" />
     <Compile Include="Form2.cs">
       <SubType>Form</SubType>
     </Compile>
