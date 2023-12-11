@@ -172,7 +172,56 @@ namespace Certificate_Maker_System
 
         private void editbtn(object sender, EventArgs e)
         {
-            
+            AddStudent addStudent = new AddStudent();
+
+            if (studentTable.SelectedRows.Count > 0)
+            {
+                // Get the selected row
+
+                addStudent.Show();
+                DataGridViewRow selectedRow = studentTable.SelectedRows[0];
+
+                // Extract data from the selected row
+                string lrnNo = selectedRow.Cells[0].Value.ToString();
+                string lastName = selectedRow.Cells[1].Value.ToString();
+                string firstName = selectedRow.Cells[2].Value.ToString();
+                string middleName = selectedRow.Cells[3].Value.ToString();
+                string date = selectedRow.Cells[4].Value.ToString();
+                string grade = selectedRow.Cells[5].Value.ToString();
+                string section = selectedRow.Cells[6].Value.ToString();
+                string gender = selectedRow.Cells[7].Value.ToString();
+                string track = selectedRow.Cells[9].Value.ToString();
+                string address = selectedRow.Cells[8].Value.ToString();
+
+
+                // Set the values in the AddStudent form
+                addStudent.lrnbox.Text = lrnNo;
+                addStudent.lastnamebox.Text = lastName;
+                addStudent.firstnamebox.Text = firstName;
+                addStudent.middlebox.Text = middleName;
+                addStudent.addressbox.Text = address;
+                addStudent.gradebox.Text = grade;
+                addStudent.sectionbox.Text = section;
+                addStudent.trackbox.Text = track;
+                addStudent.labelforform.Text = "Edit Student Form";
+                addStudent.birthdaybox.Text = date;
+
+
+                if (gender.Equals("male"))
+                {
+                    addStudent.maleradio.Checked = true;
+                } else if (gender.Equals("female"))
+                {
+                    addStudent.femaleradio.Checked = true; 
+                }
+
+                // Show the AddStudent form
+                
+            }
+            else
+            {
+                MessageBox.Show("Please select a row in the table.");
+            }
         }
     }
 }

@@ -83,7 +83,11 @@ namespace Certificate_Maker_System
 
         private void button6_Click(object sender, EventArgs e)
         {
-
+            UserManage userManage = new UserManage();
+            ResetButtonColors();
+            ((Button)sender).ForeColor = Color.RoyalBlue;
+            reset.Add((Button)sender);
+            changeUserControl(userManage);
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -137,9 +141,8 @@ namespace Certificate_Maker_System
             if (result == DialogResult.Yes)
             {
                 this.Hide();
-                Form4 form1 = new Form4();
-                form1.Show();
-                this.Close();
+                Form4 form4 = new Form4();
+                form4.Show();
             }
         }
 

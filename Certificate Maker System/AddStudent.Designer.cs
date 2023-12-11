@@ -33,8 +33,8 @@
             this.lrnbox = new System.Windows.Forms.TextBox();
             this.middlebox = new System.Windows.Forms.TextBox();
             this.lastnamebox = new System.Windows.Forms.TextBox();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.maleradio = new System.Windows.Forms.RadioButton();
+            this.femaleradio = new System.Windows.Forms.RadioButton();
             this.gradebox = new System.Windows.Forms.ComboBox();
             this.sectionbox = new System.Windows.Forms.ComboBox();
             this.trackbox = new System.Windows.Forms.ComboBox();
@@ -63,9 +63,9 @@
             this.labelforform.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.labelforform.Location = new System.Drawing.Point(12, 15);
             this.labelforform.Name = "labelforform";
-            this.labelforform.Size = new System.Drawing.Size(169, 31);
+            this.labelforform.Size = new System.Drawing.Size(223, 31);
             this.labelforform.TabIndex = 1;
-            this.labelforform.Text = "Student Form";
+            this.labelforform.Text = "Add Student Form";
             this.labelforform.Click += new System.EventHandler(this.label2_Click);
             // 
             // lrnbox
@@ -94,33 +94,33 @@
             this.lastnamebox.Size = new System.Drawing.Size(223, 32);
             this.lastnamebox.TabIndex = 6;
             // 
-            // radioButton1
+            // maleradio
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.radioButton1.Location = new System.Drawing.Point(55, 23);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(62, 25);
-            this.radioButton1.TabIndex = 8;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Male";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            this.maleradio.AutoSize = true;
+            this.maleradio.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.maleradio.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.maleradio.Location = new System.Drawing.Point(55, 23);
+            this.maleradio.Name = "maleradio";
+            this.maleradio.Size = new System.Drawing.Size(62, 25);
+            this.maleradio.TabIndex = 8;
+            this.maleradio.TabStop = true;
+            this.maleradio.Text = "Male";
+            this.maleradio.UseVisualStyleBackColor = true;
+            this.maleradio.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
-            // radioButton2
+            // femaleradio
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.radioButton2.Location = new System.Drawing.Point(130, 23);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(78, 25);
-            this.radioButton2.TabIndex = 9;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Female";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            this.femaleradio.AutoSize = true;
+            this.femaleradio.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.femaleradio.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.femaleradio.Location = new System.Drawing.Point(130, 23);
+            this.femaleradio.Name = "femaleradio";
+            this.femaleradio.Size = new System.Drawing.Size(78, 25);
+            this.femaleradio.TabIndex = 9;
+            this.femaleradio.TabStop = true;
+            this.femaleradio.Text = "Female";
+            this.femaleradio.UseVisualStyleBackColor = true;
+            this.femaleradio.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // gradebox
             // 
@@ -303,8 +303,8 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.groupBox1.Controls.Add(this.radioButton1);
-            this.groupBox1.Controls.Add(this.radioButton2);
+            this.groupBox1.Controls.Add(this.maleradio);
+            this.groupBox1.Controls.Add(this.femaleradio);
             this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(271, 214);
@@ -371,18 +371,18 @@
         #endregion
 
         public System.Windows.Forms.Label labelforform;
-        private System.Windows.Forms.TextBox lrnbox;
-        private System.Windows.Forms.TextBox middlebox;
-        private System.Windows.Forms.TextBox lastnamebox;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.ComboBox gradebox;
-        private System.Windows.Forms.ComboBox sectionbox;
-        private System.Windows.Forms.ComboBox trackbox;
-        private System.Windows.Forms.TextBox firstnamebox;
-        private System.Windows.Forms.TextBox addressbox;
+        public System.Windows.Forms.TextBox lrnbox;
+        public System.Windows.Forms.TextBox middlebox;
+        public System.Windows.Forms.TextBox lastnamebox;
+        public System.Windows.Forms.RadioButton maleradio;
+        public System.Windows.Forms.RadioButton femaleradio;
+        public System.Windows.Forms.ComboBox gradebox;
+        public System.Windows.Forms.ComboBox sectionbox;
+        public System.Windows.Forms.ComboBox trackbox;
+        public System.Windows.Forms.TextBox firstnamebox;
+        public System.Windows.Forms.TextBox addressbox;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.DateTimePicker birthdaybox;
+        public System.Windows.Forms.DateTimePicker birthdaybox;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label5;
