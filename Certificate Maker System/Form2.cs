@@ -83,12 +83,17 @@ namespace Certificate_Maker_System
 
         private void button6_Click(object sender, EventArgs e)
         {
-            UserManage userManage = new UserManage();
-            ResetButtonColors();
-            ((Button)sender).ForeColor = Color.RoyalBlue;
-            reset.Add((Button)sender);
-            changeUserControl(userManage);
+
+            
+
+                    UserManage userManage = new UserManage();
+                    ResetButtonColors();
+                    ((Button)sender).ForeColor = Color.RoyalBlue;
+                    reset.Add((Button)sender);
+                    changeUserControl(userManage);
+
         }
+
 
         private void button7_Click(object sender, EventArgs e)
         {

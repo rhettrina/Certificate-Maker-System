@@ -97,6 +97,7 @@
             this.passwordbox.Size = new System.Drawing.Size(368, 43);
             this.passwordbox.TabIndex = 4;
             this.passwordbox.Text = "Password";
+            this.passwordbox.TextChanged += new System.EventHandler(this.passwordbox_TextChanged);
             this.passwordbox.Enter += new System.EventHandler(this.passfucos);
             this.passwordbox.Leave += new System.EventHandler(this.passleave);
             // 

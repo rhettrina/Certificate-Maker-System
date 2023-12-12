@@ -23,23 +23,6 @@ namespace Certificate_Maker_System
         public AddStudent()
         {
             InitializeComponent();
-            InitializeDatabaseConnection();
-        }
-
-        private void InitializeDatabaseConnection()
-        {
-            // Create a MySqlConnection object
-            connection = new MySqlConnection(connectionString);
-
-            try
-            {
-                // Open the connection
-                connection.Open();
-                Console.WriteLine("Database connection opened successfully!");
-            }
-            catch (Exception ex)
-            {
-            }
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -82,84 +65,75 @@ namespace Certificate_Maker_System
             {
                 try
                 {
-                    using (MySqlCommand cmdCheck = connection.CreateCommand())
+                    
+                    int lrnNo = Convert.ToInt32(lrnbox.Text);
+                    string lastName = lastnamebox.Text;
+                    string firstName = firstnamebox.Text;
+                    string middleName = middlebox.Text;
+                    string birthDate = birthdaybox.Text;
+                    string grade = gradebox.Text;
+                    string section = sectionbox.Text;
+                    string gender = labelgender;
+                    string address = addressbox.Text;
+                    string track = trackbox.Text;
+
+                    // Use a parameterized query to prevent SQL injection
+                    string query = "INSERT INTO studentlist (lrnNo, lastName, firstName, middleName, birthDate, grade, section, gender, address, track) " +
+                                   "VALUES (@lrnNo, @lastName, @firstName, @middleName, @birthDate, @grade, @section, @gender, @address, @track) " +
+                                   "ON DUPLICATE KEY UPDATE " +
+                                   "lastName = @lastName, firstName = @firstName, middleName = @middleName, birthDate = @birthDate, " +
+                                   "grade = @grade, section = @section, gender = @gender, address = @address, track = @track";
+
+                    using (connection = new MySqlConnection(connectionString))
                     {
-                        cmdCheck.CommandText = "SELECT COUNT(*) FROM studentlist WHERE lrnNo = @LrnNo";
-                        cmdCheck.Parameters.Add("@LrnNo", MySqlDbType.VarChar).Value = (object)lrnbox.Text ?? DBNull.Value;
-
-                        int existingRecords = Convert.ToInt32(cmdCheck.ExecuteScalar());
-
-                        using (MySqlCommand cmd = connection.CreateCommand())
+                        using (MySqlCommand cmd = new MySqlCommand(query, connection))
                         {
-                            if (existingRecords > 0)
+                            connection.Open();
+
+                            // Add parameters with null checks
+                            cmd.Parameters.Add(new MySqlParameter("@lrnNo", MySqlDbType.Int32)).Value = (object)lrnNo ?? DBNull.Value;
+                            cmd.Parameters.Add(new MySqlParameter("@lastName", MySqlDbType.VarChar)).Value = (object)lastName ?? DBNull.Value;
+                            cmd.Parameters.Add(new MySqlParameter("@firstName", MySqlDbType.VarChar)).Value = (object)firstName ?? DBNull.Value;
+                            cmd.Parameters.Add(new MySqlParameter("@middleName", MySqlDbType.VarChar)).Value = (object)middleName ?? DBNull.Value;
+                            cmd.Parameters.Add(new MySqlParameter("@birthDate", MySqlDbType.VarChar)).Value = string.IsNullOrEmpty(birthDate) ? DBNull.Value : (object)birthDate;
+                            cmd.Parameters.Add(new MySqlParameter("@grade", MySqlDbType.VarChar)).Value = string.IsNullOrEmpty(grade) ? DBNull.Value : (object)grade;
+                            cmd.Parameters.Add(new MySqlParameter("@section", MySqlDbType.VarChar)).Value = string.IsNullOrEmpty(section) ? DBNull.Value : (object)section;
+                            cmd.Parameters.Add(new MySqlParameter("@gender", MySqlDbType.VarChar)).Value = string.IsNullOrEmpty(gender) ? DBNull.Value : (object)gender;
+                            cmd.Parameters.Add(new MySqlParameter("@address", MySqlDbType.VarChar)).Value = string.IsNullOrEmpty(address) ? DBNull.Value : (object)address;
+                            cmd.Parameters.Add(new MySqlParameter("@track", MySqlDbType.VarChar)).Value = string.IsNullOrEmpty(track) ? DBNull.Value : (object)track;
+
+                            // Execute the query
+                            int rowsAffected = cmd.ExecuteNonQuery();
+
+                            // Check if any rows were affected
+                            if (rowsAffected > 0)
                             {
-                                // Update the existing record
-                                cmd.CommandText = "UPDATE studentlist SET lastName = @LastName, " +
-                                                  "firstName = @FirstName, middleName = @MiddleName, " +
-                                                  "birthDate = @BirthDate, grade = @Grade, " +
-                                                  "section = @Section, gender = @Gender, " +
-                                                  "address = @Address, track = @Track " +
-                                                  "WHERE lrnNo = @LrnNo";
+                                string actionMessage = (rowsAffected == 1) ? "Record added" : "Record updated";
+                                MessageBox.Show($"{actionMessage} for {firstName} {lastName} successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                                // Clear all fields
+                                lrnbox.Clear();
+                                lastnamebox.Clear();
+                                firstnamebox.Clear();
+                                middlebox.Clear();
+                                addressbox.Clear();
+                                gradebox.SelectedIndex = -1;
+                                sectionbox.SelectedIndex = -1;
+                                trackbox.SelectedIndex = -1;
+                                StudentList studentList = new StudentList();
+                                studentList.RefreshDataGridView();
                             }
                             else
                             {
-                                // Insert a new record
-                                cmd.CommandText = "INSERT INTO studentlist (lrnNo, lastName, firstName, middleName, " +
-                                                  "birthDate, grade, section, gender, address, track) " +
-                                                  "VALUES (@LrnNo, @LastName, @FirstName, @MiddleName, " +
-                                                  "@BirthDate, @Grade, @Section, @Gender, @Address, @Track)";
+                                MessageBox.Show("No changes made to the record.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
-
-                            // Clear existing parameters before adding new ones
-                            cmd.Parameters.Clear();
-
-                            // Add parameters to prevent SQL injection
-                            cmd.Parameters.Add("@LrnNo", MySqlDbType.VarChar).Value = (object)lrnbox.Text ?? DBNull.Value;
-                            cmd.Parameters.Add("@LastName", MySqlDbType.VarChar).Value = (object)lastnamebox.Text ?? DBNull.Value;
-                            cmd.Parameters.Add("@FirstName", MySqlDbType.VarChar).Value = (object)firstnamebox.Text ?? DBNull.Value;
-                            cmd.Parameters.Add("@MiddleName", MySqlDbType.VarChar).Value = (object)middlebox.Text ?? DBNull.Value;
-
-                            // Convert the string to a DateTime value
-                            if (DateTime.TryParse(birthdaybox.Text, out DateTime birthDate))
-                            {
-                                cmd.Parameters.Add("@BirthDate", MySqlDbType.Date).Value = birthDate;
-                            }
-                            else
-                            {
-                                // Handle the case where the DateTime conversion fails
-                                MessageBox.Show("Invalid birth date format.");
-                                return;
-                            }
-
-                            cmd.Parameters.Add("@Grade", MySqlDbType.VarChar).Value = (object)gradebox.Text ?? DBNull.Value;
-                            cmd.Parameters.Add("@Section", MySqlDbType.VarChar).Value = (object)sectionbox.Text ?? DBNull.Value;
-                            cmd.Parameters.Add("@Gender", MySqlDbType.VarChar).Value = (object)labelgender ?? DBNull.Value;
-                            cmd.Parameters.Add("@Address", MySqlDbType.VarChar).Value = (object)addressbox.Text ?? DBNull.Value;
-                            cmd.Parameters.Add("@Track", MySqlDbType.VarChar).Value = (object)trackbox.Text ?? DBNull.Value;
-
-                            cmd.ExecuteNonQuery();
-
-                            MessageBox.Show(existingRecords > 0 ? "Data updated successfully!" : "Data inserted successfully!");
-
-                            // Clear the form
-                            lrnbox.Clear();
-                            lastnamebox.Clear();
-                            firstnamebox.Clear();
-                            middlebox.Clear();
-                            addressbox.Clear();
-                            gradebox.SelectedIndex = -1;
-                            sectionbox.SelectedIndex = -1;
-                            trackbox.SelectedIndex = -1;
-
-                            // Refresh the DataGridView
-                            StudentList studentList = new StudentList();
-                            studentList.RefreshDataGridView();
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error processing data: {ex.Message}");
+                    // Handle the exception (e.g., display an error message or log the error)
+                    MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
@@ -172,8 +146,9 @@ namespace Certificate_Maker_System
 
 
 
-        }
 
+
+        }
 
 
         private bool IsAllFieldsFilled()

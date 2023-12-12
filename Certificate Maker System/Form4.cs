@@ -121,5 +121,10 @@ namespace Certificate_Maker_System
                 passwordbox.PasswordChar = '\0';
             }
         }
+
+        private void passwordbox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
