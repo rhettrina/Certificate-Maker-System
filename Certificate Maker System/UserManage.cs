@@ -61,5 +61,10 @@ namespace Certificate_Maker_System
             AddEditUser addUser = new AddEditUser();
             addUser.Show();
         }
+
+        private void changeuser(object sender, EventArgs e)
+        {
+
+        }
     }
 }
