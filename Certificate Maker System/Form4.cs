@@ -15,7 +15,7 @@ namespace Certificate_Maker_System
     public partial class Form4 : Form
     {
 
-        private const string ConnectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=root;";
+        private const string ConnectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;";
         public Form4()
         {
             InitializeComponent();
@@ -44,7 +44,10 @@ namespace Certificate_Maker_System
                 {
                     connection.Open();
 
-                    string selectQuery = "SELECT * FROM `user` WHERE `username` = @username AND `password` = @password";
+                   string selectQuery = "SELECT ui.* FROM `user_auth` ua " +
+                     "JOIN `user_info` ui ON ua.`userId` = ui.`userId` " +
+                     "WHERE ua.`username` = @username AND ua.`password` = @password";
+
 
                     using (MySqlCommand command = new MySqlCommand(selectQuery, connection))
                     {

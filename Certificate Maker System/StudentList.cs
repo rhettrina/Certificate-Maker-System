@@ -17,7 +17,7 @@ namespace Certificate_Maker_System
     public partial class StudentList : UserControl
     {
 
-        string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=root;";
+        string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;";
 
         public StudentList()
         {
@@ -31,7 +31,9 @@ namespace Certificate_Maker_System
 
 
             // SQL query to retrieve data
-            string query = "SELECT * FROM studentlist";
+            string query = "SELECT s.lrnNo, s.lastName, s.firstName, s.middleName, s.birthDate, s.gender, s.address, sd.grade, sd.section, sd.track " +
+                               "FROM students s " +
+                               "LEFT JOIN student_details sd ON s.lrnNo = sd.lrnNo";
 
             // Create a connection and a data adapter
             using (MySqlConnection connection = new MySqlConnector.MySqlConnection(connectionString))
@@ -99,29 +101,55 @@ namespace Certificate_Maker_System
 
                         if (result == DialogResult.Yes)
                         {
-                            // Delete the record based on the lrnNo
-                            string deleteQuery = "DELETE FROM studentlist WHERE lrnNo = @LrnNo";
-                            using (MySqlConnector.MySqlCommand cmd = new MySqlConnector.MySqlCommand(deleteQuery, connection))
+                            using (MySqlConnector.MySqlTransaction transaction = connection.BeginTransaction())
                             {
-                                cmd.Parameters.AddWithValue("@LrnNo", lrnNo);
-                                cmd.ExecuteNonQuery();
-                            }
+                                try
+                                {
+                                    // Delete record from student_details table
+                                    string deleteDetailsQuery = "DELETE FROM student_details WHERE lrnNo = @LrnNo";
 
-                            // Inform the user about successful deletion
-                            MessageBox.Show("Record deleted successfully!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            RefreshDataGridView();
+                                    using (MySqlConnector.MySqlCommand cmdDetails = new MySqlConnector.MySqlCommand(deleteDetailsQuery, connection, transaction))
+                                    {
+                                        cmdDetails.Parameters.AddWithValue("@LrnNo", lrnNo);
+                                        cmdDetails.ExecuteNonQuery();
+                                    }
+
+                                    // Then, delete the record from students table
+                                    string deleteQuery = "DELETE FROM students WHERE lrnNo = @LrnNo";
+
+                                    using (MySqlConnector.MySqlCommand cmd = new MySqlConnector.MySqlCommand(deleteQuery, connection, transaction))
+                                    {
+                                        cmd.Parameters.AddWithValue("@LrnNo", lrnNo);
+                                        cmd.ExecuteNonQuery();
+                                    }
+
+                                    // Commit the transaction if everything is successful
+                                    transaction.Commit();
+
+                                    // Inform the user about successful deletion
+                                    MessageBox.Show("Record deleted successfully!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    RefreshDataGridView();
+                                }
+                                catch (Exception ex)
+                                {
+                                    // Rollback the transaction if an error occurs
+                                    transaction.Rollback();
+                                    MessageBox.Show($"Error deleting record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
+                            }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error deleting record: {ex.Message}");
+                    MessageBox.Show($"Error deleting record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
             {
                 MessageBox.Show("Please select a row to delete.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+
         }
 
         public void RefreshDataGridView()
@@ -153,7 +181,10 @@ namespace Certificate_Maker_System
                     connection.Open();
 
                     // Fetch the data from your table (adjust the query based on your table structure)
-                    string selectQuery = "SELECT * FROM studentlist";
+                    string selectQuery = "SELECT s.lrnNo, s.lastName, s.firstName, s.middleName, s.birthDate, s.gender, s.address, sd.grade, sd.section, sd.track " +
+                      "FROM students s " +
+                      "INNER JOIN student_details sd ON s.lrnNo = sd.lrnNo";
+
                     using (MySqlConnector.MySqlDataAdapter adapter = new MySqlConnector.MySqlDataAdapter(selectQuery, connection))
                     {
                         adapter.Fill(dataTable);
@@ -177,22 +208,22 @@ namespace Certificate_Maker_System
             if (studentTable.SelectedRows.Count > 0)
             {
                 // Get the selected row
-
-                addStudent.Show();
                 DataGridViewRow selectedRow = studentTable.SelectedRows[0];
 
                 // Extract data from the selected row
-                string lrnNo = selectedRow.Cells[0].Value.ToString();
-                string lastName = selectedRow.Cells[1].Value.ToString();
-                string firstName = selectedRow.Cells[2].Value.ToString();
-                string middleName = selectedRow.Cells[3].Value.ToString();
-                string date = selectedRow.Cells[4].Value.ToString();
-                string grade = selectedRow.Cells[5].Value.ToString();
-                string section = selectedRow.Cells[6].Value.ToString();
-                string gender = selectedRow.Cells[7].Value.ToString();
-                string track = selectedRow.Cells[9].Value.ToString();
-                string address = selectedRow.Cells[8].Value.ToString();
+                string lrnNo = selectedRow.Cells["lrnNo"].Value?.ToString();
+                string lastName = selectedRow.Cells["lastName"].Value?.ToString();
+                string firstName = selectedRow.Cells["firstName"].Value?.ToString();
+                string middleName = selectedRow.Cells["middleName"].Value?.ToString();
+                string date = selectedRow.Cells["birthDate"].Value?.ToString();
+                string grade = selectedRow.Cells["grade"].Value?.ToString();
+                string section = selectedRow.Cells["section"].Value?.ToString();
+                string gender = selectedRow.Cells["gender"].Value?.ToString();
+                string track = selectedRow.Cells["track"].Value?.ToString();
+                string address = selectedRow.Cells["address"].Value?.ToString();
 
+                // Show the AddStudent form
+                addStudent.Show();
 
                 // Set the values in the AddStudent form
                 addStudent.lrnbox.Text = lrnNo;
@@ -206,22 +237,20 @@ namespace Certificate_Maker_System
                 addStudent.labelforform.Text = "Edit Student Form";
                 addStudent.birthdaybox.Text = date;
 
-
-                if (gender.Equals("male"))
-                {
-                    addStudent.maleradio.Checked = true;
-                } else if (gender.Equals("female"))
-                {
-                    addStudent.femaleradio.Checked = true; 
-                }
-
-                // Show the AddStudent form
-                
+                // Check the radio button based on gender
+                addStudent.maleradio.Checked = string.Equals(gender, "male", StringComparison.OrdinalIgnoreCase);
+                addStudent.femaleradio.Checked = string.Equals(gender, "female", StringComparison.OrdinalIgnoreCase);
             }
             else
             {
                 MessageBox.Show("Please select a row in the table.");
             }
+
+        }
+
+        private void StudentList_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

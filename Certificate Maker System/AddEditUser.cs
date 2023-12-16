@@ -26,71 +26,94 @@ namespace Certificate_Maker_System
 
         private void savebtn(object sender, EventArgs e)
         {
-                try
+            try
+            {
+                string username = userbox.Text;
+                string password = passbox.Text; // Note: Implement proper password hashing
+                string firstName = firstnamebox.Text;
+                string middleName = middlebox.Text;
+                string lastName = lastnamebox.Text;
+                string gender = genderbox.Text;
+                string position = positionbox.Text;
+                string email = emailbox.Text;
+                string birthday = birthdaybox.Text; // Note: Consider using a DateTimePicker control for birthday
+
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
-                    string username = userbox.Text;
-                    string password = passbox.Text; // Note: Implement proper password hashing
-                    string firstName = firstnamebox.Text;
-                    string middleName = middlebox.Text;
-                    string lastName = lastnamebox.Text;
-                    string gender = genderbox.Text;
-                    string position = positionbox.Text;
-                    string email = emailbox.Text;
-                    string birthday = birthdaybox.Text; // Note: Consider using a DateTimePicker control for birthday
+                    connection.Open();
 
-                    // Use a parameterized query to prevent SQL injection
-                    string query = "INSERT INTO `user` (username, password, firstName, middleName, lastName, gender, position, email, birthday) " +
-                                   "VALUES (@username, @password, @firstName, @middleName, @lastName, @gender, @position, @email, @birthday)";
-
-                    using (MySqlConnection connection = new MySqlConnection(connectionString))
+                    using (MySqlTransaction transaction = connection.BeginTransaction())
                     {
-                        using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                        try
                         {
-                            connection.Open();
+                            // Insert into user_info table
+                            string userInfoQuery = "INSERT INTO `user_info` (firstName, middleName, lastName, gender, position, email, birthday) " +
+                                                   "VALUES (@firstName, @middleName, @lastName, @gender, @position, @email, @birthday)";
 
-                            // Add parameters with null checks
-                            cmd.Parameters.Add(new MySqlParameter("@username", MySqlDbType.VarChar, 50)).Value = string.IsNullOrEmpty(username) ? DBNull.Value : (object)username;
-                            cmd.Parameters.Add(new MySqlParameter("@password", MySqlDbType.VarChar, 50)).Value = string.IsNullOrEmpty(password) ? DBNull.Value : (object)password;
-                            cmd.Parameters.Add(new MySqlParameter("@firstName", MySqlDbType.VarChar, 50)).Value = string.IsNullOrEmpty(firstName) ? DBNull.Value : (object)firstName;
-                            cmd.Parameters.Add(new MySqlParameter("@middleName", MySqlDbType.VarChar, 50)).Value = string.IsNullOrEmpty(middleName) ? DBNull.Value : (object)middleName;
-                            cmd.Parameters.Add(new MySqlParameter("@lastName", MySqlDbType.VarChar, 50)).Value = string.IsNullOrEmpty(lastName) ? DBNull.Value : (object)lastName;
-                            cmd.Parameters.Add(new MySqlParameter("@gender", MySqlDbType.VarChar, 50)).Value = string.IsNullOrEmpty(gender) ? DBNull.Value : (object)gender;
-                            cmd.Parameters.Add(new MySqlParameter("@position", MySqlDbType.VarChar, 50)).Value = string.IsNullOrEmpty(position) ? DBNull.Value : (object)position;
-                            cmd.Parameters.Add(new MySqlParameter("@email", MySqlDbType.VarChar, 50)).Value = string.IsNullOrEmpty(email) ? DBNull.Value : (object)email;
-                            cmd.Parameters.Add(new MySqlParameter("@birthday", MySqlDbType.VarChar, 50)).Value = string.IsNullOrEmpty(birthday) ? DBNull.Value : (object)birthday;
-
-                            // Execute the query
-                            int rowsAffected = cmd.ExecuteNonQuery();
-
-                            // Check if any rows were affected
-                            if (rowsAffected > 0)
+                            using (MySqlCommand cmdUserInfo = new MySqlCommand(userInfoQuery, connection, transaction))
                             {
-                                string actionMessage = (rowsAffected == 1) ? "Record added" : "Record updated";
-                                MessageBox.Show($"{actionMessage} successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                cmdUserInfo.Parameters.AddWithValue("@firstName", string.IsNullOrEmpty(firstName) ? DBNull.Value : (object)firstName);
+                                cmdUserInfo.Parameters.AddWithValue("@middleName", string.IsNullOrEmpty(middleName) ? DBNull.Value : (object)middleName);
+                                cmdUserInfo.Parameters.AddWithValue("@lastName", string.IsNullOrEmpty(lastName) ? DBNull.Value : (object)lastName);
+                                cmdUserInfo.Parameters.AddWithValue("@gender", string.IsNullOrEmpty(gender) ? DBNull.Value : (object)gender);
+                                cmdUserInfo.Parameters.AddWithValue("@position", string.IsNullOrEmpty(position) ? DBNull.Value : (object)position);
+                                cmdUserInfo.Parameters.AddWithValue("@email", string.IsNullOrEmpty(email) ? DBNull.Value : (object)email);
+                                cmdUserInfo.Parameters.AddWithValue("@birthday", string.IsNullOrEmpty(birthday) ? DBNull.Value : (object)birthday);
 
-                                // Clear all fields
-                                userbox.Clear();
-                                passbox.Clear();
-                                firstnamebox.Clear();
-                                middlebox.Clear();
-                                lastnamebox.Clear();
-                                genderbox.SelectedIndex = -1;
-                                positionbox.SelectedIndex = -1;
-                                emailbox.Clear();
+                                cmdUserInfo.ExecuteNonQuery();
                             }
-                            else
+
+                            // Retrieve the automatically generated userId after the insert
+                            int userId;
+                            using (MySqlCommand cmdGetUserId = new MySqlCommand("SELECT LAST_INSERT_ID()", connection, transaction))
                             {
-                                MessageBox.Show("No changes made to the record.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                userId = Convert.ToInt32(cmdGetUserId.ExecuteScalar());
                             }
+
+                            // Insert into user_auth table
+                            string userAuthQuery = "INSERT INTO `user_auth` (userId, username, password) " +
+                                                   "VALUES (@userId, @username, @password)";
+
+                            using (MySqlCommand cmdUserAuth = new MySqlCommand(userAuthQuery, connection, transaction))
+                            {
+                                cmdUserAuth.Parameters.AddWithValue("@userId", userId);
+                                cmdUserAuth.Parameters.AddWithValue("@username", string.IsNullOrEmpty(username) ? DBNull.Value : (object)username);
+                                cmdUserAuth.Parameters.AddWithValue("@password", string.IsNullOrEmpty(password) ? DBNull.Value : (object)password);
+
+                                cmdUserAuth.ExecuteNonQuery();
+                            }
+
+                            // Commit the transaction if everything is successful
+                            transaction.Commit();
+
+                            MessageBox.Show("User added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            // Clear all fields
+                            userbox.Clear();
+                            passbox.Clear();
+                            firstnamebox.Clear();
+                            middlebox.Clear();
+                            lastnamebox.Clear();
+                            genderbox.SelectedIndex = -1;
+                            positionbox.SelectedIndex = -1;
+                            emailbox.Clear();
+                        }
+                        catch (Exception ex)
+                        {
+                            // Rollback the transaction if an error occurs
+                            transaction.Rollback();
+                            throw; // Re-throw the exception after rollback
                         }
                     }
                 }
-                catch (Exception ex)
-                {
-                    // Handle the exception (e.g., display an error message or log the error)
-                    MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception (e.g., display an error message or log the error)
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+
 
         }
 

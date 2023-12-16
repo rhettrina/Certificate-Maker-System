@@ -124,6 +124,7 @@
             this.Controls.Add(this.studentTable);
             this.Name = "StudentList";
             this.Size = new System.Drawing.Size(724, 652);
+            this.Load += new System.EventHandler(this.StudentList_Load);
             ((System.ComponentModel.ISupportInitialize)(this.studentTable)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

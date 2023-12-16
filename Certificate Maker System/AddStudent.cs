@@ -16,7 +16,7 @@ namespace Certificate_Maker_System
 
     public partial class AddStudent : Form
     {
-        private const string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=root;";
+        private const string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;";
         private MySqlConnection connection;
         string labelgender;
         string gender;
@@ -65,7 +65,6 @@ namespace Certificate_Maker_System
             {
                 try
                 {
-                    
                     int lrnNo = Convert.ToInt32(lrnbox.Text);
                     string lastName = lastnamebox.Text;
                     string firstName = firstnamebox.Text;
@@ -77,64 +76,89 @@ namespace Certificate_Maker_System
                     string address = addressbox.Text;
                     string track = trackbox.Text;
 
-                    // Use a parameterized query to prevent SQL injection
-                    string query = "INSERT INTO studentlist (lrnNo, lastName, firstName, middleName, birthDate, grade, section, gender, address, track) " +
-                                   "VALUES (@lrnNo, @lastName, @firstName, @middleName, @birthDate, @grade, @section, @gender, @address, @track) " +
+                    string query = "INSERT INTO students (lrnNo, lastName, firstName, middleName, birthDate, gender, address) " +
+                                   "VALUES (@lrnNo, @lastName, @firstName, @middleName, @birthDate, @gender, @address) " +
                                    "ON DUPLICATE KEY UPDATE " +
                                    "lastName = @lastName, firstName = @firstName, middleName = @middleName, birthDate = @birthDate, " +
-                                   "grade = @grade, section = @section, gender = @gender, address = @address, track = @track";
+                                   "gender = @gender, address = @address";
+
+                    string queryDetails = "INSERT INTO student_details (lrnNo, grade, section, track) " +
+                                          "VALUES (@lrnNo, @grade, @section, @track) " +
+                                          "ON DUPLICATE KEY UPDATE " +
+                                          "grade = @grade, section = @section, track = @track";
+
+                    string successMessage = "";
 
                     using (connection = new MySqlConnection(connectionString))
                     {
-                        using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                        connection.Open();
+
+                        using (MySqlTransaction transaction = connection.BeginTransaction())
                         {
-                            connection.Open();
-
-                            // Add parameters with null checks
-                            cmd.Parameters.Add(new MySqlParameter("@lrnNo", MySqlDbType.Int32)).Value = (object)lrnNo ?? DBNull.Value;
-                            cmd.Parameters.Add(new MySqlParameter("@lastName", MySqlDbType.VarChar)).Value = (object)lastName ?? DBNull.Value;
-                            cmd.Parameters.Add(new MySqlParameter("@firstName", MySqlDbType.VarChar)).Value = (object)firstName ?? DBNull.Value;
-                            cmd.Parameters.Add(new MySqlParameter("@middleName", MySqlDbType.VarChar)).Value = (object)middleName ?? DBNull.Value;
-                            cmd.Parameters.Add(new MySqlParameter("@birthDate", MySqlDbType.VarChar)).Value = string.IsNullOrEmpty(birthDate) ? DBNull.Value : (object)birthDate;
-                            cmd.Parameters.Add(new MySqlParameter("@grade", MySqlDbType.VarChar)).Value = string.IsNullOrEmpty(grade) ? DBNull.Value : (object)grade;
-                            cmd.Parameters.Add(new MySqlParameter("@section", MySqlDbType.VarChar)).Value = string.IsNullOrEmpty(section) ? DBNull.Value : (object)section;
-                            cmd.Parameters.Add(new MySqlParameter("@gender", MySqlDbType.VarChar)).Value = string.IsNullOrEmpty(gender) ? DBNull.Value : (object)gender;
-                            cmd.Parameters.Add(new MySqlParameter("@address", MySqlDbType.VarChar)).Value = string.IsNullOrEmpty(address) ? DBNull.Value : (object)address;
-                            cmd.Parameters.Add(new MySqlParameter("@track", MySqlDbType.VarChar)).Value = string.IsNullOrEmpty(track) ? DBNull.Value : (object)track;
-
-                            // Execute the query
-                            int rowsAffected = cmd.ExecuteNonQuery();
-
-                            // Check if any rows were affected
-                            if (rowsAffected > 0)
+                            try
                             {
-                                string actionMessage = (rowsAffected == 1) ? "Record added" : "Record updated";
-                                MessageBox.Show($"{actionMessage} for {firstName} {lastName} successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                using (MySqlCommand cmd = new MySqlCommand(query, connection, transaction))
+                                {
+                                    cmd.Parameters.AddWithValue("@lrnNo", lrnNo);
+                                    cmd.Parameters.AddWithValue("@lastName", lastName);
+                                    cmd.Parameters.AddWithValue("@firstName", firstName);
+                                    cmd.Parameters.AddWithValue("@middleName", middleName);
+                                    cmd.Parameters.AddWithValue("@birthDate", string.IsNullOrEmpty(birthDate) ? (object)DBNull.Value : birthDate);
+                                    cmd.Parameters.AddWithValue("@gender", string.IsNullOrEmpty(gender) ? (object)DBNull.Value : gender);
+                                    cmd.Parameters.AddWithValue("@address", string.IsNullOrEmpty(address) ? (object)DBNull.Value : address);
 
-                                // Clear all fields
-                                lrnbox.Clear();
-                                lastnamebox.Clear();
-                                firstnamebox.Clear();
-                                middlebox.Clear();
-                                addressbox.Clear();
-                                gradebox.SelectedIndex = -1;
-                                sectionbox.SelectedIndex = -1;
-                                trackbox.SelectedIndex = -1;
-                                StudentList studentList = new StudentList();
-                                studentList.RefreshDataGridView();
+                                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                                    // Handle the result as needed
+                                    if (rowsAffected > 0)
+                                    {
+                                        successMessage += "Student information saved successfully!\n";
+                                    }
+                                }
+
+                                using (MySqlCommand cmdDetails = new MySqlCommand(queryDetails, connection, transaction))
+                                {
+                                    cmdDetails.Parameters.AddWithValue("@lrnNo", lrnNo);
+                                    cmdDetails.Parameters.AddWithValue("@grade", string.IsNullOrEmpty(grade) ? (object)DBNull.Value : grade);
+                                    cmdDetails.Parameters.AddWithValue("@section", string.IsNullOrEmpty(section) ? (object)DBNull.Value : section);
+                                    cmdDetails.Parameters.AddWithValue("@track", string.IsNullOrEmpty(track) ? (object)DBNull.Value : track);
+
+                                    int rowsAffectedDetails = cmdDetails.ExecuteNonQuery();
+
+                                    // Handle the result as needed
+                                    if (rowsAffectedDetails > 0)
+                                    {
+                                        successMessage += "Student details saved successfully!";
+                                    }
+                                }
+
+                                // Commit the transaction only once after both queries have been executed
+                                transaction.Commit();
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                MessageBox.Show("No changes made to the record.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                transaction.Rollback();
+                                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         }
+
+                        // Display combined success message if applicable
+                        if (!string.IsNullOrEmpty(successMessage))
+                        {
+                            MessageBox.Show(successMessage, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+
+                        // Rest of your code
                     }
                 }
                 catch (Exception ex)
                 {
-                    // Handle the exception (e.g., display an error message or log the error)
                     MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+
+
+
+
             }
             else
             {
