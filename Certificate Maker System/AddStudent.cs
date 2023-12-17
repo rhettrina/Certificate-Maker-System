@@ -65,7 +65,7 @@ namespace Certificate_Maker_System
             {
                 try
                 {
-                    int lrnNo = Convert.ToInt32(lrnbox.Text);
+                    long lrnNo = Convert.ToInt64(lrnbox.Text);
                     string lastName = lastnamebox.Text;
                     string firstName = firstnamebox.Text;
                     string middleName = middlebox.Text;
