@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Word = Microsoft.Office.Interop.Word;
 
@@ -28,11 +29,13 @@ namespace Certificate_Maker_System.Resources
         public string codTemp;
         private object folder;
         public string selectedTemplate;
+        private MySqlConnection connection;
 
         public CertificateGenerator()
         {
             InitializeComponent();
             searchbox.TabStop = false;
+            connection = new MySqlConnection(connectionString);
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -173,7 +176,54 @@ namespace Certificate_Maker_System.Resources
             {
                 Console.WriteLine("No template loaded.");
             }
+
+            string nameboxValue = namebox.Text;
+            string gradeValue = gradebox.Text;
+            string trackValue = trackbox.Text;  // Assuming you have a textbox named trackbox for the track
+            string certificateTypeValue = types.Text;
+            DateTime currentDate = DateTime.Now;
+            Form4 form4 = new Form4();
+            string made = form4.GetUsername();
+
+            if (!string.IsNullOrEmpty(nameboxValue) && !string.IsNullOrEmpty(gradeValue) &&
+                !string.IsNullOrEmpty(trackValue) && !string.IsNullOrEmpty(certificateTypeValue))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string query = "INSERT INTO history (name, grade, track, certificateType, datetime, created) " +
+                                   "VALUES (@name, @grade, @track, @certificateType, @datetime, @created)";
+                    MySqlCommand cmd = new MySqlCommand(query, connection);
+
+                    cmd.Parameters.AddWithValue("@name", nameboxValue);
+                    cmd.Parameters.AddWithValue("@grade", gradeValue);
+                    cmd.Parameters.AddWithValue("@track", trackValue);
+                    cmd.Parameters.AddWithValue("@certificateType", certificateTypeValue);
+                    cmd.Parameters.AddWithValue("@datetime", currentDate);
+                    cmd.Parameters.AddWithValue("@created", made);
+
+                    cmd.ExecuteNonQuery();
+
+                    MessageBox.Show("Data saved successfully!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please enter values in all textboxes.");
+            }
+
         }
+
+
 
 
 
