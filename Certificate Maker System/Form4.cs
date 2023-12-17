@@ -8,7 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Certificate_Maker_System.Resources;
 using MySqlConnector;
+using Org.BouncyCastle.Tls;
 
 namespace Certificate_Maker_System
 {
@@ -18,6 +20,7 @@ namespace Certificate_Maker_System
         private const string ConnectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;";
         public string inputPassword;
         public string inputUsername;
+        public string getusername;
 
         public Form4()
         {
@@ -37,6 +40,8 @@ namespace Certificate_Maker_System
         {
             this.Close();
         }
+
+        
 
         public void loginbtn(object sender, EventArgs e)
         {
@@ -69,6 +74,7 @@ namespace Certificate_Maker_System
                                 // Verification succeeded, open Form2
                                 this.Hide();
                                 Form2 form2 = new Form2(inputUsername);
+                                UserManage userManage   = new UserManage(inputUsername);
                                 form2.ShowDialog();
                             }
                             else
@@ -85,6 +91,11 @@ namespace Certificate_Maker_System
             }
         
     }
+
+        public string GetUsername()
+        {
+            return inputUsername;
+        }
 
         private void userfucos(object sender, EventArgs e)
         {

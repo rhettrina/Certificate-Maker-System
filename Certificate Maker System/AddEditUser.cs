@@ -14,6 +14,7 @@ namespace Certificate_Maker_System
     public partial class AddEditUser : Form
     {
         private const string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;";
+        public string userId;
         public AddEditUser()
         {
             InitializeComponent();
@@ -46,12 +47,31 @@ namespace Certificate_Maker_System
                     {
                         try
                         {
-                            // Insert into user_info table
-                            string userInfoQuery = "INSERT INTO `user_info` (firstName, middleName, lastName, gender, position, email, birthday) " +
-                                                   "VALUES (@firstName, @middleName, @lastName, @gender, @position, @email, @birthday)";
+                            ManageButton manage = new ManageButton();
+
+                            if (string.IsNullOrEmpty(userId))
+                            {
+                                // Handle the case when no row is selected (e.g., display an error message)
+                                MessageBox.Show("Please select a user to update or leave the user ID empty for a new user.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+
+                            bool isUpdate = !string.IsNullOrEmpty(userId);
+
+                            // Insert or update into user_info table
+                            string userInfoQuery = isUpdate
+                                ? "UPDATE user_info SET firstName = @firstName, middleName = @middleName, lastName = @lastName, " +
+                                  "gender = @gender, position = @position, email = @email, birthday = @birthday WHERE userId = @userId"
+                                : "INSERT INTO user_info (firstName, middleName, lastName, gender, position, email, birthday) " +
+                                  "VALUES (@firstName, @middleName, @lastName, @gender, @position, @email, @birthday)";
 
                             using (MySqlCommand cmdUserInfo = new MySqlCommand(userInfoQuery, connection, transaction))
                             {
+                                if (isUpdate)
+                                {
+                                    cmdUserInfo.Parameters.AddWithValue("@userId", userId);
+                                }
+
                                 cmdUserInfo.Parameters.AddWithValue("@firstName", string.IsNullOrEmpty(firstName) ? DBNull.Value : (object)firstName);
                                 cmdUserInfo.Parameters.AddWithValue("@middleName", string.IsNullOrEmpty(middleName) ? DBNull.Value : (object)middleName);
                                 cmdUserInfo.Parameters.AddWithValue("@lastName", string.IsNullOrEmpty(lastName) ? DBNull.Value : (object)lastName);
@@ -63,30 +83,33 @@ namespace Certificate_Maker_System
                                 cmdUserInfo.ExecuteNonQuery();
                             }
 
-                            // Retrieve the automatically generated userId after the insert
-                            int userId;
-                            using (MySqlCommand cmdGetUserId = new MySqlCommand("SELECT LAST_INSERT_ID()", connection, transaction))
+                            // If it's an update, no need to insert into user_auth table
+                            if (!isUpdate)
                             {
-                                userId = Convert.ToInt32(cmdGetUserId.ExecuteScalar());
-                            }
+                                // Retrieve the automatically generated userId after the insert
+                                using (MySqlCommand cmdGetUserId = new MySqlCommand("SELECT LAST_INSERT_ID()", connection, transaction))
+                                {
+                                    userId = cmdGetUserId.ExecuteScalar().ToString();
+                                }
 
-                            // Insert into user_auth table
-                            string userAuthQuery = "INSERT INTO `user_auth` (userId, username, password) " +
-                                                   "VALUES (@userId, @username, @password)";
+                                // Insert into user_auth table
+                                string userAuthQuery = "INSERT INTO user_auth (userId, username, password) " +
+                                                        "VALUES (@userId, @username, @password)";
 
-                            using (MySqlCommand cmdUserAuth = new MySqlCommand(userAuthQuery, connection, transaction))
-                            {
-                                cmdUserAuth.Parameters.AddWithValue("@userId", userId);
-                                cmdUserAuth.Parameters.AddWithValue("@username", string.IsNullOrEmpty(username) ? DBNull.Value : (object)username);
-                                cmdUserAuth.Parameters.AddWithValue("@password", string.IsNullOrEmpty(password) ? DBNull.Value : (object)password);
+                                using (MySqlCommand cmdUserAuth = new MySqlCommand(userAuthQuery, connection, transaction))
+                                {
+                                    cmdUserAuth.Parameters.AddWithValue("@userId", userId);
+                                    cmdUserAuth.Parameters.AddWithValue("@username", string.IsNullOrEmpty(username) ? DBNull.Value : (object)username);
+                                    cmdUserAuth.Parameters.AddWithValue("@password", string.IsNullOrEmpty(password) ? DBNull.Value : (object)password);
 
-                                cmdUserAuth.ExecuteNonQuery();
+                                    cmdUserAuth.ExecuteNonQuery();
+                                }
                             }
 
                             // Commit the transaction if everything is successful
                             transaction.Commit();
 
-                            MessageBox.Show("User added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(isUpdate ? "User updated successfully!" : "User added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                             // Clear all fields
                             userbox.Clear();
@@ -113,9 +136,8 @@ namespace Certificate_Maker_System
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-
-
         }
+
 
         private void AddEditUser_Load(object sender, EventArgs e)
         {

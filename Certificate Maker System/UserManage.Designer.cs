@@ -37,8 +37,6 @@
             this.positionuser = new System.Windows.Forms.TextBox();
             this.genderuser = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.passworduser = new System.Windows.Forms.TextBox();
@@ -102,8 +100,6 @@
             this.panel2.Controls.Add(this.positionuser);
             this.panel2.Controls.Add(this.genderuser);
             this.panel2.Controls.Add(this.button4);
-            this.panel2.Controls.Add(this.button2);
-            this.panel2.Controls.Add(this.button1);
             this.panel2.Controls.Add(this.label12);
             this.panel2.Controls.Add(this.label11);
             this.panel2.Controls.Add(this.passworduser);
@@ -162,31 +158,6 @@
             this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // button2
-            // 
-            this.button2.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.button2.Location = new System.Drawing.Point(578, 334);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(94, 26);
-            this.button2.TabIndex = 20;
-            this.button2.Text = "CHANGE";
-            this.button2.UseVisualStyleBackColor = false;
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.button1.Location = new System.Drawing.Point(578, 265);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(94, 26);
-            this.button1.TabIndex = 19;
-            this.button1.Text = "CHANGE";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.changeuser);
-            // 
             // label12
             // 
             this.label12.AutoSize = true;
@@ -214,7 +185,7 @@
             this.passworduser.Location = new System.Drawing.Point(362, 334);
             this.passworduser.Name = "passworduser";
             this.passworduser.PasswordChar = '*';
-            this.passworduser.Size = new System.Drawing.Size(208, 26);
+            this.passworduser.Size = new System.Drawing.Size(252, 26);
             this.passworduser.TabIndex = 16;
             // 
             // usernameuser
@@ -222,7 +193,7 @@
             this.usernameuser.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.usernameuser.Location = new System.Drawing.Point(362, 264);
             this.usernameuser.Name = "usernameuser";
-            this.usernameuser.Size = new System.Drawing.Size(208, 26);
+            this.usernameuser.Size = new System.Drawing.Size(252, 26);
             this.usernameuser.TabIndex = 15;
             // 
             // label10
@@ -377,8 +348,6 @@
         private System.Windows.Forms.Label label11;
         public System.Windows.Forms.TextBox passworduser;
         public System.Windows.Forms.TextBox usernameuser;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button4;
         public System.Windows.Forms.TextBox birthdayuser;
         public System.Windows.Forms.TextBox positionuser;

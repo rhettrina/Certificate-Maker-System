@@ -1,8 +1,10 @@
 ﻿using Certificate_Maker_System.Resources;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,12 +14,16 @@ using static Guna.UI2.WinForms.Helpers.GraphicsHelper;
 
 namespace Certificate_Maker_System
 {
+
     public partial class UserManage : UserControl
     {
 
         private Form2 form2;
         private ManageButton manageButton;
-        public UserManage()
+        private int clickCount = 0;
+        private int clickCount1 = 0;
+        private string receive;
+        public UserManage(string getuser)
         {
             InitializeComponent();
             firstnameuser.Enabled = false;
@@ -31,6 +37,7 @@ namespace Certificate_Maker_System
             passworduser.Enabled = false;
             form2 = new Form2("");
             manageButton = new ManageButton();
+            receive = getuser;
         }
 
         private void guna2CustomGradientPanel1_Paint(object sender, PaintEventArgs e)
@@ -101,7 +108,56 @@ namespace Certificate_Maker_System
 
         private void changeuser(object sender, EventArgs e)
         {
+            clickCount++;
+            if (clickCount % 2 == 1)
+            {
+                usernameuser.Enabled = true;
+            }
+            else
+            {
+                usernameuser.Enabled = false;
 
+                UpdateUsername(usernameuser.Text);
+            }
         }
+
+        private void passbtn_Click(object sender, EventArgs e)
+        {
+            clickCount1++;
+
+            if (clickCount1 % 2 == 1)
+            {
+                passworduser.Enabled = true;
+                passworduser.PasswordChar = '\0';
+            }
+            else
+            {
+                passworduser.Enabled = false;
+                passworduser.PasswordChar = '*'; 
+            }
+        }
+
+        private void UpdateUsername(string newUsername)
+        {
+            string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;";
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = "UPDATE user_auth SET username = @NewUsername WHERE userId = @UserId";
+
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@NewUsername", newUsername);
+                    command.Parameters.AddWithValue("@UserId", receive); // Replace with the actual user ID
+
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            MessageBox.Show("Username updated successfully!");
+        }
+
     }
 }

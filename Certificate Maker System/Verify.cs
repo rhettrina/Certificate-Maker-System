@@ -44,7 +44,7 @@ namespace Certificate_Maker_System
 
             if (confirmation.Text == trytry)
             {
-                UserManage userManage = new UserManage();
+                UserManage userManage = new UserManage("");
                 changeUserControl(userManage);
                 this.Close();
                 MessageBox.Show("Correct");

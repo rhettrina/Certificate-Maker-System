@@ -90,6 +90,7 @@
             this.button3.Size = new System.Drawing.Size(30, 30);
             this.button3.TabIndex = 9;
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.editbtn);
             // 
             // button2
             // 
@@ -102,6 +103,7 @@
             this.button2.Size = new System.Drawing.Size(30, 30);
             this.button2.TabIndex = 8;
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.deletebtn);
             // 
             // ManageButton
             // 
@@ -125,7 +127,7 @@
         #endregion
 
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.DataGridView managetable;
+        public System.Windows.Forms.DataGridView managetable;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button3;
