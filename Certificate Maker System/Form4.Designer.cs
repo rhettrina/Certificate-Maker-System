@@ -163,8 +163,8 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox usernamebox;
-        private System.Windows.Forms.TextBox passwordbox;
+        public System.Windows.Forms.TextBox usernamebox;
+        public System.Windows.Forms.TextBox passwordbox;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button8;
     }

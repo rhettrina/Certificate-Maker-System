@@ -13,7 +13,7 @@ namespace Certificate_Maker_System
 {
     public partial class AddEditUser : Form
     {
-        private const string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=root;";
+        private const string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;";
         public AddEditUser()
         {
             InitializeComponent();

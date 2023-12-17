@@ -16,16 +16,21 @@ namespace Certificate_Maker_System
     {
 
         private const string ConnectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;";
+        public string inputPassword;
+        public string inputUsername;
+
         public Form4()
         {
             InitializeComponent();
             usernamebox.TabStop = false;
-            passwordbox.TabStop = false;    
+            passwordbox.TabStop = false;   
+            
         }
 
         private void Form2_Load(object sender, EventArgs e)
         {
-
+            inputUsername = usernamebox.Text;
+            inputPassword = passwordbox.Text;
         }
 
         private void close(object sender, EventArgs e)
@@ -33,10 +38,10 @@ namespace Certificate_Maker_System
             this.Close();
         }
 
-        private void loginbtn(object sender, EventArgs e)
+        public void loginbtn(object sender, EventArgs e)
         {
-            string inputUsername = usernamebox.Text;
-            string inputPassword = passwordbox.Text;
+            inputUsername = usernamebox.Text;
+            inputPassword = passwordbox.Text;
 
             using (MySqlConnection connection = new MySqlConnection(ConnectionString))
             {
@@ -63,7 +68,7 @@ namespace Certificate_Maker_System
                             {
                                 // Verification succeeded, open Form2
                                 this.Hide();
-                                Form2 form2 = new Form2();
+                                Form2 form2 = new Form2(inputUsername);
                                 form2.ShowDialog();
                             }
                             else
