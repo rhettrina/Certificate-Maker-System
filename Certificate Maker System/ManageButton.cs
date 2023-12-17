@@ -8,16 +8,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Certificate_Maker_System
 {
     public partial class ManageButton : UserControl
     {
         string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;";
+        private MySqlConnection connection;
         public ManageButton()
         {
             InitializeComponent();
-            Task.Run(() => PopulateUserInfoDataGridViewAsync());
+            InitializeDatabaseConnection();
+            LoadUserData();
         }
 
         private void adduserbtn(object sender, EventArgs e)
@@ -26,88 +29,51 @@ namespace Certificate_Maker_System
             addEditUser.Show();
         }
 
-
-        public async Task PopulateUserInfoDataGridViewAsync()
+        private void InitializeDatabaseConnection()
         {
-            // SQL query to retrieve data from the user_info table
-            string query = "SELECT userId, firstName, middleName, lastName, gender, position, email, birthday FROM user_info";
+            // Initialize the MySqlConnection object with your connection string
+            connection = new MySqlConnection(connectionString);
+        }
 
-            // Create a connection and a data adapter
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+        private void LoadUserData()
+        {
+            try
             {
-                MySqlDataAdapter dataAdapter = new MySqlDataAdapter(query, connection);
+                // Open the database connection
+                connection.Open();
+
+                // Query to select all rows from the user_info table
+                string query = "SELECT * FROM user_info";
+
+                // Create a MySqlCommand object
+                MySqlCommand cmd = new MySqlCommand(query, connection);
 
                 // Create a DataTable to store the data
                 DataTable dataTable = new DataTable();
 
-                try
-                {
-                    // Open the connection asynchronously
-                    await connection.OpenAsync();
+                // Create a MySqlDataAdapter to fill the DataTable with data
+                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
 
-                    // Fill the DataTable with the data from the database
-                    dataAdapter.Fill(dataTable);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                finally
-                {
-                    // Close the connection
-                    connection.Close();
-                }
-
-                // Bind the DataTable to the DataGridView (replace studentTable with your DataGridView name)
-                managetable.Invoke((MethodInvoker)(() => managetable.DataSource = dataTable));
-            }
-        }
-
-
-        public void RefreshDataGridView()
-        {
-            try
-            {
-                // Fetch the data from the database
-                DataTable dataTable = FetchDataFromDatabase();
+                // Fill the DataTable
+                adapter.Fill(dataTable);
 
                 // Set the DataTable as the DataSource for the DataGridView
-                managetable.Invoke((MethodInvoker)(() => managetable.DataSource = dataTable));
+                managetable.DataSource = dataTable;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error refreshing DataGridView: {ex.Message}");
+                MessageBox.Show("Error: " + ex.Message);
+            }
+            finally
+            {
+                // Close the database connection
+                connection.Close();
             }
         }
 
-        // Example method to fetch data from the database
-        private DataTable FetchDataFromDatabase()
+        private void ManageButton_Load(object sender, EventArgs e)
         {
-            DataTable dataTable = new DataTable();
 
-            try
-            {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
-                {
-                    connection.Open();
-
-                    // Fetch the data from your table (adjust the query based on your table structure)
-                    string selectQuery = "SELECT userId, firstName, middleName, lastName, gender, position, email, birthday FROM user_info";
-
-                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(selectQuery, connection))
-                    {
-                        adapter.Fill(dataTable);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error fetching data: {ex.Message}");
-            }
-
-            return dataTable;
         }
-
-
     }
 }

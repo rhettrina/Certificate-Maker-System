@@ -115,6 +115,7 @@
             this.Controls.Add(this.label1);
             this.Name = "ManageButton";
             this.Size = new System.Drawing.Size(724, 652);
+            this.Load += new System.EventHandler(this.ManageButton_Load);
             ((System.ComponentModel.ISupportInitialize)(this.managetable)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
