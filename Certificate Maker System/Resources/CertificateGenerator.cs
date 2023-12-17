@@ -28,16 +28,11 @@ namespace Certificate_Maker_System.Resources
         public string codTemp;
         private object folder;
         public string selectedTemplate;
-        private string receive;
-        public string formattedDateTime;
-        DateTime dateTime;
 
-        public CertificateGenerator(string getuser)
+        public CertificateGenerator()
         {
             InitializeComponent();
             searchbox.TabStop = false;
-            receive = getuser;
-            formattedDateTime = dateTime.ToString("yyyy-MM-dd HH:mm:ss");
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -177,42 +172,6 @@ namespace Certificate_Maker_System.Resources
             else
             {
                 Console.WriteLine("No template loaded.");
-            }
-            string fullName = namebox.Text;
-            string grade = gradebox.Text;
-            string track = trackbox.Text;
-            string certificateType = types.Text;
-            Form4 form4 = new Form4();
-
-            string createdBy = form4.GetUsername();
-            SaveDataToDatabase(fullName, grade, track, certificateType, createdBy);
-        }
-
-        private void SaveDataToDatabase(string fullName, string grade, string track, string certificateType, string createdBy)
-        {
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                connection.Open();
-
-                using (MySqlCommand cmd = new MySqlCommand())
-                {
-                    cmd.Connection = connection;
-
-                    formattedDateTime = dateTime.ToString("yyyy-MM-dd HH:mm:ss");
-
-                    // Insert data into the table
-                    cmd.CommandText = "INSERT INTO history (name, grade, track, datetime, certificateType, created) VALUES (@FullName, @Grade, @Track, @DateTime, @CertificateType, @CreatedBy)";
-                    cmd.Parameters.AddWithValue("@FullName", fullName);
-                    cmd.Parameters.AddWithValue("@Grade", grade);
-                    cmd.Parameters.AddWithValue("@Track", track);
-                    cmd.Parameters.AddWithValue("@DateTime", formattedDateTime);
-                    cmd.Parameters.AddWithValue("@CertificateType", certificateType);
-                    cmd.Parameters.AddWithValue("@CreatedBy", createdBy);
-
-                    cmd.ExecuteNonQuery();
-                }
-
-                connection.Close();
             }
         }
 

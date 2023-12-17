@@ -49,13 +49,6 @@ namespace Certificate_Maker_System
                         {
                             ManageButton manage = new ManageButton();
 
-                            if (string.IsNullOrEmpty(userId))
-                            {
-                                // Handle the case when no row is selected (e.g., display an error message)
-                                MessageBox.Show("Please select a user to update or leave the user ID empty for a new user.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                return;
-                            }
-
                             bool isUpdate = !string.IsNullOrEmpty(userId);
 
                             // Insert or update into user_info table
@@ -83,8 +76,21 @@ namespace Certificate_Maker_System
                                 cmdUserInfo.ExecuteNonQuery();
                             }
 
-                            // If it's an update, no need to insert into user_auth table
-                            if (!isUpdate)
+                            // If it's an update, update the user_auth table only if the password is provided
+                            if (isUpdate && !string.IsNullOrEmpty(password))
+                            {
+                                string userAuthQuery = "UPDATE user_auth SET username = @username, password = @password WHERE userId = @userId";
+
+                                using (MySqlCommand cmdUserAuth = new MySqlCommand(userAuthQuery, connection, transaction))
+                                {
+                                    cmdUserAuth.Parameters.AddWithValue("@userId", userId);
+                                    cmdUserAuth.Parameters.AddWithValue("@username", string.IsNullOrEmpty(username) ? DBNull.Value : (object)username);
+                                    cmdUserAuth.Parameters.AddWithValue("@password", string.IsNullOrEmpty(password) ? DBNull.Value : (object)password);
+
+                                    cmdUserAuth.ExecuteNonQuery();
+                                }
+                            }
+                            else if (!isUpdate)
                             {
                                 // Retrieve the automatically generated userId after the insert
                                 using (MySqlCommand cmdGetUserId = new MySqlCommand("SELECT LAST_INSERT_ID()", connection, transaction))
@@ -132,9 +138,10 @@ namespace Certificate_Maker_System
             }
             catch (Exception ex)
             {
-                // Handle the exception (e.g., display an error message or log the error)
-                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Handle exceptions at a higher level if needed
+                MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
 
         }
 

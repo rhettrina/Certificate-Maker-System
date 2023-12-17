@@ -191,7 +191,7 @@ namespace Certificate_Maker_System
 
         private void certificatebtn(object sender, EventArgs e)
         {
-            CertificateGenerator certificateGenerator = new CertificateGenerator("");
+            CertificateGenerator certificateGenerator = new CertificateGenerator();
             ResetButtonColors();
             ((Button)sender).ForeColor = Color.RoyalBlue;
             reset.Add((Button)sender);
