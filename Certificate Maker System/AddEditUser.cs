@@ -51,43 +51,43 @@ namespace Certificate_Maker_System
 
                             bool isUpdate = !string.IsNullOrEmpty(userId);
 
-                            // Insert or update into user_info table
-                            string userInfoQuery = isUpdate
-                                ? "UPDATE user_info SET firstName = @firstName, middleName = @middleName, lastName = @lastName, " +
+                            // Insert or update into user_profiles table (formerly user_info)
+                            string userProfileQuery = isUpdate
+                                ? "UPDATE user_profiles SET firstName = @firstName, middleName = @middleName, lastName = @lastName, " +
                                   "gender = @gender, position = @position, email = @email, birthday = @birthday WHERE userId = @userId"
-                                : "INSERT INTO user_info (firstName, middleName, lastName, gender, position, email, birthday) " +
+                                : "INSERT INTO user_profiles (firstName, middleName, lastName, gender, position, email, birthday) " +
                                   "VALUES (@firstName, @middleName, @lastName, @gender, @position, @email, @birthday)";
 
-                            using (MySqlCommand cmdUserInfo = new MySqlCommand(userInfoQuery, connection, transaction))
+                            using (MySqlCommand cmdUserProfile = new MySqlCommand(userProfileQuery, connection, transaction))
                             {
                                 if (isUpdate)
                                 {
-                                    cmdUserInfo.Parameters.AddWithValue("@userId", userId);
+                                    cmdUserProfile.Parameters.AddWithValue("@userId", userId);
                                 }
 
-                                cmdUserInfo.Parameters.AddWithValue("@firstName", string.IsNullOrEmpty(firstName) ? DBNull.Value : (object)firstName);
-                                cmdUserInfo.Parameters.AddWithValue("@middleName", string.IsNullOrEmpty(middleName) ? DBNull.Value : (object)middleName);
-                                cmdUserInfo.Parameters.AddWithValue("@lastName", string.IsNullOrEmpty(lastName) ? DBNull.Value : (object)lastName);
-                                cmdUserInfo.Parameters.AddWithValue("@gender", string.IsNullOrEmpty(gender) ? DBNull.Value : (object)gender);
-                                cmdUserInfo.Parameters.AddWithValue("@position", string.IsNullOrEmpty(position) ? DBNull.Value : (object)position);
-                                cmdUserInfo.Parameters.AddWithValue("@email", string.IsNullOrEmpty(email) ? DBNull.Value : (object)email);
-                                cmdUserInfo.Parameters.AddWithValue("@birthday", string.IsNullOrEmpty(birthday) ? DBNull.Value : (object)birthday);
+                                cmdUserProfile.Parameters.AddWithValue("@firstName", string.IsNullOrEmpty(firstName) ? DBNull.Value : (object)firstName);
+                                cmdUserProfile.Parameters.AddWithValue("@middleName", string.IsNullOrEmpty(middleName) ? DBNull.Value : (object)middleName);
+                                cmdUserProfile.Parameters.AddWithValue("@lastName", string.IsNullOrEmpty(lastName) ? DBNull.Value : (object)lastName);
+                                cmdUserProfile.Parameters.AddWithValue("@gender", string.IsNullOrEmpty(gender) ? DBNull.Value : (object)gender);
+                                cmdUserProfile.Parameters.AddWithValue("@position", string.IsNullOrEmpty(position) ? DBNull.Value : (object)position);
+                                cmdUserProfile.Parameters.AddWithValue("@email", string.IsNullOrEmpty(email) ? DBNull.Value : (object)email);
+                                cmdUserProfile.Parameters.AddWithValue("@birthday", string.IsNullOrEmpty(birthday) ? DBNull.Value : (object)birthday);
 
-                                cmdUserInfo.ExecuteNonQuery();
+                                cmdUserProfile.ExecuteNonQuery();
                             }
 
-                            // If it's an update, update the user_auth table only if the password is provided
+                            // If it's an update, update the users table only if the password is provided
                             if (isUpdate && !string.IsNullOrEmpty(password))
                             {
-                                string userAuthQuery = "UPDATE user_auth SET username = @username, password = @password WHERE userId = @userId";
+                                string usersQuery = "UPDATE users SET username = @username, password = @password WHERE userId = @userId";
 
-                                using (MySqlCommand cmdUserAuth = new MySqlCommand(userAuthQuery, connection, transaction))
+                                using (MySqlCommand cmdUsers = new MySqlCommand(usersQuery, connection, transaction))
                                 {
-                                    cmdUserAuth.Parameters.AddWithValue("@userId", userId);
-                                    cmdUserAuth.Parameters.AddWithValue("@username", string.IsNullOrEmpty(username) ? DBNull.Value : (object)username);
-                                    cmdUserAuth.Parameters.AddWithValue("@password", string.IsNullOrEmpty(password) ? DBNull.Value : (object)password);
+                                    cmdUsers.Parameters.AddWithValue("@userId", userId);
+                                    cmdUsers.Parameters.AddWithValue("@username", string.IsNullOrEmpty(username) ? DBNull.Value : (object)username);
+                                    cmdUsers.Parameters.AddWithValue("@password", string.IsNullOrEmpty(password) ? DBNull.Value : (object)password);
 
-                                    cmdUserAuth.ExecuteNonQuery();
+                                    cmdUsers.ExecuteNonQuery();
                                 }
                             }
                             else if (!isUpdate)
@@ -98,17 +98,17 @@ namespace Certificate_Maker_System
                                     userId = cmdGetUserId.ExecuteScalar().ToString();
                                 }
 
-                                // Insert into user_auth table
-                                string userAuthQuery = "INSERT INTO user_auth (userId, username, password) " +
-                                                        "VALUES (@userId, @username, @password)";
+                                // Insert into users table (formerly user_auth)
+                                string usersQuery = "INSERT INTO users (userId, username, password) " +
+                                                   "VALUES (@userId, @username, @password)";
 
-                                using (MySqlCommand cmdUserAuth = new MySqlCommand(userAuthQuery, connection, transaction))
+                                using (MySqlCommand cmdUsers = new MySqlCommand(usersQuery, connection, transaction))
                                 {
-                                    cmdUserAuth.Parameters.AddWithValue("@userId", userId);
-                                    cmdUserAuth.Parameters.AddWithValue("@username", string.IsNullOrEmpty(username) ? DBNull.Value : (object)username);
-                                    cmdUserAuth.Parameters.AddWithValue("@password", string.IsNullOrEmpty(password) ? DBNull.Value : (object)password);
+                                    cmdUsers.Parameters.AddWithValue("@userId", userId);
+                                    cmdUsers.Parameters.AddWithValue("@username", string.IsNullOrEmpty(username) ? DBNull.Value : (object)username);
+                                    cmdUsers.Parameters.AddWithValue("@password", string.IsNullOrEmpty(password) ? DBNull.Value : (object)password);
 
-                                    cmdUserAuth.ExecuteNonQuery();
+                                    cmdUsers.ExecuteNonQuery();
                                 }
                             }
 
@@ -141,10 +141,7 @@ namespace Certificate_Maker_System
                 // Handle exceptions at a higher level if needed
                 MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-
         }
-
 
         private void AddEditUser_Load(object sender, EventArgs e)
         {

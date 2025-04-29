@@ -14,10 +14,8 @@ using static Guna.UI2.WinForms.Helpers.GraphicsHelper;
 
 namespace Certificate_Maker_System
 {
-
     public partial class UserManage : UserControl
     {
-
         private Form2 form2;
         private ManageButton manageButton;
         private int clickCount = 0;
@@ -42,42 +40,35 @@ namespace Certificate_Maker_System
 
         private void guna2CustomGradientPanel1_Paint(object sender, PaintEventArgs e)
         {
-
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
-
         }
 
         private void UserManage_Load(object sender, EventArgs e)
         {
-
         }
 
         private void label2_Click(object sender, EventArgs e)
         {
-
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-
         }
 
         private void label10_Click(object sender, EventArgs e)
         {
-
         }
 
         private void label12_Click(object sender, EventArgs e)
         {
-
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
-                    }
+        }
 
         private void button4_Click(object sender, EventArgs e)
         {
@@ -90,8 +81,8 @@ namespace Certificate_Maker_System
                 Form2 form2 = this.ParentForm as Form2;
 
                 Panel panelcontainer = form2.panelContainer;
-                
-                ManageButton manageButton   = new ManageButton();
+
+                ManageButton manageButton = new ManageButton();
                 panelcontainer.Controls.Clear();
                 panelcontainer.Controls.Add(manageButton);
             }
@@ -101,10 +92,6 @@ namespace Certificate_Maker_System
                 MessageBox.Show("Only administrators are allowed to perform this action.", "Permission Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-
-
-
-
 
         private void changeuser(object sender, EventArgs e)
         {
@@ -133,7 +120,7 @@ namespace Certificate_Maker_System
             else
             {
                 passworduser.Enabled = false;
-                passworduser.PasswordChar = '*'; 
+                passworduser.PasswordChar = '*';
             }
         }
 
@@ -145,7 +132,8 @@ namespace Certificate_Maker_System
             {
                 connection.Open();
 
-                string query = "UPDATE user_auth SET username = @NewUsername WHERE userId = @UserId";
+                // Updated query to use the users table instead of user_auth
+                string query = "UPDATE users SET username = @NewUsername WHERE userId = @UserId";
 
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
@@ -158,6 +146,5 @@ namespace Certificate_Maker_System
 
             MessageBox.Show("Username updated successfully!");
         }
-
     }
 }

@@ -30,6 +30,10 @@ namespace Certificate_Maker_System
             receive = getuser;
         }
 
+        public Form2()
+        {
+        }
+
         private void ResetButtonColors()
         {
             foreach (Button button in reset)
@@ -101,7 +105,7 @@ namespace Certificate_Maker_System
                 Form4 form4 = new Form4();
 
                 // Fetch userId based on username
-                string getUserIdQuery = "SELECT userId FROM user_auth WHERE username = @username";
+                string getUserIdQuery = "SELECT userId FROM users WHERE username = @username";
                 using (MySqlCommand getUserIdCommand = new MySqlCommand(getUserIdQuery, connection))
                 {
                     getUserIdCommand.Parameters.AddWithValue("@username", receive); // Assuming GetInputUsername() is a method in Form4
@@ -112,7 +116,7 @@ namespace Certificate_Maker_System
                         int selectedUserId = Convert.ToInt32(result);
 
                         // Fetch user_info data
-                        string userInfoQuery = "SELECT * FROM user_info WHERE userId = @userId";
+                        string userInfoQuery = "SELECT * FROM user_profiles WHERE userId = @userId";
                         using (MySqlCommand userInfoCommand = new MySqlCommand(userInfoQuery, connection))
                         {
                             userInfoCommand.Parameters.AddWithValue("@userId", selectedUserId);
@@ -146,7 +150,7 @@ namespace Certificate_Maker_System
                         }
 
                         // Fetch user_auth data
-                        string userAuthQuery = "SELECT * FROM user_auth WHERE userId = @userId";
+                        string userAuthQuery = "SELECT username, password FROM users WHERE userId = @userId";
                         using (MySqlCommand userAuthCommand = new MySqlCommand(userAuthQuery, connection))
                         {
                             userAuthCommand.Parameters.AddWithValue("@userId", selectedUserId);

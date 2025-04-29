@@ -16,24 +16,20 @@ namespace Certificate_Maker_System
 {
     public partial class StudentList : UserControl
     {
-
         string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;";
 
         public StudentList()
         {
             InitializeComponent();
             Task.Run(() => PopulateDataGridViewAsync());
-           
         }
 
         public async Task PopulateDataGridViewAsync()
         {
-
-
-            // SQL query to retrieve data
-            string query = "SELECT s.lrnNo, s.lastName, s.firstName, s.middleName, s.birthDate, s.gender, s.address, sd.grade, sd.section, sd.track " +
-                               "FROM students s " +
-                               "LEFT JOIN student_details sd ON s.lrnNo = sd.lrnNo";
+            // Updated SQL query to use student_academic instead of student_details
+            string query = "SELECT s.lrnNo, s.lastName, s.firstName, s.middleName, s.birthDate, s.gender, s.address, sa.grade, sa.section, sa.track " +
+                           "FROM students s " +
+                           "LEFT JOIN student_academic sa ON s.lrnNo = sa.lrnNo";
 
             // Create a connection and a data adapter
             using (MySqlConnection connection = new MySqlConnector.MySqlConnection(connectionString))
@@ -66,9 +62,6 @@ namespace Certificate_Maker_System
             }
         }
 
-
-
-
         private void addstudentbtn(object sender, EventArgs e)
         {
             AddStudent addStudent = new AddStudent();
@@ -77,7 +70,6 @@ namespace Certificate_Maker_System
 
         private void studentTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
         }
 
         private void deletebtn(object sender, EventArgs e)
@@ -105,13 +97,13 @@ namespace Certificate_Maker_System
                             {
                                 try
                                 {
-                                    // Delete record from student_details table
-                                    string deleteDetailsQuery = "DELETE FROM student_details WHERE lrnNo = @LrnNo";
+                                    // Delete record from student_academic table (formerly student_details)
+                                    string deleteAcademicQuery = "DELETE FROM student_academic WHERE lrnNo = @LrnNo";
 
-                                    using (MySqlConnector.MySqlCommand cmdDetails = new MySqlConnector.MySqlCommand(deleteDetailsQuery, connection, transaction))
+                                    using (MySqlConnector.MySqlCommand cmdAcademic = new MySqlConnector.MySqlCommand(deleteAcademicQuery, connection, transaction))
                                     {
-                                        cmdDetails.Parameters.AddWithValue("@LrnNo", lrnNo);
-                                        cmdDetails.ExecuteNonQuery();
+                                        cmdAcademic.Parameters.AddWithValue("@LrnNo", lrnNo);
+                                        cmdAcademic.ExecuteNonQuery();
                                     }
 
                                     // Then, delete the record from students table
@@ -149,7 +141,6 @@ namespace Certificate_Maker_System
             {
                 MessageBox.Show("Please select a row to delete.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
         }
 
         public void RefreshDataGridView()
@@ -180,10 +171,10 @@ namespace Certificate_Maker_System
                 {
                     connection.Open();
 
-                    // Fetch the data from your table (adjust the query based on your table structure)
-                    string selectQuery = "SELECT s.lrnNo, s.lastName, s.firstName, s.middleName, s.birthDate, s.gender, s.address, sd.grade, sd.section, sd.track " +
-                      "FROM students s " +
-                      "INNER JOIN student_details sd ON s.lrnNo = sd.lrnNo";
+                    // Updated fetch query to use student_academic instead of student_details
+                    string selectQuery = "SELECT s.lrnNo, s.lastName, s.firstName, s.middleName, s.birthDate, s.gender, s.address, sa.grade, sa.section, sa.track " +
+                                         "FROM students s " +
+                                         "INNER JOIN student_academic sa ON s.lrnNo = sa.lrnNo";
 
                     using (MySqlConnector.MySqlDataAdapter adapter = new MySqlConnector.MySqlDataAdapter(selectQuery, connection))
                     {
@@ -198,8 +189,6 @@ namespace Certificate_Maker_System
 
             return dataTable;
         }
-
-
 
         private void editbtn(object sender, EventArgs e)
         {
@@ -245,12 +234,10 @@ namespace Certificate_Maker_System
             {
                 MessageBox.Show("Please select a row in the table.");
             }
-
         }
 
         private void StudentList_Load(object sender, EventArgs e)
         {
-
         }
     }
 }

@@ -43,22 +43,22 @@ namespace Certificate_Maker_System
                 // Open the database connection
                 connection.Open();
 
-                // Query to select all rows from the user_info table
+                // Updated query to use the new normalized tables: users and user_profiles
                 string query = @"SELECT
-                            LPAD(ui.userId, 4, '0') AS userId,
-                            ui.firstName,
-                            ui.middleName,
-                            ui.lastName,
-                            ui.gender,
-                            ui.position,
-                            ui.email,
-                            ui.birthday,
-                            ua.username,
-                            ua.password
+                            LPAD(up.userId, 4, '0') AS userId,
+                            up.firstName,
+                            up.middleName,
+                            up.lastName,
+                            up.gender,
+                            up.position,
+                            up.email,
+                            up.birthday,
+                            u.username,
+                            u.password
                         FROM
-                            user_info ui
+                            user_profiles up
                         LEFT JOIN
-                            user_auth ua ON ui.userId = ua.userId";
+                            users u ON up.userId = u.userId";
 
                 // Create a MySqlCommand object
                 MySqlCommand cmd = new MySqlCommand(query, connection);
@@ -86,10 +86,8 @@ namespace Certificate_Maker_System
             }
         }
 
-
         private void ManageButton_Load(object sender, EventArgs e)
         {
-
         }
 
         private void deletebtn(object sender, EventArgs e)
@@ -110,17 +108,17 @@ namespace Certificate_Maker_System
                     {
                         try
                         {
-                            // Delete from user_auth table
-                            string deleteAuthQuery = "DELETE FROM user_auth WHERE userId = @userId";
-                            MySqlCommand deleteAuthCmd = new MySqlCommand(deleteAuthQuery, connection, transaction);
-                            deleteAuthCmd.Parameters.AddWithValue("@userId", userId);
-                            deleteAuthCmd.ExecuteNonQuery();
+                            // Delete from users table (formerly user_auth)
+                            string deleteUsersQuery = "DELETE FROM users WHERE userId = @userId";
+                            MySqlCommand deleteUsersCmd = new MySqlCommand(deleteUsersQuery, connection, transaction);
+                            deleteUsersCmd.Parameters.AddWithValue("@userId", userId);
+                            deleteUsersCmd.ExecuteNonQuery();
 
-                            // Delete from user_info table
-                            string deleteInfoQuery = "DELETE FROM user_info WHERE userId = @userId";
-                            MySqlCommand deleteInfoCmd = new MySqlCommand(deleteInfoQuery, connection, transaction);
-                            deleteInfoCmd.Parameters.AddWithValue("@userId", userId);
-                            deleteInfoCmd.ExecuteNonQuery();
+                            // Delete from user_profiles table (formerly user_info)
+                            string deleteProfilesQuery = "DELETE FROM user_profiles WHERE userId = @userId";
+                            MySqlCommand deleteProfilesCmd = new MySqlCommand(deleteProfilesQuery, connection, transaction);
+                            deleteProfilesCmd.Parameters.AddWithValue("@userId", userId);
+                            deleteProfilesCmd.ExecuteNonQuery();
 
                             // Commit the transaction if both DELETE statements succeed
                             transaction.Commit();
@@ -153,7 +151,6 @@ namespace Certificate_Maker_System
                 MessageBox.Show("Please select a row to delete.");
             }
         }
-
 
         private void editbtn(object sender, EventArgs e)
         {

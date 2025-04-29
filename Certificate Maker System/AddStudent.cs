@@ -13,7 +13,6 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Certificate_Maker_System
 {
-
     public partial class AddStudent : Form
     {
         private const string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;";
@@ -27,17 +26,14 @@ namespace Certificate_Maker_System
 
         private void label2_Click(object sender, EventArgs e)
         {
-
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
-
         }
 
         private void radioButton3_CheckedChanged(object sender, EventArgs e)
         {
-
         }
 
         private void AddStudent_Load(object sender, EventArgs e)
@@ -51,7 +47,6 @@ namespace Certificate_Maker_System
             trackbox.Items.Add("STEM");
             trackbox.Items.Add("AGRICULTURE");
             trackbox.Items.Add("HOME ECONOMICS");
-
         }
 
         private void cancelbtn(object sender, EventArgs e)
@@ -82,7 +77,8 @@ namespace Certificate_Maker_System
                                    "lastName = @lastName, firstName = @firstName, middleName = @middleName, birthDate = @birthDate, " +
                                    "gender = @gender, address = @address";
 
-                    string queryDetails = "INSERT INTO student_details (lrnNo, grade, section, track) " +
+                    // Updated query for student_academic (formerly student_details)
+                    string queryAcademic = "INSERT INTO student_academic (lrnNo, grade, section, track) " +
                                           "VALUES (@lrnNo, @grade, @section, @track) " +
                                           "ON DUPLICATE KEY UPDATE " +
                                           "grade = @grade, section = @section, track = @track";
@@ -116,19 +112,20 @@ namespace Certificate_Maker_System
                                     }
                                 }
 
-                                using (MySqlCommand cmdDetails = new MySqlCommand(queryDetails, connection, transaction))
+                                // Updated command to use the student_academic table
+                                using (MySqlCommand cmdAcademic = new MySqlCommand(queryAcademic, connection, transaction))
                                 {
-                                    cmdDetails.Parameters.AddWithValue("@lrnNo", lrnNo);
-                                    cmdDetails.Parameters.AddWithValue("@grade", string.IsNullOrEmpty(grade) ? (object)DBNull.Value : grade);
-                                    cmdDetails.Parameters.AddWithValue("@section", string.IsNullOrEmpty(section) ? (object)DBNull.Value : section);
-                                    cmdDetails.Parameters.AddWithValue("@track", string.IsNullOrEmpty(track) ? (object)DBNull.Value : track);
+                                    cmdAcademic.Parameters.AddWithValue("@lrnNo", lrnNo);
+                                    cmdAcademic.Parameters.AddWithValue("@grade", string.IsNullOrEmpty(grade) ? (object)DBNull.Value : grade);
+                                    cmdAcademic.Parameters.AddWithValue("@section", string.IsNullOrEmpty(section) ? (object)DBNull.Value : section);
+                                    cmdAcademic.Parameters.AddWithValue("@track", string.IsNullOrEmpty(track) ? (object)DBNull.Value : track);
 
-                                    int rowsAffectedDetails = cmdDetails.ExecuteNonQuery();
+                                    int rowsAffectedAcademic = cmdAcademic.ExecuteNonQuery();
 
                                     // Handle the result as needed
-                                    if (rowsAffectedDetails > 0)
+                                    if (rowsAffectedAcademic > 0)
                                     {
-                                        successMessage += "Student details saved successfully!";
+                                        successMessage += "Student academic details saved successfully!";
                                     }
                                 }
 
@@ -147,33 +144,18 @@ namespace Certificate_Maker_System
                         {
                             MessageBox.Show(successMessage, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
-
-                        // Rest of your code
                     }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
-
-
-
             }
             else
             {
                 MessageBox.Show("Please fill in all required fields.");
             }
-
-
-
-
-
-
-
-
         }
-
 
         private bool IsAllFieldsFilled()
         {
@@ -189,21 +171,16 @@ namespace Certificate_Maker_System
                    !string.IsNullOrEmpty(trackbox.Text);
         }
 
-
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
-
         }
 
         private void grade_SelectedIndexChanged(object sender, EventArgs e)
         {
         }
 
-
-
         private void label11_Click(object sender, EventArgs e)
         {
-
         }
 
         private void lrnbox_KeyPress(object sender, KeyPressEventArgs e)
@@ -218,7 +195,7 @@ namespace Certificate_Maker_System
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             gender = "male";
-            labelgender = gender; 
+            labelgender = gender;
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
@@ -229,12 +206,10 @@ namespace Certificate_Maker_System
 
         private void labelgender_Click(object sender, EventArgs e)
         {
-
         }
 
         private void trackbox_SelectedIndexChanged(object sender, EventArgs e)
         {
-
         }
 
         private void close(object sender, EventArgs e)

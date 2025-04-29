@@ -112,116 +112,80 @@ namespace Certificate_Maker_System.Resources
 
         private void button1_Click(object sender, EventArgs e)
         {
+            // First, check if we have a valid LRN number to work with
+            if (string.IsNullOrEmpty(lrn.Text) || !int.TryParse(lrn.Text, out int lrnNo))
+            {
+                MessageBox.Show("Please enter a valid LRN number.");
+                return;
+            }
 
+            // Check if a certificate type is selected
+            if (string.IsNullOrEmpty(selectedTemplate))
+            {
+                MessageBox.Show("Please select a certificate type.");
+                return;
+            }
+
+            // Generate the certificate document based on template
             if (!string.IsNullOrEmpty(selectedTemplate))
             {
+                Word.Application wordApp = new Word.Application();
+                wordApp.Visible = true;
+                wordApp.WindowState = Word.WdWindowState.wdWindowStateNormal;
+                Word.Document doc = wordApp.Documents.Add();
+                Word.Paragraph paragraph = doc.Paragraphs.Add();
+
                 switch (selectedTemplate)
                 {
                     case "Certificate of Enrolment":
-                        Console.WriteLine(corTemp);
-                        Word.Application word = new Word.Application();
-                        word.Visible = true;
-                        word.WindowState = Word.WdWindowState.wdWindowStateNormal;
-                        Word.Document doc = word.Documents.Add();
-                        Word.Paragraph paragraph;
-                        paragraph = doc.Paragraphs.Add();
                         paragraph.Range.Text = corTemp;
-                        //doc.SaveAs2(@E:\New folder\mydoc.doc);//
-                        //doc.Close();//
-                        //word.Quit();
-                       
-
-
                         break;
-
                     case "Good Moral":
-                        Console.WriteLine(goodMoral);
-                        Word.Application words = new Word.Application();
-                        words.Visible = true;
-                        words.WindowState = Word.WdWindowState.wdWindowStateNormal;
-                        Word.Document docs = words.Documents.Add();
-                        Word.Paragraph paragraphs;
-                        paragraphs = docs.Paragraphs.Add();
-                        paragraphs.Range.Text = goodMoral;
-                        //doc.SaveAs2(@E:\New folder\mydoc.doc);//
-                        //doc.Close();//
-                        //words.Quit();
-
-
+                        paragraph.Range.Text = goodMoral;
                         break;
-
                     case "Ranking":
-                        Console.WriteLine(ranking);
-                        Word.Application wordss = new Word.Application();
-                        wordss.Visible = true;
-                        wordss.WindowState = Word.WdWindowState.wdWindowStateNormal;
-                        Word.Document docss = wordss.Documents.Add();
-                        Word.Paragraph paragraphss;
-                        paragraphss = docss.Paragraphs.Add();
-                        paragraphss.Range.Text = ranking;
-                        //doc.SaveAs2(@E:\New folder\mydoc.doc);//
-                        //doc.Close();//
-                        //wordss.Quit();
-
-
-
+                        paragraph.Range.Text = ranking;
                         break;
-
                     default:
-                        Console.WriteLine("No template loaded.");
+                        paragraph.Range.Text = "No template selected.";
                         break;
                 }
             }
-            else
-            {
-                Console.WriteLine("No template loaded.");
-            }
 
-            string nameboxValue = namebox.Text;
-            string gradeValue = gradebox.Text;
-            string trackValue = trackbox.Text;  // Assuming you have a textbox named trackbox for the track
-            string certificateTypeValue = types.Text;
-            DateTime currentDate = DateTime.Now;
-            Form4 form4 = new Form4();
-            string made = form4.GetUsername();
-
-            if (!string.IsNullOrEmpty(nameboxValue) && !string.IsNullOrEmpty(gradeValue) &&
-                !string.IsNullOrEmpty(trackValue) && !string.IsNullOrEmpty(certificateTypeValue))
+            // Save to history table
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 try
                 {
-                    connection.Open();
+                    conn.Open();
 
-                    string query = "INSERT INTO history (name, grade, track, certificateType, datetime, created) " +
-                                   "VALUES (@name, @grade, @track, @certificateType, @datetime, @created)";
-                    MySqlCommand cmd = new MySqlCommand(query, connection);
+                    // Get the current user ID (you need to implement this method in Form4)
+                    Form4 form4 = new Form4();
+                    int userId = form4.GetUserId(); // Implement this method to return the current user's ID
 
-                    cmd.Parameters.AddWithValue("@name", nameboxValue);
-                    cmd.Parameters.AddWithValue("@grade", gradeValue);
-                    cmd.Parameters.AddWithValue("@track", trackValue);
-                    cmd.Parameters.AddWithValue("@certificateType", certificateTypeValue);
-                    cmd.Parameters.AddWithValue("@datetime", currentDate);
-                    cmd.Parameters.AddWithValue("@created", made);
+                    // Insert into certificate_history
+                    string query = "INSERT INTO certificate_history (lrn_no, certificate_type, generated_date, generated_by) " +
+                                  "VALUES (@lrnNo, @certificateType, @generatedDate, @generatedBy)";
 
-                    cmd.ExecuteNonQuery();
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@lrnNo", lrnNo);
+                        cmd.Parameters.AddWithValue("@certificateType", selectedTemplate);
+                        cmd.Parameters.AddWithValue("@generatedDate", DateTime.Now);
+                        cmd.Parameters.AddWithValue("@generatedBy", userId);
 
-                    MessageBox.Show("Data saved successfully!");
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    MessageBox.Show("Certificate generated and history saved successfully!");
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error: " + ex.Message);
                 }
-                finally
-                {
-                    connection.Close();
-                }
             }
-            else
-            {
-                MessageBox.Show("Please enter values in all textboxes.");
-            }
-
         }
+
 
 
 
@@ -320,7 +284,6 @@ namespace Certificate_Maker_System.Resources
 
         private async void searchbtn(object sender, EventArgs e)
         {
-
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 try
@@ -329,9 +292,9 @@ namespace Certificate_Maker_System.Resources
 
                     string searchCriteria = searchbox.Text;
 
-                    string query = "SELECT s.lrnNo, CONCAT(s.firstName, ' ', s.middleName, ' ', s.lastName) AS fullName, sd.grade, sd.section, sd.track " +
+                    string query = "SELECT s.lrnNo, CONCAT(s.firstName, ' ', s.middleName, ' ', s.lastName) AS fullName, sa.grade, sa.section, sa.track " +
                                    "FROM students s " +
-                                   "JOIN student_details sd ON s.lrnNo = sd.lrnNo " +
+                                   "JOIN student_academic sa ON s.lrnNo = sa.lrnNo " +
                                    "WHERE s.lrnNo LIKE @searchCriteria OR " +
                                    "CONCAT(s.firstName, ' ', s.middleName, ' ', s.lastName) LIKE @searchCriteria";
 
@@ -361,6 +324,7 @@ namespace Certificate_Maker_System.Resources
                 }
             }
         }
+
 
     }
 }

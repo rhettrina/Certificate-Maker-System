@@ -54,9 +54,12 @@ namespace Certificate_Maker_System
                 {
                     connection.Open();
 
-                   string selectQuery = "SELECT ui.* FROM `user_auth` ua " +
-                     "JOIN `user_info` ui ON ua.`userId` = ui.`userId` " +
-                     "WHERE ua.`username` = @username AND ua.`password` = @password";
+                    string selectQuery =
+      "SELECT up.* " +
+      "FROM `users` u " +
+      "JOIN `user_profiles` up ON u.`userId` = up.`userId` " +
+      "WHERE u.`username` = @username AND u.`password` = @password";
+
 
 
                     using (MySqlCommand command = new MySqlCommand(selectQuery, connection))
@@ -145,5 +148,36 @@ namespace Certificate_Maker_System
         {
 
         }
+        // Add to Form4 class
+        public int GetUserId()
+        {
+            // Assuming you have the username stored in a class variable
+            string username = GetUsername();
+
+            int userId = 0;
+            using (MySqlConnection connection = new MySqlConnection(ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = "SELECT userId FROM users WHERE username = @username";
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@username", username);
+                        object result = cmd.ExecuteScalar();
+                        if (result != null && int.TryParse(result.ToString(), out userId))
+                        {
+                            return userId;
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    // Handle exception
+                }
+            }
+            return userId; // Returns 0 if not found
+        }
+
     }
 }
