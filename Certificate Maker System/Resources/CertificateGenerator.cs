@@ -152,27 +152,22 @@ namespace Certificate_Maker_System.Resources
                 }
             }
 
-            // Save to history table
+            // Save to history table without tracking who generated it
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 try
                 {
                     conn.Open();
 
-                    // Get the current user ID (you need to implement this method in Form4)
-                    Form4 form4 = new Form4();
-                    int userId = form4.GetUserId(); // Implement this method to return the current user's ID
-
-                    // Insert into certificate_history
-                    string query = "INSERT INTO certificate_history (lrn_no, certificate_type, generated_date, generated_by) " +
-                                  "VALUES (@lrnNo, @certificateType, @generatedDate, @generatedBy)";
+                    // Insert into certificate_history without the generated_by field
+                    string query = "INSERT INTO certificate_history (lrn_no, certificate_type, generated_date) " +
+                                  "VALUES (@lrnNo, @certificateType, @generatedDate)";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@lrnNo", lrnNo);
                         cmd.Parameters.AddWithValue("@certificateType", selectedTemplate);
                         cmd.Parameters.AddWithValue("@generatedDate", DateTime.Now);
-                        cmd.Parameters.AddWithValue("@generatedBy", userId);
 
                         cmd.ExecuteNonQuery();
                     }
@@ -185,6 +180,7 @@ namespace Certificate_Maker_System.Resources
                 }
             }
         }
+
 
 
 
