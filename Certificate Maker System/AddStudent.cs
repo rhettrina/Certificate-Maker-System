@@ -64,7 +64,9 @@ namespace Certificate_Maker_System
                     string lastName = lastnamebox.Text;
                     string firstName = firstnamebox.Text;
                     string middleName = middlebox.Text;
-                    string birthDate = birthdaybox.Text;
+                    // In the savebtn method (around line 68)
+                    string birthDate = birthdaybox.Value.ToString("yyyy-MM-dd");
+
                     string grade = gradebox.Text;
                     string section = sectionbox.Text;
                     string gender = labelgender;
@@ -99,7 +101,9 @@ namespace Certificate_Maker_System
                                     cmd.Parameters.AddWithValue("@lastName", lastName);
                                     cmd.Parameters.AddWithValue("@firstName", firstName);
                                     cmd.Parameters.AddWithValue("@middleName", middleName);
-                                    cmd.Parameters.AddWithValue("@birthDate", string.IsNullOrEmpty(birthDate) ? (object)DBNull.Value : birthDate);
+                                    // In AddStudent.cs, savebtn method
+                                    cmd.Parameters.AddWithValue("@birthDate", DateTime.Parse(birthDate));
+
                                     cmd.Parameters.AddWithValue("@gender", string.IsNullOrEmpty(gender) ? (object)DBNull.Value : gender);
                                     cmd.Parameters.AddWithValue("@address", string.IsNullOrEmpty(address) ? (object)DBNull.Value : address);
 

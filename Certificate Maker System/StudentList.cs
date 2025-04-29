@@ -16,7 +16,9 @@ namespace Certificate_Maker_System
 {
     public partial class StudentList : UserControl
     {
-        string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;";
+        string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;ConvertZeroDateTime=True;";
+
+
 
         public StudentList()
         {
@@ -38,6 +40,18 @@ namespace Certificate_Maker_System
 
                 // Create a DataTable to store the data
                 DataTable dataTable = new DataTable();
+                // Add after filling the dataTable
+                if (dataTable.Columns.Contains("birthDate"))
+                {
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        if (row["birthDate"] != DBNull.Value)
+                        {
+                            DateTime date = Convert.ToDateTime(row["birthDate"]);
+                            row["birthDate"] = date.ToString("yyyy-MM-dd");
+                        }
+                    }
+                }
 
                 try
                 {
@@ -66,6 +80,7 @@ namespace Certificate_Maker_System
         {
             AddStudent addStudent = new AddStudent();
             addStudent.Show();
+
         }
 
         private void studentTable_CellContentClick(object sender, DataGridViewCellEventArgs e)

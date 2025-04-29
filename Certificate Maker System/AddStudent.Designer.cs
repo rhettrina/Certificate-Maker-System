@@ -192,9 +192,9 @@
             // birthdaybox
             // 
             this.birthdaybox.CalendarFont = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.birthdaybox.CustomFormat = "dd-MM-yyyy";
+            this.birthdaybox.CustomFormat = "yyyy-MM-dd";
             this.birthdaybox.Font = new System.Drawing.Font("Microsoft Tai Le", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.birthdaybox.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.birthdaybox.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.birthdaybox.Location = new System.Drawing.Point(265, 113);
             this.birthdaybox.Name = "birthdaybox";
             this.birthdaybox.Size = new System.Drawing.Size(223, 32);
