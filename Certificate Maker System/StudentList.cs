@@ -1,28 +1,20 @@
 ﻿using MySqlConnector;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
-using MySqlConnection = MySqlConnector.MySqlConnection;
 
 namespace Certificate_Maker_System
 {
     public partial class StudentList : UserControl
     {
-        string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;ConvertZeroDateTime=True;";
-
-
+        private string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;ConvertZeroDateTime=True;";
 
         public StudentList()
         {
-            InitializeComponent();
+            InitializeComponent();// Connect the event handler
+            cbStatusFilter.SelectedIndexChanged += cbStatusFilter_SelectedIndexChanged;
+
             Task.Run(() => PopulateDataGridViewAsync());
         }
 
@@ -33,25 +25,27 @@ namespace Certificate_Maker_System
                            "FROM students s " +
                            "LEFT JOIN student_academic sa ON s.lrnNo = sa.lrnNo";
 
+            // Check the ComboBox selection
+            string selectedStatus = cbStatusFilter.SelectedItem?.ToString();
+            if (selectedStatus != null && selectedStatus != "All")
+            {
+                // For "Enrolled" or "Graduated", apply a WHERE
+                query += " WHERE sa.status = @StatusFilter";
+            }
+
             // Create a connection and a data adapter
             using (MySqlConnection connection = new MySqlConnector.MySqlConnection(connectionString))
             {
                 MySqlConnector.MySqlDataAdapter dataAdapter = new MySqlConnector.MySqlDataAdapter(query, connection);
 
+                // Add the parameter to the adapter if we're filtering
+                if (selectedStatus != null && selectedStatus != "All")
+                {
+                    dataAdapter.SelectCommand.Parameters.AddWithValue("@StatusFilter", selectedStatus);
+                }
+
                 // Create a DataTable to store the data
                 DataTable dataTable = new DataTable();
-                // Add after filling the dataTable
-                if (dataTable.Columns.Contains("birthDate"))
-                {
-                    foreach (DataRow row in dataTable.Rows)
-                    {
-                        if (row["birthDate"] != DBNull.Value)
-                        {
-                            DateTime date = Convert.ToDateTime(row["birthDate"]);
-                            row["birthDate"] = date.ToString("yyyy-MM-dd");
-                        }
-                    }
-                }
 
                 try
                 {
@@ -60,6 +54,19 @@ namespace Certificate_Maker_System
 
                     // Fill the DataTable with the data from the database
                     dataAdapter.Fill(dataTable);
+
+                    // Add after filling the dataTable
+                    if (dataTable.Columns.Contains("birthDate"))
+                    {
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            if (row["birthDate"] != DBNull.Value)
+                            {
+                                DateTime date = Convert.ToDateTime(row["birthDate"]);
+                                row["birthDate"] = date.ToString("yyyy-MM-dd");
+                            }
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -78,9 +85,9 @@ namespace Certificate_Maker_System
 
         private void addstudentbtn(object sender, EventArgs e)
         {
-            AddStudent addStudent = new AddStudent();
-            addStudent.Show();
+            AddStudent addStudent = new AddStudent(this);
 
+            addStudent.Show();
         }
 
         private void studentTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -207,7 +214,7 @@ namespace Certificate_Maker_System
 
         private void editbtn(object sender, EventArgs e)
         {
-            AddStudent addStudent = new AddStudent();
+            AddStudent addStudent = new AddStudent(this);
 
             if (studentTable.SelectedRows.Count > 0)
             {
@@ -253,6 +260,80 @@ namespace Certificate_Maker_System
 
         private void StudentList_Load(object sender, EventArgs e)
         {
+            studentTable.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            studentTable.MultiSelect = false;
+            // Example code if you added a ComboBox in the designer named cbStatusFilter:
+            cbStatusFilter.Items.Clear();
+            cbStatusFilter.Items.Add("Enrolled");
+            cbStatusFilter.Items.Add("Graduated");
+            cbStatusFilter.Items.Add("All");
+            cbStatusFilter.SelectedIndex = 0; // default to "Enrolled"
+
+            // Call your method to populate the DataGridView, filtered
+            PopulateDataGridViewAsync();
+        }
+
+        private void cbStatusFilter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PopulateDataGridViewAsync();
+        }
+
+        private async void btnMarkAsGraduate_Click(object sender, EventArgs e)
+        {
+            // 1) Make sure a student row is selected
+            if (studentTable.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Please select a student to mark as Graduated.",
+                    "No Student Selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // 2) Retrieve the selected student’s LRN
+            DataGridViewRow selectedRow = studentTable.SelectedRows[0];
+            string lrnNo = selectedRow.Cells["lrnNo"].Value.ToString();
+
+            // 3) Ask confirmation
+            DialogResult confirm = MessageBox.Show(
+                $"Are you sure you want to mark LRN {lrnNo} as Graduated?",
+                "Mark as Graduate",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+            if (confirm != DialogResult.Yes) return;
+
+            // 4) Perform the update on student_academic
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    string updateQuery = "UPDATE student_academic SET status = 'Graduated' WHERE lrnNo = @LRN";
+                    using (MySqlCommand cmd = new MySqlCommand(updateQuery, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@LRN", lrnNo);
+                        await cmd.ExecuteNonQueryAsync();
+                    }
+                }
+
+                MessageBox.Show("Student successfully marked as Graduated!",
+                    "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // 5) Refresh or re-populate the DataGridView
+                await PopulateDataGridViewAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void buttonBulkAdd_Click(object sender, EventArgs e)
+        {
+            // Open the new BulkAddStudents form
+            BulkAddStudents bulkAddForm = new BulkAddStudents(this);
+            bulkAddForm.ShowDialog();
         }
     }
 }

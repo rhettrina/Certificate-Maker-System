@@ -1,15 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Certificate_Maker_System
 {
@@ -17,11 +8,14 @@ namespace Certificate_Maker_System
     {
         private const string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;";
         private MySqlConnection connection;
-        string labelgender;
-        string gender;
-        public AddStudent()
+        private string labelgender;
+        private string gender;
+        private StudentList parentStudentList;
+
+        public AddStudent(StudentList parentList)
         {
             InitializeComponent();
+            this.parentStudentList = parentList;
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -56,6 +50,15 @@ namespace Certificate_Maker_System
 
         private void savebtn(object sender, EventArgs e)
         {
+            // 1) Ensure LRN has exactly 11 digits:
+            if (lrnbox.Text.Length != 11)
+            {
+                MessageBox.Show("LRN must be exactly 11 digits. Please correct it to continue.",
+                                "Invalid LRN",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                return; // Stop execution if it's not exactly 11 digits
+            }
             if (IsAllFieldsFilled())
             {
                 try
@@ -100,7 +103,10 @@ namespace Certificate_Maker_System
                                     cmd.Parameters.AddWithValue("@lrnNo", lrnNo);
                                     cmd.Parameters.AddWithValue("@lastName", lastName);
                                     cmd.Parameters.AddWithValue("@firstName", firstName);
-                                    cmd.Parameters.AddWithValue("@middleName", middleName);
+                                    cmd.Parameters.AddWithValue(
+     "@middleName",
+     string.IsNullOrEmpty(middleName) ? (object)DBNull.Value : middleName
+ );
                                     // In AddStudent.cs, savebtn method
                                     cmd.Parameters.AddWithValue("@birthDate", DateTime.Parse(birthDate));
 
@@ -147,6 +153,8 @@ namespace Certificate_Maker_System
                         if (!string.IsNullOrEmpty(successMessage))
                         {
                             MessageBox.Show(successMessage, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            parentStudentList.RefreshDataGridView();
+                            this.Close();
                         }
                     }
                 }
@@ -166,7 +174,6 @@ namespace Certificate_Maker_System
             return !string.IsNullOrEmpty(lrnbox.Text) &&
                    !string.IsNullOrEmpty(lastnamebox.Text) &&
                    !string.IsNullOrEmpty(firstnamebox.Text) &&
-                   !string.IsNullOrEmpty(middlebox.Text) &&
                    DateTime.TryParse(birthdaybox.Text, out _) &&
                    !string.IsNullOrEmpty(gradebox.Text) &&
                    !string.IsNullOrEmpty(sectionbox.Text) &&
@@ -221,6 +228,14 @@ namespace Certificate_Maker_System
             this.Close();
             StudentList studentList = new StudentList();
             studentList.RefreshDataGridView();
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
         }
     }
 }

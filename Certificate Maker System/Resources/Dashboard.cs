@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
 
 namespace Certificate_Maker_System.Resources
 {
@@ -24,9 +16,14 @@ namespace Certificate_Maker_System.Resources
             // Format the date as "dddd, MMMM dd" (day of the week, full month name, day of the month)
             string formattedDate = currentDate.ToString("dddd, MMMM dd");
 
-            // Set the formatted date to the TextBox
+            // Set the formatted date to the label
             datenow.Text = formattedDate;
             UpdateGenderCounts();
+        }
+
+        private void Dashboard_Load(object sender, EventArgs e)
+        {
+            // Handle any additional load logic here if needed
         }
 
         private void UpdateGenderCounts()
@@ -51,7 +48,6 @@ namespace Certificate_Maker_System.Resources
 
                             int totalCount = maleCount + femaleCount;
                             totalno.Text = totalCount.ToString();
-                            // Update TextBoxes with counts
                             maleno.Text = maleCount.ToString();
                             femaleno.Text = femaleCount.ToString();
                         }
@@ -65,40 +61,47 @@ namespace Certificate_Maker_System.Resources
             }
         }
 
-        private void monthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
+        private void panel1_Paint(object sender, PaintEventArgs e)
         {
-        }
-
-        private void Dashboard_Load(object sender, EventArgs e)
-        {
-        }
-
-        private void guna2Panel1_Paint(object sender, PaintEventArgs e)
-        {
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
+            // Optional paint handling
         }
 
         private void panel5_Paint(object sender, PaintEventArgs e)
         {
+            // Optional paint handling
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
+        private void label4_Click(object sender, EventArgs e)
         {
+            // Optional event handling
         }
 
         private void label5_Click(object sender, EventArgs e)
         {
+            // Optional event handling
         }
 
         private void label7_Click(object sender, EventArgs e)
         {
+            // Optional event handling
+        }
+
+        private void monthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
+        {
+            // Optional event handling for other calendars if needed
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Optional event handling for combo box
+        }
+
+        // This is the click event for the "Add Student" button
+        private void btnAddStudent_Click(object sender, EventArgs e)
+        {
+            // Instantiate and show the AddStudent form
+            AddStudent addStudentForm = new AddStudent(null);
+            addStudentForm.Show();
         }
     }
 }

@@ -117,17 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="button8.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1
-        MAAA6mAAADqYAAAXcJy6UTwAAAAHdElNRQfnDAgGAzIgpjqFAAABLUlEQVRYR+2XQW7CMBBF5xKUssFu
-        1Xuymiy4A2dBglVBbCgCbgNy4EvOl4HE8cCCvg0oM573jS2kiPwDvM7EV3P5qQZcKsaXDsXrRpwuuSS1
-        3OtJXLU1CVHLq93Fob9clloa5KHB60Hc9JNbsvmefIjTv+vs/e3ZFiFay0HJEE15h1klQmTLQZ8QveUg
-        J0QxOegSorgccIixjrjl0mMhB/dCcK24HLAohOBnZnIQn3P4jL+H2lNo7vpJO49JBUhdTBNeegSpC8fP
-        zH4JFsVnzrXiIViQunDcUywED07JAff2DsED78kBr8kOwYPayAGv7RyCB3SRA57ROgQvzJEDnvUwBC/o
-        IwfxTKfH2yEs5KBVCKera4PNX2pzgxsuhwALcbo2kYM6hK7Sr2bvyhnHyjrxTdqAPwAAAABJRU5ErkJg
-        gg==
-</value>
+  <data name="lblInstructions.Text" xml:space="preserve">
+    <value>To bulk-add students:
+• Each line must have 10 fields separated by commas:
+  LRN,FirstName,MiddleName,LastName,BirthDate,Gender,Address,Grade,Section,Track
+• Example:
+  12345678901,Juan,Dela,Cruz,2005-06-15,male,Makati,Grade 11,Sampaguita,STEM
+• Paste your CSV lines in the box or click Browse CSV to load from file.</value>
   </data>
 </root>

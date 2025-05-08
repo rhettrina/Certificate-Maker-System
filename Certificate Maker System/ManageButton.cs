@@ -1,22 +1,16 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Certificate_Maker_System
 {
     public partial class ManageButton : UserControl
     {
-        string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;";
+        private string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;";
         private MySqlConnection connection;
         public string getuserid;
+
         public ManageButton()
         {
             InitializeComponent();

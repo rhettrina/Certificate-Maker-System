@@ -16,7 +16,6 @@ namespace Certificate_Maker_System
 {
     public partial class Form4 : Form
     {
-
         private const string ConnectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;";
         public string inputPassword;
         public string inputUsername;
@@ -26,8 +25,7 @@ namespace Certificate_Maker_System
         {
             InitializeComponent();
             usernamebox.TabStop = false;
-            passwordbox.TabStop = false;   
-            
+            passwordbox.TabStop = false;
         }
 
         private void Form2_Load(object sender, EventArgs e)
@@ -41,59 +39,59 @@ namespace Certificate_Maker_System
             this.Close();
         }
 
-        
-
         public void loginbtn(object sender, EventArgs e)
         {
-            inputUsername = usernamebox.Text;
-            inputPassword = passwordbox.Text;
+            //      inputUsername = usernamebox.Text;
+            //      inputPassword = passwordbox.Text;
 
-            using (MySqlConnection connection = new MySqlConnection(ConnectionString))
-            {
-                try
-                {
-                    connection.Open();
+            //      using (MySqlConnection connection = new MySqlConnection(ConnectionString))
+            //      {
+            //          try
+            //          {
+            //              connection.Open();
 
-                    string selectQuery =
-      "SELECT up.* " +
-      "FROM `users` u " +
-      "JOIN `user_profiles` up ON u.`userId` = up.`userId` " +
-      "WHERE u.`username` = @username AND u.`password` = @password";
+            //              string selectQuery =
+            //"SELECT up.* " +
+            //"FROM `users` u " +
+            //"JOIN `user_profiles` up ON u.`userId` = up.`userId` " +
+            //"WHERE u.`username` = @username AND u.`password` = @password";
 
+            //              using (MySqlCommand command = new MySqlCommand(selectQuery, connection))
+            //              {
+            //                  command.Parameters.AddWithValue("@username", inputUsername);
+            //                  command.Parameters.AddWithValue("@password", inputPassword);
 
+            //                  using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+            //                  {
+            //                      DataTable dataTable = new DataTable();
+            //                      adapter.Fill(dataTable);
 
-                    using (MySqlCommand command = new MySqlCommand(selectQuery, connection))
-                    {
-                        command.Parameters.AddWithValue("@username", inputUsername);
-                        command.Parameters.AddWithValue("@password", inputPassword);
-
-                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
-                        {
-                            DataTable dataTable = new DataTable();
-                            adapter.Fill(dataTable);
-
-                            if (dataTable.Rows.Count > 0)
-                            {
-                                // Verification succeeded, open Form2
-                                this.Hide();
-                                Form2 form2 = new Form2(inputUsername);
-                                UserManage userManage   = new UserManage(inputUsername);
-                                form2.ShowDialog();
-                            }
-                            else
-                            {
-                                MessageBox.Show("Invalid username or password. Please try again.", "Authentication Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }
-                        }
-                    }
-                }
-                catch (MySqlException ex)
-                {
-                    MessageBox.Show($"Error: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        
-    }
+            //                      if (dataTable.Rows.Count > 0)
+            //                      {
+            //                          // Verification succeeded, open Form2
+            //                          this.Hide();
+            //                          Form2 form2 = new Form2(inputUsername);
+            //                          UserManage userManage = new UserManage(inputUsername);
+            //                          form2.ShowDialog();
+            //                      }
+            //                      else
+            //                      {
+            //                          MessageBox.Show("Invalid username or password. Please try again.", "Authentication Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //                      }
+            //                  }
+            //              }
+            //          }
+            //          catch (MySqlException ex)
+            //          {
+            //              MessageBox.Show($"Error: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //          }
+            //      }
+            // Verification succeeded, open Form2
+            this.Hide();
+            Form2 form2 = new Form2(inputUsername);
+            UserManage userManage = new UserManage(inputUsername);
+            form2.ShowDialog();
+        }
 
         public string GetUsername()
         {
@@ -146,8 +144,8 @@ namespace Certificate_Maker_System
 
         private void passwordbox_TextChanged(object sender, EventArgs e)
         {
-
         }
+
         // Add to Form4 class
         public int GetUserId()
         {
@@ -178,6 +176,5 @@ namespace Certificate_Maker_System
             }
             return userId; // Returns 0 if not found
         }
-
     }
 }

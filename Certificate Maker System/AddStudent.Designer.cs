@@ -71,7 +71,8 @@
             // lrnbox
             // 
             this.lrnbox.Font = new System.Drawing.Font("Microsoft Tai Le", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lrnbox.Location = new System.Drawing.Point(265, 59);
+            this.lrnbox.Location = new System.Drawing.Point(271, 94);
+            this.lrnbox.MaxLength = 11;
             this.lrnbox.Name = "lrnbox";
             this.lrnbox.Size = new System.Drawing.Size(223, 32);
             this.lrnbox.TabIndex = 3;
@@ -81,7 +82,7 @@
             // middlebox
             // 
             this.middlebox.Font = new System.Drawing.Font("Microsoft Tai Le", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.middlebox.Location = new System.Drawing.Point(18, 113);
+            this.middlebox.Location = new System.Drawing.Point(25, 148);
             this.middlebox.Name = "middlebox";
             this.middlebox.Size = new System.Drawing.Size(223, 32);
             this.middlebox.TabIndex = 4;
@@ -89,7 +90,7 @@
             // lastnamebox
             // 
             this.lastnamebox.Font = new System.Drawing.Font("Microsoft Tai Le", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lastnamebox.Location = new System.Drawing.Point(18, 173);
+            this.lastnamebox.Location = new System.Drawing.Point(25, 208);
             this.lastnamebox.Name = "lastnamebox";
             this.lastnamebox.Size = new System.Drawing.Size(223, 32);
             this.lastnamebox.TabIndex = 6;
@@ -130,7 +131,7 @@
             this.gradebox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.gradebox.Font = new System.Drawing.Font("Microsoft Tai Le", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gradebox.FormattingEnabled = true;
-            this.gradebox.Location = new System.Drawing.Point(18, 243);
+            this.gradebox.Location = new System.Drawing.Point(25, 278);
             this.gradebox.Name = "gradebox";
             this.gradebox.Size = new System.Drawing.Size(223, 31);
             this.gradebox.TabIndex = 10;
@@ -141,7 +142,7 @@
             this.sectionbox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.sectionbox.Font = new System.Drawing.Font("Microsoft Tai Le", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sectionbox.FormattingEnabled = true;
-            this.sectionbox.Location = new System.Drawing.Point(18, 314);
+            this.sectionbox.Location = new System.Drawing.Point(25, 349);
             this.sectionbox.Name = "sectionbox";
             this.sectionbox.Size = new System.Drawing.Size(223, 31);
             this.sectionbox.TabIndex = 11;
@@ -151,7 +152,7 @@
             this.trackbox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.trackbox.Font = new System.Drawing.Font("Microsoft Tai Le", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.trackbox.FormattingEnabled = true;
-            this.trackbox.Location = new System.Drawing.Point(18, 383);
+            this.trackbox.Location = new System.Drawing.Point(25, 418);
             this.trackbox.Name = "trackbox";
             this.trackbox.Size = new System.Drawing.Size(223, 31);
             this.trackbox.TabIndex = 13;
@@ -160,7 +161,7 @@
             // firstnamebox
             // 
             this.firstnamebox.Font = new System.Drawing.Font("Microsoft Tai Le", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.firstnamebox.Location = new System.Drawing.Point(18, 59);
+            this.firstnamebox.Location = new System.Drawing.Point(25, 94);
             this.firstnamebox.Name = "firstnamebox";
             this.firstnamebox.Size = new System.Drawing.Size(223, 32);
             this.firstnamebox.TabIndex = 2;
@@ -195,7 +196,7 @@
             this.birthdaybox.CustomFormat = "yyyy-MM-dd";
             this.birthdaybox.Font = new System.Drawing.Font("Microsoft Tai Le", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.birthdaybox.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.birthdaybox.Location = new System.Drawing.Point(265, 113);
+            this.birthdaybox.Location = new System.Drawing.Point(271, 148);
             this.birthdaybox.Name = "birthdaybox";
             this.birthdaybox.Size = new System.Drawing.Size(223, 32);
             this.birthdaybox.TabIndex = 17;
@@ -205,18 +206,19 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label4.Location = new System.Drawing.Point(268, 94);
+            this.label4.Location = new System.Drawing.Point(275, 75);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(32, 16);
             this.label4.TabIndex = 19;
             this.label4.Text = "LRN";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label3.Location = new System.Drawing.Point(22, 94);
+            this.label3.Location = new System.Drawing.Point(29, 75);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(74, 16);
             this.label3.TabIndex = 18;
@@ -227,7 +229,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label5.Location = new System.Drawing.Point(22, 148);
+            this.label5.Location = new System.Drawing.Point(29, 129);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(156, 16);
             this.label5.TabIndex = 20;
@@ -238,7 +240,7 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label6.Location = new System.Drawing.Point(22, 208);
+            this.label6.Location = new System.Drawing.Point(29, 189);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(72, 16);
             this.label6.TabIndex = 21;
@@ -249,18 +251,19 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label7.Location = new System.Drawing.Point(268, 148);
+            this.label7.Location = new System.Drawing.Point(275, 129);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(66, 16);
             this.label7.TabIndex = 22;
             this.label7.Text = "BirthDate";
+            this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label8.Location = new System.Drawing.Point(22, 277);
+            this.label8.Location = new System.Drawing.Point(29, 258);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(43, 16);
             this.label8.TabIndex = 23;
@@ -271,7 +274,7 @@
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label9.Location = new System.Drawing.Point(22, 348);
+            this.label9.Location = new System.Drawing.Point(29, 329);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(52, 16);
             this.label9.TabIndex = 24;
@@ -282,7 +285,7 @@
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label10.Location = new System.Drawing.Point(278, 417);
+            this.label10.Location = new System.Drawing.Point(275, 295);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(56, 16);
             this.label10.TabIndex = 25;
@@ -293,7 +296,7 @@
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label11.Location = new System.Drawing.Point(22, 417);
+            this.label11.Location = new System.Drawing.Point(29, 398);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(101, 16);
             this.label11.TabIndex = 26;

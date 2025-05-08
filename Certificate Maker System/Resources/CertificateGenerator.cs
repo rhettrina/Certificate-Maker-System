@@ -1,266 +1,292 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using Word = Microsoft.Office.Interop.Word;
 
 namespace Certificate_Maker_System.Resources
 {
-
     public partial class CertificateGenerator : UserControl
     {
         private const string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;";
-        public string lrnInput;
-        public string gnsInput;
-        public string satInput;
-        public string nameInput;
-        public string corTemp;
-        public string goodMoral;
-        public string ranking;
-        public string codTemp;
-        private object folder;
         public string selectedTemplate;
         private MySqlConnection connection;
+
+        // Map friendly names to template files if needed (optional)
+        private Dictionary<string, string> templatePaths = new Dictionary<string, string>();
+
+        // A WebBrowser to display the HTML preview
+        private WebBrowser webPreview;
+
+        // Debounce timer to wait briefly before regenerating preview
+        private Timer previewTimer;
 
         public CertificateGenerator()
         {
             InitializeComponent();
-            searchbox.TabStop = false;
             connection = new MySqlConnection(connectionString);
+
+            // If you have physical templates, map them here; otherwise, skip
+            templatePaths["Certificate of Enrolment"] = "enrolment.docx";
+            templatePaths["Good Moral"] = "good moral.docx";
+            templatePaths["Graduate"] = "graduate.docx";
+
+            // Initialize the HTML preview control
+            InitializePreviewControl();
+
+            // Set up a timer to trigger preview generation after typing stops
+            previewTimer = new Timer
+            {
+                Interval = 800 // milliseconds
+            };
+            previewTimer.Tick += (s, e) =>
+            {
+                previewTimer.Stop();
+                UpdatePreview();
+            };
+        }
+
+        private void CertificateGenerator_Load(object sender, EventArgs e)
+        {
+            // Initialize dropdowns, default text, etc.
+            try
+            {
+                types.Items.Clear();
+                types.Items.Add("Certificate of Enrolment");
+                types.Items.Add("Good Moral");
+                types.Items.Add("Graduate");
+
+                semesterBox.SelectedIndex = 0;
+                startYearCombo.SelectedIndex = 0;
+                endYearCombo.SelectedIndex = 1;
+                issueDatePicker.Value = DateTime.Today;
+
+                registrarBox.Text = "FLORABEL A. PLACIDO";
+                principalBox.Text = "MARLO FIEL P. SULTAN, Ed. D.";
+
+                // Hook text-change events for real-time preview
+                lrn.TextChanged += (s, ev) => TriggerPreview();
+                namebox.TextChanged += (s, ev) => TriggerPreview();
+                gradebox.SelectedIndexChanged += (s, ev) => TriggerPreview();
+                trackbox.SelectedIndexChanged += (s, ev) => TriggerPreview();
+                semesterBox.SelectedIndexChanged += (s, ev) => TriggerPreview();
+                startYearCombo.SelectedIndexChanged += (s, ev) => TriggerPreview();
+                endYearCombo.SelectedIndexChanged += (s, ev) => TriggerPreview();
+                purposeBox.TextChanged += (s, ev) => TriggerPreview();
+                issueDatePicker.ValueChanged += (s, ev) => TriggerPreview();
+                registrarBox.TextChanged += (s, ev) => TriggerPreview();
+                principalBox.TextChanged += (s, ev) => TriggerPreview();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error on load: " + ex.Message);
+            }
+        }
+
+        // Simple method to set up the WebBrowser inside panelPreview
+        private void InitializePreviewControl()
+        {
+            webPreview = new WebBrowser
+            {
+                Dock = DockStyle.Fill,
+                ScriptErrorsSuppressed = true,
+                AllowWebBrowserDrop = false
+            };
+            panelPreview.Controls.Clear();
+            panelPreview.Controls.Add(webPreview);
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (types.SelectedItem != null)
+            selectedTemplate = types.SelectedItem?.ToString() ?? "";
+
+            if (selectedTemplate == "Certificate of Enrolment")
             {
-                selectedTemplate = this.types.GetItemText(this.types.SelectedItem);
+                // Toggle UI controls
+                labelRegistrar.Visible = true;
+                registrarBox.Visible = true;
+                labelPrincipal.Visible = false;
+                principalBox.Visible = false;
 
-                switch (selectedTemplate)
-                {
-                    case "Certificate of Enrolment":
-                        LoadTemplate1();
-                        break;
+                labelSemester.Visible = true;
+                semesterBox.Visible = true;
 
-                    case "Good Moral":
-                        LoadTemplate2();
-                        break;
-
-                    case "Ranking":
-                        LoadTemplate3();
-                        break;
-
-                    default:
-                        // Handle default case or do nothing
-                        break;
-                }
+                labelPurpose.Visible = true;
+                purposeBox.Visible = true;
             }
+            else if (selectedTemplate == "Good Moral")
+            {
+                labelRegistrar.Visible = false;
+                registrarBox.Visible = false;
+                labelPrincipal.Visible = true;
+                principalBox.Visible = true;
+
+                labelSemester.Visible = false;
+                semesterBox.Visible = false;
+
+                labelPurpose.Visible = false;
+                purposeBox.Visible = false;
+            }
+            else if (selectedTemplate == "Graduate")
+            {
+                labelRegistrar.Visible = false;
+                registrarBox.Visible = false;
+                labelPrincipal.Visible = true;
+                principalBox.Visible = true;
+
+                labelSemester.Visible = false;
+                semesterBox.Visible = false;
+
+                labelPurpose.Visible = true;
+                purposeBox.Visible = true;
+            }
+
+            TriggerPreview();
         }
 
-        private void LoadTemplate1()
-        {
-            corTemp = "CERTIFICATE OF ENROLMENT\r\n\r\n" +
-                      "To Whom It May Concern:\r\n" +
-                      "This is to certify that " + namebox.Text + " with Learners Reference Number " + lrn.Text + "" +
-                      " is enrolled as Grade " + gradebox.Text + " in this school, this SEMESTER SY SCHOOL YEAR.\r\n" +
-                      "Issued this DAY day of MONTH YEAR upon request of the party concerned for PURPOSE.\r\n\r\n" +
-                      "FLORABEL A. PLACIDO\r\nRegistrar I\r\n\r\n\r\n\r\n\r\n  " +
-                      "Not Valid without\r\n" +
-                      "JPNHS Official Seal";
-        }
-
-        private void LoadTemplate2()
-        {
-            goodMoral = "CERTIFICATE OF GOOD MORAL CHARACTER\r\n\r\n" +
-                "To Whom It May Concern:\r\n" +
-                "This is to certify that " + namebox.Text + " with LRN " + lrn.Text + " is a graduate of " + trackbox.Text + " in this school under the K to 12 Curriculum, this SY SCHOOL YEAR.\r\n        \r\n" +
-                "HE/SHE is known to be a student with good moral character and has no record of misdemeanor.\r\n\r\n" +
-                "Issued this DAY day of MONTH YEAR upon request of the party concerned for whatever legal purpose/s this may serve.\r\n\r\n\r\n\r\n\r\n" +
-                "MARLO FIEL P. SULTAN, Ed. D.\r\nSchool Principal III\r\n\r\n\r\n\r\n\r\n" +
-                "Not valid without JPNHS \r\n        " +
-                "Official Seal";
-        }
-
-        private void LoadTemplate3()
-        {
-            // Get the current date
-            string currentDate = DateTime.Now.ToString("dd MMMM, yyyy");
-
-            ranking = "C E R T I F I C A T I O N\r\n\r\n" +
-                "To Whom It May Concern:\r\n\r\n\t" +
-                "This is to certify that " + namebox.Text + " with LRN " + lrn.Text + " ranked 1st out of 744 learners in this institution during the School Year 2022-2023. \r\n\r\n\t" +
-                "Also, Mr. Carlo Mario Panambo ranked 1st out of 388 learners in Academic Track. He obtained a general weighted average of 98% and awarded with Highest Honors.\r\n\r\n\t" +
-                "Issued this " + currentDate + " upon the request of the party concerned as reference for Ateneo De Naga University Scholarship.\r\n\r\n\r\n\r\n" +
-                "MARO FIEL P. SULTAN\r\n" +
-                "School Principal III\r\n\r\n\r\n" +
-                "BY AUTHORITY OF THE PRINCIPAL\r\n\r\n\r\n" +
-                "EUNICE M. LONIZO\r\n" +
-                "HT III, English / OIC – Asst. School Principal II\r\n\r\n\r\n  " +
-                "Not Valid without\r\nJPNHS Official Seal";
-        }
-
-
-
-
+        // Button for generating the final "certificate" (here we just show a message)
+        // You can adapt this to actually produce a file if desired.
         private void button1_Click(object sender, EventArgs e)
         {
-            // First, check if we have a valid LRN number to work with
-            if (string.IsNullOrEmpty(lrn.Text) || !int.TryParse(lrn.Text, out int lrnNo))
+            if (string.IsNullOrWhiteSpace(lrn.Text))
             {
-                MessageBox.Show("Please enter a valid LRN number.");
+                MessageBox.Show("Please enter a valid LRN number.", "Validation Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(selectedTemplate))
+            {
+                MessageBox.Show("Please select a certificate type.", "Validation Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(namebox.Text))
+            {
+                MessageBox.Show("Please enter a student name.", "Validation Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Check if a certificate type is selected
-            if (string.IsNullOrEmpty(selectedTemplate))
+            // If you have logic to produce a real file, place it here
+            // For now, we just notify success
+            MessageBox.Show("Certificate generated successfully (placeholder)!", "Success",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // Example if you want to store data in a DB
+            // (Assuming you have a table named certificate_history, etc.)
+            try
             {
-                MessageBox.Show("Please select a certificate type.");
-                return;
+                SaveCertificateHistory(lrn.Text, selectedTemplate);
             }
-
-            // Generate the certificate document based on template
-            if (!string.IsNullOrEmpty(selectedTemplate))
+            catch (Exception ex)
             {
-                Word.Application wordApp = new Word.Application();
-                wordApp.Visible = true;
-                wordApp.WindowState = Word.WdWindowState.wdWindowStateNormal;
-                Word.Document doc = wordApp.Documents.Add();
-                Word.Paragraph paragraph = doc.Paragraphs.Add();
-
-                switch (selectedTemplate)
-                {
-                    case "Certificate of Enrolment":
-                        paragraph.Range.Text = corTemp;
-                        break;
-                    case "Good Moral":
-                        paragraph.Range.Text = goodMoral;
-                        break;
-                    case "Ranking":
-                        paragraph.Range.Text = ranking;
-                        break;
-                    default:
-                        paragraph.Range.Text = "No template selected.";
-                        break;
-                }
+                MessageBox.Show("Failed to save certificate info: " + ex.Message);
             }
+        }
 
-            // Save to history table without tracking who generated it
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
+        // Demonstration of saving to a hypothetical certificate_history table
+        private void SaveCertificateHistory(string lrnNo, string certificateType)
+        {
+            try
             {
-                try
+                using (var conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
+                    string query = @"
+                        INSERT INTO certificate_history
+                          (lrn_no, student_name, certificate_type, generated_date)
+                        VALUES
+                          (@lrnNo, @studentName, @certType, @generatedDate);";
 
-                    // Insert into certificate_history without the generated_by field
-                    string query = "INSERT INTO certificate_history (lrn_no, certificate_type, generated_date) " +
-                                  "VALUES (@lrnNo, @certificateType, @generatedDate)";
-
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@lrnNo", lrnNo);
-                        cmd.Parameters.AddWithValue("@certificateType", selectedTemplate);
+                        cmd.Parameters.AddWithValue("@studentName", namebox.Text.Trim());
+                        cmd.Parameters.AddWithValue("@certType", certificateType);
                         cmd.Parameters.AddWithValue("@generatedDate", DateTime.Now);
-
                         cmd.ExecuteNonQuery();
                     }
-
-                    MessageBox.Show("Certificate generated and history saved successfully!");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
                 }
             }
-        }
-
-
-
-
-
-
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-            // Implementation for label2_Click
-        }
-
-
-        private void lrnBox(object sender, EventArgs e)
-        {
-            lrnInput = lrn.Text;
-            LoadSelectedTemplate(); // Trigger template loading when lrnBox is updated
-        }
-
-        private void gradeAndSection(object sender, EventArgs e)
-        {
-            gnsInput = gradebox.Text;
-            LoadSelectedTemplate(); // Trigger template loading when gradeAndSectionBox is updated
-        }
-
-        private void strandAndTrack(object sender, EventArgs e)
-        {
-            satInput = trackbox.Text;
-            LoadSelectedTemplate(); // Trigger template loading when strandAndSectionBox is updated
-        }
-
-        private void name(object sender, EventArgs e)
-        {
-            nameInput = namebox.Text;
-            LoadSelectedTemplate(); // Trigger template loading when nameBox is updated
-        }
-
-        private void LoadSelectedTemplate()
-        {
-            // Update the content based on the selected template
-            switch (selectedTemplate)
+            catch
             {
-                case "Certificate of Enrolment":
-                    LoadTemplate1();
-                    break;
-
-                case "Good Moral":
-                    LoadTemplate2();
-                    break;
-
-                case "Ranking":
-                    LoadTemplate3();
-                    break;
-
-                // Add more cases as needed
-
-                default:
-                    // Handle default case or do nothing
-                    break;
+                // Swallow or rethrow as needed
+                throw;
             }
-
-            // Set the appropriate template content to the corresponding variables
-            corTemp = selectedTemplate == "Certificate of Enrolment" ? corTemp : null;
-            goodMoral = selectedTemplate == "Good Moral" ? goodMoral : null;
-            ranking = selectedTemplate == "Ranking" ? ranking : null;
         }
 
-
-
-        private void CertificateGenerator_Load(object sender, EventArgs e)
+        // Search logic (LRN or partial name)
+        private void searchbtn(object sender, EventArgs e)
         {
-            types.Items.Add("Certificate of Enrolment");
-            types.Items.Add("Good Moral");
-            types.Items.Add("Ranking");
+            if (string.IsNullOrWhiteSpace(searchbox.Text) ||
+                searchbox.Text == "Search LRN or Student Name")
+            {
+                MessageBox.Show("Please enter an LRN or student name to search.", "Search",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            string searchValue = searchbox.Text.Trim();
+
+            try
+            {
+                using (var conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = @"
+                        SELECT s.lrnNo,
+                               CONCAT(s.firstName, ' ',
+                                      IFNULL(s.middleName, ''),
+                                      ' ',
+                                      s.lastName) AS fullName,
+                               sa.grade,
+                               sa.section,
+                               sa.track
+                        FROM students s
+                        JOIN student_academic sa ON s.lrnNo = sa.lrnNo
+                        WHERE s.lrnNo LIKE @search
+                           OR CONCAT(s.firstName, ' ', s.middleName, ' ', s.lastName) LIKE @search
+                        LIMIT 1;";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@search", "%" + searchValue + "%");
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                lrn.Text = reader["lrnNo"].ToString();
+                                namebox.Text = reader["fullName"].ToString().Replace("  ", " ");
+                                gradebox.Text = $"{reader["grade"]} - {reader["section"]}";
+                                trackbox.Text = reader["track"].ToString();
+                            }
+                            else
+                            {
+                                MessageBox.Show(
+                                    "No data found for the provided search criteria.",
+                                    "Search",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error searching: " + ex.Message,
+                    "Search Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void searchenter(object sender, EventArgs e)
         {
             if (searchbox.Text == "Search LRN or Student Name")
             {
-                // Clear the text when the TextBox receives focus
                 searchbox.Text = "";
                 searchbox.ForeColor = Color.Black;
             }
@@ -270,57 +296,186 @@ namespace Certificate_Maker_System.Resources
         {
             if (string.IsNullOrWhiteSpace(searchbox.Text))
             {
-                // If it's empty, set the default text back
                 searchbox.Text = "Search LRN or Student Name";
-                // Set the text color back to gray
                 searchbox.ForeColor = Color.Gray;
             }
         }
 
-
-        private async void searchbtn(object sender, EventArgs e)
+        private void buttonBatchGenerate_Click(object sender, EventArgs e)
         {
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-
-                    string searchCriteria = searchbox.Text;
-
-                    string query = "SELECT s.lrnNo, CONCAT(s.firstName, ' ', s.middleName, ' ', s.lastName) AS fullName, sa.grade, sa.section, sa.track " +
-                                   "FROM students s " +
-                                   "JOIN student_academic sa ON s.lrnNo = sa.lrnNo " +
-                                   "WHERE s.lrnNo LIKE @searchCriteria OR " +
-                                   "CONCAT(s.firstName, ' ', s.middleName, ' ', s.lastName) LIKE @searchCriteria";
-
-                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
-                    {
-                        cmd.Parameters.AddWithValue("@searchCriteria", "%" + searchCriteria + "%");
-
-                        using (MySqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                lrn.Text = reader["lrnNo"].ToString();
-                                namebox.Text = reader["fullName"].ToString();
-                                gradebox.Text = $"{reader["grade"]} - {reader["section"]}";
-                                trackbox.Text = reader["track"].ToString();
-                            }
-                            else
-                            {
-                                MessageBox.Show("No data found for the provided search criteria.");
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
-            }
+            MessageBox.Show("Batch generation functionality is planned for a future update.",
+                "Coming Soon", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        // --------------- PREVIEW WITH HTML (no external library) ---------------
 
+        /// <summary>
+        /// Called to schedule a preview update after the user stops typing.
+        /// </summary>
+        private void TriggerPreview()
+        {
+            previewTimer.Stop();
+            previewTimer.Start();
+        }
+
+        /// <summary>
+        /// Called by the timer to rebuild the preview HTML and load in the WebBrowser.
+        /// </summary>
+        private void UpdatePreview()
+        {
+            if (string.IsNullOrWhiteSpace(selectedTemplate))
+                return;
+
+            string html = GeneratePreviewHtml();
+            webPreview.DocumentText = html;
+        }
+
+        /// <summary>
+        /// Generates a small HTML snippet to show in the WebBrowser preview,
+        /// based on selected template and field inputs.
+        /// </summary>
+        private string GeneratePreviewHtml()
+        {
+            // Basic data
+            string studentName = namebox.Text.Trim();
+            string studentLRN = lrn.Text.Trim();
+            string gradeSection = gradebox.Text.Trim();
+            string track = trackbox.Text.Trim();
+            string sy = $"{startYearCombo.Text}-{endYearCombo.Text}";
+            string dateIssued = issueDatePicker.Value.ToString("MMMM dd, yyyy");
+            string purpose = purposeBox.Text.Trim();
+            string sem = semesterBox.Visible ? semesterBox.Text : "";
+            string signatoryName = (selectedTemplate == "Certificate of Enrolment")
+                ? registrarBox.Text : principalBox.Text;
+            string signatoryTitle = (selectedTemplate == "Certificate of Enrolment")
+                ? "School Registrar" : "School Principal";
+
+            // Build the HTML
+            var html = $@"
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Certificate Preview</title>
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            margin: 0; padding: 0;
+            background: #f2f2f2;
+        }}
+        .preview-container {{
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }}
+        .certificate {{
+            margin: 0 auto;
+            width: 600px;
+            background: #fff;
+            padding: 40px;
+            border: 2px solid #003299;
+            box-sizing: border-box;
+        }}
+        h1 {{
+            text-align: center;
+            text-transform: uppercase;
+            color: #003299;
+            margin-bottom: 0;
+        }}
+        h2 {{
+            text-align: center;
+            margin-top: 5px;
+            font-weight: normal;
+            color: #333;
+        }}
+        p {{
+            margin: 5px 0;
+            font-size: 14px;
+            line-height: 1.4;
+            text-align: center;
+        }}
+        .signatory {{
+            margin-top: 60px;
+            text-align: center;
+        }}
+        .signatory-line {{
+            display: block;
+            width: 250px;
+            margin: 0 auto;
+            border-bottom: 1px solid #000;
+            margin-bottom: 5px;
+        }}
+        .signatory-name {{
+            font-weight: bold;
+            text-transform: uppercase;
+        }}
+        .signatory-title {{
+            font-style: italic;
+            font-size: 13px;
+        }}
+        .issued-date {{
+            margin-top: 25px;
+            font-style: italic;
+        }}
+    </style>
+</head>
+<body>
+    <div class='preview-container'>
+        <div class='certificate'>
+            <h1>CERTIFICATE</h1>
+            <h2>{selectedTemplate}</h2>
+";
+            // Template logic
+            if (selectedTemplate == "Certificate of Enrolment")
+            {
+                html += $@"
+            <p>This is to certify that {studentName}, LRN: {studentLRN}<br/>
+               is officially enrolled in Grade {gradeSection}, Track: {track}<br/>
+               {sem}, School Year {sy}.</p>
+            ";
+                if (!string.IsNullOrEmpty(purpose))
+                {
+                    html += $@"
+            <p>This certification is issued for {purpose}.</p>
+                    ";
+                }
+            }
+            else if (selectedTemplate == "Good Moral")
+            {
+                html += $@"
+            <p>This is to certify that {studentName}, LRN: {studentLRN}<br/>
+               is a student of <strong>Good Moral Character</strong><br/>
+               Grade {gradeSection}, Track: {track}, S.Y. {sy}.</p>
+            ";
+            }
+            else if (selectedTemplate == "Graduate")
+            {
+                html += $@"
+            <p>This is to certify that {studentName}, LRN: {studentLRN}<br/>
+               has successfully completed all requirements for<br/>
+               Grade {gradeSection}, Track: {track}, S.Y. {sy}.</p>
+            ";
+                if (!string.IsNullOrEmpty(purpose))
+                {
+                    html += $@"
+            <p>This certification is issued for {purpose}.</p>
+                    ";
+                }
+            }
+
+            html += $@"
+            <div class='issued-date'>Issued on {dateIssued}</div>
+            <div class='signatory'>
+                <span class='signatory-line'></span>
+                <div class='signatory-name'>{signatoryName}</div>
+                <div class='signatory-title'>{signatoryTitle}</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+";
+            return html;
+        }
     }
 }

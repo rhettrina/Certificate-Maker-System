@@ -68,11 +68,11 @@
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Font = new System.Drawing.Font("Microsoft New Tai Lue", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label2.Location = new System.Drawing.Point(12, 216);
+            this.label2.Location = new System.Drawing.Point(82, 220);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(496, 48);
+            this.label2.Size = new System.Drawing.Size(344, 48);
             this.label2.TabIndex = 2;
-            this.label2.Text = "CERTIFICATE MAKER SYSTEM";
+            this.label2.Text = "REGISTRAR SYSTEM";
             // 
             // usernamebox
             // 

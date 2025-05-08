@@ -1,16 +1,7 @@
-﻿using Certificate_Maker_System.Resources;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static Guna.UI2.WinForms.Helpers.GraphicsHelper;
 
 namespace Certificate_Maker_System
 {
@@ -21,6 +12,7 @@ namespace Certificate_Maker_System
         private int clickCount = 0;
         private int clickCount1 = 0;
         private string receive;
+
         public UserManage(string getuser)
         {
             InitializeComponent();

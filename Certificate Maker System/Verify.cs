@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Certificate_Maker_System
@@ -39,7 +32,7 @@ namespace Certificate_Maker_System
         private void okbtn(object sender, EventArgs e)
         {
             Form4 form4 = new Form4();
-            
+
             string trytry = "try";
 
             if (confirmation.Text == trytry)

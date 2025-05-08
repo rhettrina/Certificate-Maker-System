@@ -28,13 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StudentList));
             this.studentTable = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
+            this.cbStatusFilter = new System.Windows.Forms.ComboBox();
+            this.btnMarkAsGraduate = new System.Windows.Forms.Button();
+            this.buttonBulkAdd = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.studentTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,14 +49,14 @@
             this.studentTable.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.studentTable.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.studentTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.studentTable.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.studentTable.DefaultCellStyle = dataGridViewCellStyle3;
             this.studentTable.Location = new System.Drawing.Point(19, 41);
             this.studentTable.Name = "studentTable";
             this.studentTable.Size = new System.Drawing.Size(685, 524);
@@ -112,11 +115,55 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.editbtn);
             // 
+            // cbStatusFilter
+            // 
+            this.cbStatusFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbStatusFilter.FormattingEnabled = true;
+            this.cbStatusFilter.Location = new System.Drawing.Point(139, 14);
+            this.cbStatusFilter.Name = "cbStatusFilter";
+            this.cbStatusFilter.Size = new System.Drawing.Size(121, 21);
+            this.cbStatusFilter.TabIndex = 5;
+            // 
+            // btnMarkAsGraduate
+            // 
+            this.btnMarkAsGraduate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnMarkAsGraduate.BackColor = System.Drawing.Color.Green;
+            this.btnMarkAsGraduate.FlatAppearance.BorderSize = 0;
+            this.btnMarkAsGraduate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMarkAsGraduate.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMarkAsGraduate.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnMarkAsGraduate.Location = new System.Drawing.Point(351, 586);
+            this.btnMarkAsGraduate.Name = "btnMarkAsGraduate";
+            this.btnMarkAsGraduate.Size = new System.Drawing.Size(150, 40);
+            this.btnMarkAsGraduate.TabIndex = 6;
+            this.btnMarkAsGraduate.Text = "Mark as Graduate";
+            this.btnMarkAsGraduate.UseVisualStyleBackColor = false;
+            this.btnMarkAsGraduate.Click += new System.EventHandler(this.btnMarkAsGraduate_Click);
+            // 
+            // buttonBulkAdd
+            // 
+            this.buttonBulkAdd.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.buttonBulkAdd.BackColor = System.Drawing.Color.DimGray;
+            this.buttonBulkAdd.FlatAppearance.BorderSize = 0;
+            this.buttonBulkAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonBulkAdd.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonBulkAdd.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonBulkAdd.Location = new System.Drawing.Point(184, 586);
+            this.buttonBulkAdd.Name = "buttonBulkAdd";
+            this.buttonBulkAdd.Size = new System.Drawing.Size(150, 40);
+            this.buttonBulkAdd.TabIndex = 7;
+            this.buttonBulkAdd.Text = "Import Students";
+            this.buttonBulkAdd.UseVisualStyleBackColor = false;
+            this.buttonBulkAdd.Click += new System.EventHandler(this.buttonBulkAdd_Click);
+            // 
             // StudentList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.Controls.Add(this.buttonBulkAdd);
+            this.Controls.Add(this.btnMarkAsGraduate);
+            this.Controls.Add(this.cbStatusFilter);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -138,5 +185,8 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.ComboBox cbStatusFilter;
+        private System.Windows.Forms.Button btnMarkAsGraduate;
+        private System.Windows.Forms.Button buttonBulkAdd;
     }
 }
