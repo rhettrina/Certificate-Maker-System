@@ -41,56 +41,56 @@ namespace Certificate_Maker_System
 
         public void loginbtn(object sender, EventArgs e)
         {
-            //      inputUsername = usernamebox.Text;
-            //      inputPassword = passwordbox.Text;
+            inputUsername = usernamebox.Text;
+            inputPassword = passwordbox.Text;
 
-            //      using (MySqlConnection connection = new MySqlConnection(ConnectionString))
-            //      {
-            //          try
-            //          {
-            //              connection.Open();
+            using (MySqlConnection connection = new MySqlConnection(ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
 
-            //              string selectQuery =
-            //"SELECT up.* " +
-            //"FROM `users` u " +
-            //"JOIN `user_profiles` up ON u.`userId` = up.`userId` " +
-            //"WHERE u.`username` = @username AND u.`password` = @password";
+                    string selectQuery =
+      "SELECT up.* " +
+      "FROM `users` u " +
+      "JOIN `user_profiles` up ON u.`userId` = up.`userId` " +
+      "WHERE u.`username` = @username AND u.`password` = @password";
 
-            //              using (MySqlCommand command = new MySqlCommand(selectQuery, connection))
-            //              {
-            //                  command.Parameters.AddWithValue("@username", inputUsername);
-            //                  command.Parameters.AddWithValue("@password", inputPassword);
+                    using (MySqlCommand command = new MySqlCommand(selectQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@username", inputUsername);
+                        command.Parameters.AddWithValue("@password", inputPassword);
 
-            //                  using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
-            //                  {
-            //                      DataTable dataTable = new DataTable();
-            //                      adapter.Fill(dataTable);
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                        {
+                            DataTable dataTable = new DataTable();
+                            adapter.Fill(dataTable);
 
-            //                      if (dataTable.Rows.Count > 0)
-            //                      {
-            //                          // Verification succeeded, open Form2
-            //                          this.Hide();
-            //                          Form2 form2 = new Form2(inputUsername);
-            //                          UserManage userManage = new UserManage(inputUsername);
-            //                          form2.ShowDialog();
-            //                      }
-            //                      else
-            //                      {
-            //                          MessageBox.Show("Invalid username or password. Please try again.", "Authentication Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //                      }
-            //                  }
-            //              }
-            //          }
-            //          catch (MySqlException ex)
-            //          {
-            //              MessageBox.Show($"Error: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //          }
-            //      }
+                            if (dataTable.Rows.Count > 0)
+                            {
+                                // Verification succeeded, open Form2
+                                this.Hide();
+                                Form2 form2 = new Form2(inputUsername);
+                                UserManage userManage = new UserManage(inputUsername);
+                                form2.ShowDialog();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Invalid username or password. Please try again.", "Authentication Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                    }
+                }
+                catch (MySqlException ex)
+                {
+                    MessageBox.Show($"Error: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
             // Verification succeeded, open Form2
-            this.Hide();
-            Form2 form2 = new Form2(inputUsername);
-            UserManage userManage = new UserManage(inputUsername);
-            form2.ShowDialog();
+            //this.Hide();
+            //Form2 form2 = new Form2(inputUsername);
+            //UserManage userManage = new UserManage(inputUsername);
+            //form2.ShowDialog();
         }
 
         public string GetUsername()
