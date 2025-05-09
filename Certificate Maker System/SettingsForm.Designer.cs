@@ -29,7 +29,9 @@ namespace Certificate_Maker_System
         #region Windows Form Designer generated code
 
         private void InitializeComponent()
-        {
+        {// Add this at the end of the InitializeComponent() method, just before the ResumeLayout call
+            this.Load += new System.EventHandler(this.SettingsForm_Load);
+
             this.txtOutputPath = new System.Windows.Forms.TextBox();
             this.btnBrowsePath = new System.Windows.Forms.Button();
             this.btnAddSection = new System.Windows.Forms.Button();

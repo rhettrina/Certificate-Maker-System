@@ -439,147 +439,246 @@ namespace Certificate_Maker_System.Resources
         /// Generates a small HTML snippet to show in the WebBrowser preview,
         /// based on selected template and field inputs.
         /// </summary>
+        /// <summary>
+        /// Generates an HTML preview that closely mimics the actual Word document templates.
+        /// </summary>
+        /// <summary>
+        /// Generates an HTML preview that closely mimics the actual Word document templates,
+        /// including a school header with logo.
+        /// </summary>
         private string GeneratePreviewHtml()
         {
-            // Basic data
+            // Determine gender prefix (simplified example)
+            string genderPrefix = DetermineGenderPrefix(namebox.Text);
+            string heOrShe = genderPrefix == "Mr." ? "He" : "She";
+            string hisOrHer = genderPrefix == "Mr." ? "his" : "her";
+
+            // Basic data (same as your replacement list)
             string studentName = namebox.Text.Trim();
             string studentLRN = lrn.Text.Trim();
             string gradeSection = gradebox.Text.Trim();
             string track = trackbox.Text.Trim();
-            string sy = $"{startYearCombo.Text}-{endYearCombo.Text}";
-            string dateIssued = issueDatePicker.Value.ToString("MMMM dd, yyyy");
+            string semester = semesterBox.Visible ? semesterBox.Text : "";
+            string schoolYear = $"{startYearCombo.Text}-{endYearCombo.Text}";
             string purpose = purposeBox.Text.Trim();
-            string sem = semesterBox.Visible ? semesterBox.Text : "";
-            string signatoryName = (selectedTemplate == "Certificate of Enrolment")
-                ? registrarBox.Text : principalBox.Text;
-            string signatoryTitle = (selectedTemplate == "Certificate of Enrolment")
-                ? "School Registrar" : "School Principal";
 
-            // Build the HTML
-            var html = $@"
+            // Date components
+            DateTime issueDate = issueDatePicker.Value;
+            string issueDay = issueDate.ToString("dd");
+            string issueMonth = issueDate.ToString("MMMM");
+            string issueYear = issueDate.ToString("yyyy");
+
+            // Signatories
+            string registrar = registrarBox.Text.Trim();
+            string principal = principalBox.Text.Trim();
+
+            // Base path for resources (adjust as needed)
+            string logoPath = Path.Combine(Application.StartupPath, "Resources", "jpnhs_logo.png");
+            // Create a data URI for the logo if file exists
+            string logoDataUri = "";
+            if (File.Exists(logoPath))
+            {
+                try
+                {
+                    byte[] logoBytes = File.ReadAllBytes(logoPath);
+                    logoDataUri = $"data:image/png;base64,{Convert.ToBase64String(logoBytes)}";
+                }
+                catch
+                {
+                    // Fallback if image cannot be loaded
+                    logoDataUri = "";
+                }
+            }
+
+            // Base HTML with styles
+            string html = $@"
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset='utf-8' />
+    <meta charset='utf-8'>
     <title>Certificate Preview</title>
     <style>
         body {{
-            font-family: Arial, sans-serif;
-            margin: 0; padding: 0;
-            background: #f2f2f2;
+            font-family: 'Times New Roman', serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
         }}
         .preview-container {{
             width: 100%;
-            padding: 20px;
-            box-sizing: border-box;
-        }}
-        .certificate {{
+            max-width: 800px;
             margin: 0 auto;
-            width: 600px;
-            background: #fff;
+            background-color: white;
             padding: 40px;
-            border: 2px solid #003299;
-            box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            min-height: 800px;
+        }}
+        .header {{
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+        }}
+        .header-logo {{
+            max-width: 80px;
+            height: auto;
+            margin-bottom: 10px;
+        }}
+        .header-text {{
+            margin: 0;
+            padding: 0;
+        }}
+        .school-name {{
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+            text-transform: uppercase;
+        }}
+        .school-address {{
+            font-size: 12px;
+            margin: 5px 0;
         }}
         h1 {{
             text-align: center;
-            text-transform: uppercase;
-            color: #003299;
-            margin-bottom: 0;
-        }}
-        h2 {{
-            text-align: center;
-            margin-top: 5px;
-            font-weight: normal;
-            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            margin-top: 30px;
+            letter-spacing: 3px;
         }}
         p {{
-            margin: 5px 0;
+            line-height: 1.6;
             font-size: 14px;
-            line-height: 1.4;
-            text-align: center;
+            text-align: justify;
+            margin-bottom: 10px;
         }}
-        .signatory {{
+        .signature {{
             margin-top: 60px;
             text-align: center;
-        }}
-        .signatory-line {{
-            display: block;
-            width: 250px;
-            margin: 0 auto;
-            border-bottom: 1px solid #000;
-            margin-bottom: 5px;
         }}
         .signatory-name {{
             font-weight: bold;
             text-transform: uppercase;
+            margin-bottom: 0;
         }}
         .signatory-title {{
             font-style: italic;
-            font-size: 13px;
+            margin-top: 0;
         }}
-        .issued-date {{
-            margin-top: 25px;
+        .indent {{
+            text-indent: 40px;
+        }}
+        .seal-notice {{
+            margin-top: 80px;
             font-style: italic;
+            font-size: 12px;
+            position: relative;
+            left: 40px;
         }}
     </style>
 </head>
 <body>
     <div class='preview-container'>
-        <div class='certificate'>
-            <h1>CERTIFICATE</h1>
-            <h2>{selectedTemplate}</h2>
+        <div class='header'>
 ";
-            // Template logic
+
+            // Add logo if we have it
+            if (!string.IsNullOrEmpty(logoDataUri))
+            {
+                html += $@"<img src='{logoDataUri}' class='header-logo' alt='School Logo'><br>";
+            }
+            else
+            {
+                // Text-based fallback if no logo is available
+                html += $@"<div style='width:80px;height:80px;border:1px solid #ccc;margin:0 auto;display:flex;align-items:center;justify-content:center;'>LOGO</div><br>";
+            }
+
+            // Add school header text
+            html += $@"
+            <div class='header-text'>
+                <p class='school-name'>JOSE P. NUVAL NATIONAL HIGH SCHOOL</p>
+                <p class='school-address'>Calumpit, Bulacan</p>
+                <p class='school-address'>Senior High School Department</p>
+            </div>
+        </div>
+";
+
+            // Different content based on template type
             if (selectedTemplate == "Certificate of Enrolment")
             {
+                // Based on enrolment.docx template
                 html += $@"
-            <p>This is to certify that {studentName}, LRN: {studentLRN}<br/>
-               is officially enrolled in Grade {gradeSection}, Track: {track}<br/>
-               {sem}, School Year {sy}.</p>
-            ";
-                if (!string.IsNullOrEmpty(purpose))
-                {
-                    html += $@"
-            <p>This certification is issued for {purpose}.</p>
-                    ";
-                }
+        <h1>CERTIFICATE OF ENROLMENT</h1>
+
+        <p>To Whom It May Concern:</p>
+
+        <p class='indent'>This is to certify that {studentName} with Learners Reference Number {studentLRN} is enrolled as Grade {gradeSection} {track} in this school, this {semester} SY {schoolYear}.</p>
+
+        <p class='indent'>Issued this {issueDay} day of {issueMonth} {issueYear} upon request of the party concerned for {purpose}.</p>
+
+        <div class='signature'>
+            <p class='signatory-name'>{registrar}</p>
+            <p class='signatory-title'>Registrar I</p>
+        </div>
+
+        <p class='seal-notice'>Not Valid without<br>JPNHS Official Seal</p>
+";
             }
             else if (selectedTemplate == "Good Moral")
             {
+                // Based on good moral.docx template
                 html += $@"
-            <p>This is to certify that {studentName}, LRN: {studentLRN}<br/>
-               is a student of <strong>Good Moral Character</strong><br/>
-               Grade {gradeSection}, Track: {track}, S.Y. {sy}.</p>
-            ";
+        <h1>CERTIFICATE OF GOOD MORAL CHARACTER</h1>
+
+        <p>To Whom It May Concern:</p>
+
+        <p class='indent'>This is to certify that {studentName} with LRN {studentLRN} is a graduate of {track} in this school under the K to 12 Curriculum, this SY {schoolYear}.</p>
+
+        <p class='indent'>{heOrShe} is known to be a student with good moral character and has no record of misdemeanor.</p>
+
+        <p class='indent'>Issued this {issueDay} day of {issueMonth} {issueYear} upon request of the party concerned for whatever legal purpose/s this may serve.</p>
+
+        <div class='signature'>
+            <p class='signatory-name'>{principal}</p>
+            <p class='signatory-title'>School Principal III</p>
+        </div>
+
+        <p class='seal-notice'>Not valid without JPNHS<br>Official Seal</p>
+";
             }
             else if (selectedTemplate == "Graduate")
             {
+                // Based on graduate.docx template
                 html += $@"
-            <p>This is to certify that {studentName}, LRN: {studentLRN}<br/>
-               has successfully completed all requirements for<br/>
-               Grade {gradeSection}, Track: {track}, S.Y. {sy}.</p>
-            ";
-                if (!string.IsNullOrEmpty(purpose))
-                {
-                    html += $@"
-            <p>This certification is issued for {purpose}.</p>
-                    ";
-                }
+        <h1>C E R T I F I C A T I O N</h1>
+
+        <p>To Whom It May Concern:</p>
+
+        <p class='indent'>This is to certify that {studentName} with LRN {studentLRN} graduated Senior High School in this institution, during the School Year {schoolYear} under the K to 12 Curriculum.</p>
+
+        <p class='indent'>This further certifies that {studentName} completed the course {track}</p>
+
+        <p class='indent'>Issued this {issueDay} day of {issueMonth}, {issueYear} upon the request of the party concerned for whatever legal purpose this may serve.</p>
+
+        <div class='signature'>
+            <p class='signatory-name'>{principal}</p>
+            <p class='signatory-title'>School Principal III</p>
+        </div>
+
+        <p class='seal-notice'>Not Valid without<br>JPNHS Official Seal</p>
+";
+            }
+            else
+            {
+                // Default placeholder if no template selected
+                html += "<p style='text-align:center; color:#777; margin-top:100px;'>Please select a certificate type</p>";
             }
 
-            html += $@"
-            <div class='issued-date'>Issued on {dateIssued}</div>
-            <div class='signatory'>
-                <span class='signatory-line'></span>
-                <div class='signatory-name'>{signatoryName}</div>
-                <div class='signatory-title'>{signatoryTitle}</div>
-            </div>
-        </div>
+            html += @"
     </div>
 </body>
-</html>
-";
+</html>";
+
             return html;
         }
     }
