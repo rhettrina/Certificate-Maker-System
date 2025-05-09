@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using DocumentFormat.OpenXml.Packaging;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -151,42 +152,144 @@ namespace Certificate_Maker_System.Resources
 
         // Button for generating the final "certificate" (here we just show a message)
         // You can adapt this to actually produce a file if desired.
+        // Add this method to generate the actual document
         private void button1_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(lrn.Text))
+            if (string.IsNullOrWhiteSpace(lrn.Text) ||
+                string.IsNullOrWhiteSpace(selectedTemplate) ||
+                string.IsNullOrWhiteSpace(namebox.Text))
             {
-                MessageBox.Show("Please enter a valid LRN number.", "Validation Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(selectedTemplate))
-            {
-                MessageBox.Show("Please select a certificate type.", "Validation Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(namebox.Text))
-            {
-                MessageBox.Show("Please enter a student name.", "Validation Error",
+                MessageBox.Show("Please fill in all required fields.", "Validation Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // If you have logic to produce a real file, place it here
-            // For now, we just notify success
-            MessageBox.Show("Certificate generated successfully (placeholder)!", "Success",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            // Example if you want to store data in a DB
-            // (Assuming you have a table named certificate_history, etc.)
             try
             {
+                // 1. Determine template path based on selected certificate type
+                string templatePath = Path.Combine(Application.StartupPath, "Templates",
+                    templatePaths[selectedTemplate]);
+
+                if (!File.Exists(templatePath))
+                {
+                    MessageBox.Show($"Template file not found: {templatePaths[selectedTemplate]}",
+                        "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // 2. Create output directory if it doesn't exist
+                string outputDir = Path.Combine(Environment.GetFolderPath(
+                    Environment.SpecialFolder.MyDocuments), "Generated_Certificates");
+                Directory.CreateDirectory(outputDir);
+
+                // 3. Generate unique filename for output
+                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                string safeName = new string(namebox.Text.Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray());
+                string outputDoc = Path.Combine(outputDir, $"{safeName}_{timestamp}.docx");
+
+                // 4. Copy template to output location
+                File.Copy(templatePath, outputDoc);
+
+                // 5. Determine gender prefix based on name or other logic
+                string genderPrefix = DetermineGenderPrefix(namebox.Text);
+
+                // 6. School year combined value
+                string schoolYear = $"{startYearCombo.Text}-{endYearCombo.Text}";
+
+                // 7. Issue date components
+                DateTime issueDateValue = issueDatePicker.Value;
+
+                // 8. Get track, grade section, etc.
+                string track = trackbox.Text.Trim();
+                string gradeSection = gradebox.Text.Trim();
+                string semester = semesterBox.Visible ? semesterBox.Text : "";
+                string purpose = purposeBox.Text.Trim();
+                string registrar = registrarBox.Text.Trim();
+                string principal = principalBox.Text.Trim();
+
+                // 9. Apply the replacement logic from your code
+                using (WordprocessingDocument doc = WordprocessingDocument.Open(outputDoc, true))
+                {
+                    var replacements = new List<(string placeholder, string value)>
+            {
+                ("##STUDENT_NAME##", namebox.Text),
+                ("##LRN##", lrn.Text),
+                ("##GRADE_SECTION##", gradeSection ?? ""),
+                ("##TRACK##", track ?? ""),
+                ("##SEMESTER##", semester ?? ""),
+                ("##SCHOOL_YEAR##", schoolYear ?? ""),
+                ("##PURPOSE##", purpose ?? ""),
+                ("##ISSUE_DAY##", issueDateValue.ToString("dd")),
+                ("##ISSUE_MONTH##", issueDateValue.ToString("MMMM")),
+                ("##ISSUE_YEAR##", issueDateValue.ToString("yyyy")),
+                ("##REGISTRAR_NAME##", registrar ?? ""),
+                ("##PRINCIPAL##", principal ?? ""),
+                ("##GENDER_PREFIX##", genderPrefix)
+            };
+
+                    // Handle special case for "he/she"
+                    string heOrShe = genderPrefix == "Mr." ? "He" : "She";
+                    replacements.Add(("##HE_SHE##", heOrShe));
+                    replacements.Add(("##HE/SHE##", heOrShe));
+                    replacements.Add(("HE/SHE", heOrShe));
+
+                    // Add possessive variants
+                    string hisOrHer = genderPrefix == "Mr." ? "his" : "her";
+                    replacements.Add(("##HIS_HER##", hisOrHer));
+                    replacements.Add(("##HIS/HER##", hisOrHer));
+
+                    var body = doc.MainDocumentPart.Document.Body;
+
+                    foreach (var paragraph in body.Descendants<DocumentFormat.OpenXml.Wordprocessing.Paragraph>())
+                    {
+                        foreach (var text in paragraph.Descendants<DocumentFormat.OpenXml.Wordprocessing.Text>())
+                        {
+                            string currentText = text.Text;
+                            bool textChanged = false;
+
+                            foreach (var (placeholder, value) in replacements)
+                            {
+                                if (currentText.Contains(placeholder))
+                                {
+                                    currentText = currentText.Replace(placeholder, value ?? "");
+                                    textChanged = true;
+                                }
+                            }
+
+                            if (textChanged)
+                            {
+                                text.Text = currentText;
+                            }
+                        }
+                    }
+
+                    doc.MainDocumentPart.Document.Save();
+                }
+
+                // 10. Show success message and open the file
+                MessageBox.Show($"Certificate generated successfully!\nSaved to: {outputDoc}", "Success",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Optionally open the document
+                System.Diagnostics.Process.Start(outputDoc);
+
+                // 11. Save to history if needed
                 SaveCertificateHistory(lrn.Text, selectedTemplate);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Failed to save certificate info: " + ex.Message);
+                MessageBox.Show($"Error generating certificate: {ex.Message}",
+                    "Generation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        // Helper method to determine gender prefix (you can implement your own logic)
+        private string DetermineGenderPrefix(string name)
+        {
+            // This is a simplified example - in a real application,
+            // you might want to store the gender in your database
+            // or have a more sophisticated mechanism
+            return "Mr."; // Default value
         }
 
         // Demonstration of saving to a hypothetical certificate_history table
