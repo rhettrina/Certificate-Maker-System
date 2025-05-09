@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Certificate_Maker_System.Resources;
+using MySql.Data.MySqlClient;
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -12,6 +13,7 @@ namespace Certificate_Maker_System
         private int clickCount = 0;
         private int clickCount1 = 0;
         private string receive;
+        private CertificateGenerator generator;
 
         public UserManage(string getuser)
         {
@@ -28,6 +30,7 @@ namespace Certificate_Maker_System
             form2 = new Form2("");
             manageButton = new ManageButton();
             receive = getuser;
+            generator = new CertificateGenerator();
         }
 
         private void guna2CustomGradientPanel1_Paint(object sender, PaintEventArgs e)
@@ -137,6 +140,15 @@ namespace Certificate_Maker_System
             }
 
             MessageBox.Show("Username updated successfully!");
+        }
+
+        private void settingsbtn_Click(object sender, EventArgs e)
+        {
+            // Open the Settings form, passing in the current generator
+            using (SettingsForm sf = new SettingsForm(generator))
+            {
+                sf.ShowDialog();
+            }
         }
     }
 }

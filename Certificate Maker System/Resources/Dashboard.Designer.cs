@@ -2,15 +2,53 @@
 {
     partial class Dashboard
     {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
+        // Top panel: date label + Add Student button
+        private System.Windows.Forms.Panel panelTop;
+        private System.Windows.Forms.Label labelDate;
+        private System.Windows.Forms.Button btnAddStudent;
+
+        // Panel: Overall counts
+        private System.Windows.Forms.Panel panelOverall;
+        private System.Windows.Forms.Label labelOverallTitle;
+        private System.Windows.Forms.Label labelTotalCount;
+        private System.Windows.Forms.Label labelMaleTitle;
+        private System.Windows.Forms.Label labelMaleCount;
+        private System.Windows.Forms.Label labelFemaleTitle;
+        private System.Windows.Forms.Label labelFemaleCount;
+
+        // Panel: Grade counts
+        private System.Windows.Forms.Panel panelGrades;
+        private System.Windows.Forms.Label labelGradesTitle;
+        private System.Windows.Forms.Label labelG11Title;
+        private System.Windows.Forms.Label labelG12Title;
+        private System.Windows.Forms.Label labelCountG11;
+        private System.Windows.Forms.Label labelCountG12;
+
+        // Panel: Track counts
+        private System.Windows.Forms.Panel panelTracks;
+        private System.Windows.Forms.Label labelTrackTitle;
+        private System.Windows.Forms.Label labelSTEMTitle;
+        private System.Windows.Forms.Label labelSTEMCount;
+        private System.Windows.Forms.Label labelGASTitle;
+        private System.Windows.Forms.Label labelGASCount;
+        private System.Windows.Forms.Label labelHETitle;
+        private System.Windows.Forms.Label labelHECount;
+        private System.Windows.Forms.Label labelAgriTitle;
+        private System.Windows.Forms.Label labelAgriCount;
+
+        // Panel: Enrollment status (Enrolled, Graduated, etc.)
+        private System.Windows.Forms.Panel panelStatus;
+        private System.Windows.Forms.Label labelStatusTitle;
+        private System.Windows.Forms.Label labelEnrolledTitle;
+        private System.Windows.Forms.Label labelGraduatedTitle;
+        private System.Windows.Forms.Label labelEnrolledCount;
+        private System.Windows.Forms.Label labelGraduatedCount;
+
         /// <summary> 
-        /// Clean up any resources being used.
+        /// Disposes resources.
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,273 +60,421 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
+        /// <summary>
+        /// Required method for Designer support.
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dashboard));
-            this.label1 = new System.Windows.Forms.Label();
-            this.datenow = new System.Windows.Forms.Label();
-            this.monthCalendar2 = new System.Windows.Forms.MonthCalendar();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.femaleno = new System.Windows.Forms.Label();
-            this.maleno = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.panel7 = new System.Windows.Forms.Panel();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.totalno = new System.Windows.Forms.Label();
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.panel1.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panel4.SuspendLayout();
+            this.panelTop = new System.Windows.Forms.Panel();
+            this.labelDate = new System.Windows.Forms.Label();
+            this.btnAddStudent = new System.Windows.Forms.Button();
+            this.panelOverall = new System.Windows.Forms.Panel();
+            this.labelOverallTitle = new System.Windows.Forms.Label();
+            this.labelTotalCount = new System.Windows.Forms.Label();
+            this.labelMaleTitle = new System.Windows.Forms.Label();
+            this.labelMaleCount = new System.Windows.Forms.Label();
+            this.labelFemaleTitle = new System.Windows.Forms.Label();
+            this.labelFemaleCount = new System.Windows.Forms.Label();
+            this.panelGrades = new System.Windows.Forms.Panel();
+            this.labelGradesTitle = new System.Windows.Forms.Label();
+            this.labelG11Title = new System.Windows.Forms.Label();
+            this.labelCountG11 = new System.Windows.Forms.Label();
+            this.labelG12Title = new System.Windows.Forms.Label();
+            this.labelCountG12 = new System.Windows.Forms.Label();
+            this.panelTracks = new System.Windows.Forms.Panel();
+            this.labelTrackTitle = new System.Windows.Forms.Label();
+            this.labelSTEMTitle = new System.Windows.Forms.Label();
+            this.labelSTEMCount = new System.Windows.Forms.Label();
+            this.labelGASTitle = new System.Windows.Forms.Label();
+            this.labelGASCount = new System.Windows.Forms.Label();
+            this.labelHETitle = new System.Windows.Forms.Label();
+            this.labelHECount = new System.Windows.Forms.Label();
+            this.labelAgriTitle = new System.Windows.Forms.Label();
+            this.labelAgriCount = new System.Windows.Forms.Label();
+            this.panelStatus = new System.Windows.Forms.Panel();
+            this.labelStatusTitle = new System.Windows.Forms.Label();
+            this.labelEnrolledTitle = new System.Windows.Forms.Label();
+            this.labelEnrolledCount = new System.Windows.Forms.Label();
+            this.labelGraduatedTitle = new System.Windows.Forms.Label();
+            this.labelGraduatedCount = new System.Windows.Forms.Label();
+            this.panelTop.SuspendLayout();
+            this.panelOverall.SuspendLayout();
+            this.panelGrades.SuspendLayout();
+            this.panelTracks.SuspendLayout();
+            this.panelStatus.SuspendLayout();
             this.SuspendLayout();
             // 
-            // label1
+            // panelTop
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label1.Location = new System.Drawing.Point(12, 12);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(68, 16);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Date Now";
+            this.panelTop.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panelTop.Controls.Add(this.labelDate);
+            this.panelTop.Controls.Add(this.btnAddStudent);
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(724, 60);
+            this.panelTop.TabIndex = 0;
             // 
-            // datenow
+            // labelDate
             // 
-            this.datenow.AutoSize = true;
-            this.datenow.Font = new System.Drawing.Font("Microsoft Tai Le", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.datenow.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.datenow.Location = new System.Drawing.Point(10, 45);
-            this.datenow.Name = "datenow";
-            this.datenow.Size = new System.Drawing.Size(189, 27);
-            this.datenow.TabIndex = 2;
-            this.datenow.Text = "Week, Month Day";
+            this.labelDate.AutoSize = true;
+            this.labelDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.labelDate.Location = new System.Drawing.Point(20, 20);
+            this.labelDate.Name = "labelDate";
+            this.labelDate.Size = new System.Drawing.Size(181, 20);
+            this.labelDate.TabIndex = 0;
+            this.labelDate.Text = "Friday, September 01";
             // 
-            // monthCalendar2
+            // btnAddStudent
             // 
-            this.monthCalendar2.Location = new System.Drawing.Point(15, 81);
-            this.monthCalendar2.Name = "monthCalendar2";
-            this.monthCalendar2.TabIndex = 3;
+            this.btnAddStudent.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.btnAddStudent.Location = new System.Drawing.Point(560, 10);
+            this.btnAddStudent.Name = "btnAddStudent";
+            this.btnAddStudent.Size = new System.Drawing.Size(150, 40);
+            this.btnAddStudent.TabIndex = 1;
+            this.btnAddStudent.Text = "Add New Student";
+            this.btnAddStudent.UseVisualStyleBackColor = true;
+            this.btnAddStudent.Click += new System.EventHandler(this.btnAddStudent_Click);
             // 
-            // panel1
+            // panelOverall
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(32)))), ((int)(((byte)(133)))));
-            this.panel1.Controls.Add(this.monthCalendar2);
-            this.panel1.Controls.Add(this.datenow);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(452, 16);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(255, 266);
-            this.panel1.TabIndex = 1;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            this.panelOverall.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(32)))), ((int)(((byte)(133)))));
+            this.panelOverall.Controls.Add(this.labelOverallTitle);
+            this.panelOverall.Controls.Add(this.labelTotalCount);
+            this.panelOverall.Controls.Add(this.labelMaleTitle);
+            this.panelOverall.Controls.Add(this.labelMaleCount);
+            this.panelOverall.Controls.Add(this.labelFemaleTitle);
+            this.panelOverall.Controls.Add(this.labelFemaleCount);
+            this.panelOverall.Location = new System.Drawing.Point(16, 60);
+            this.panelOverall.Name = "panelOverall";
+            this.panelOverall.Size = new System.Drawing.Size(694, 140);
+            this.panelOverall.TabIndex = 1;
             // 
-            // panel3
+            // labelOverallTitle
             // 
-            this.panel3.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.panel3.Controls.Add(this.femaleno);
-            this.panel3.Controls.Add(this.maleno);
-            this.panel3.Controls.Add(this.label6);
-            this.panel3.Controls.Add(this.label5);
-            this.panel3.Controls.Add(this.panel7);
-            this.panel3.Controls.Add(this.panel6);
-            this.panel3.Controls.Add(this.totalno);
-            this.panel3.Controls.Add(this.panel5);
-            this.panel3.Controls.Add(this.panel4);
-            this.panel3.Location = new System.Drawing.Point(19, 16);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(418, 266);
-            this.panel3.TabIndex = 3;
+            this.labelOverallTitle.AutoSize = true;
+            this.labelOverallTitle.Font = new System.Drawing.Font("Microsoft Tai Le", 16F, System.Drawing.FontStyle.Bold);
+            this.labelOverallTitle.ForeColor = System.Drawing.Color.White;
+            this.labelOverallTitle.Location = new System.Drawing.Point(310, 10);
+            this.labelOverallTitle.Name = "labelOverallTitle";
+            this.labelOverallTitle.Size = new System.Drawing.Size(87, 29);
+            this.labelOverallTitle.TabIndex = 0;
+            this.labelOverallTitle.Text = "Overall";
             // 
-            // femaleno
+            // labelTotalCount
             // 
-            this.femaleno.AutoSize = true;
-            this.femaleno.Font = new System.Drawing.Font("Microsoft Tai Le", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.femaleno.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.femaleno.Location = new System.Drawing.Point(275, 210);
-            this.femaleno.Name = "femaleno";
-            this.femaleno.Size = new System.Drawing.Size(79, 34);
-            this.femaleno.TabIndex = 7;
-            this.femaleno.Text = "1389";
+            this.labelTotalCount.AutoSize = true;
+            this.labelTotalCount.Font = new System.Drawing.Font("Microsoft Tai Le", 15.75F, System.Drawing.FontStyle.Bold);
+            this.labelTotalCount.ForeColor = System.Drawing.Color.White;
+            this.labelTotalCount.Location = new System.Drawing.Point(315, 50);
+            this.labelTotalCount.Name = "labelTotalCount";
+            this.labelTotalCount.Size = new System.Drawing.Size(86, 27);
+            this.labelTotalCount.TabIndex = 1;
+            this.labelTotalCount.Text = "Total: 0";
             // 
-            // maleno
+            // labelMaleTitle
             // 
-            this.maleno.AutoSize = true;
-            this.maleno.Font = new System.Drawing.Font("Microsoft Tai Le", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.maleno.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.maleno.Location = new System.Drawing.Point(68, 212);
-            this.maleno.Name = "maleno";
-            this.maleno.Size = new System.Drawing.Size(79, 34);
-            this.maleno.TabIndex = 6;
-            this.maleno.Text = "1200";
-            this.maleno.Click += new System.EventHandler(this.label7_Click);
+            this.labelMaleTitle.AutoSize = true;
+            this.labelMaleTitle.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold);
+            this.labelMaleTitle.ForeColor = System.Drawing.Color.White;
+            this.labelMaleTitle.Location = new System.Drawing.Point(200, 90);
+            this.labelMaleTitle.Name = "labelMaleTitle";
+            this.labelMaleTitle.Size = new System.Drawing.Size(52, 21);
+            this.labelMaleTitle.TabIndex = 2;
+            this.labelMaleTitle.Text = "Male:";
             // 
-            // label6
+            // labelMaleCount
             // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Tai Le", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label6.Location = new System.Drawing.Point(272, 185);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(81, 23);
-            this.label6.TabIndex = 5;
-            this.label6.Text = "FEMALE";
+            this.labelMaleCount.AutoSize = true;
+            this.labelMaleCount.Font = new System.Drawing.Font("Microsoft Tai Le", 14F, System.Drawing.FontStyle.Bold);
+            this.labelMaleCount.ForeColor = System.Drawing.Color.White;
+            this.labelMaleCount.Location = new System.Drawing.Point(250, 88);
+            this.labelMaleCount.Name = "labelMaleCount";
+            this.labelMaleCount.Size = new System.Drawing.Size(21, 23);
+            this.labelMaleCount.TabIndex = 3;
+            this.labelMaleCount.Text = "0";
             // 
-            // label5
+            // labelFemaleTitle
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Tai Le", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label5.Location = new System.Drawing.Point(76, 186);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(61, 23);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "MALE";
+            this.labelFemaleTitle.AutoSize = true;
+            this.labelFemaleTitle.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold);
+            this.labelFemaleTitle.ForeColor = System.Drawing.Color.White;
+            this.labelFemaleTitle.Location = new System.Drawing.Point(400, 90);
+            this.labelFemaleTitle.Name = "labelFemaleTitle";
+            this.labelFemaleTitle.Size = new System.Drawing.Size(69, 21);
+            this.labelFemaleTitle.TabIndex = 4;
+            this.labelFemaleTitle.Text = "Female:";
             // 
-            // panel7
+            // labelFemaleCount
             // 
-            this.panel7.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel7.BackgroundImage")));
-            this.panel7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel7.Location = new System.Drawing.Point(267, 98);
-            this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(89, 85);
-            this.panel7.TabIndex = 3;
+            this.labelFemaleCount.AutoSize = true;
+            this.labelFemaleCount.Font = new System.Drawing.Font("Microsoft Tai Le", 14F, System.Drawing.FontStyle.Bold);
+            this.labelFemaleCount.ForeColor = System.Drawing.Color.White;
+            this.labelFemaleCount.Location = new System.Drawing.Point(480, 88);
+            this.labelFemaleCount.Name = "labelFemaleCount";
+            this.labelFemaleCount.Size = new System.Drawing.Size(21, 23);
+            this.labelFemaleCount.TabIndex = 5;
+            this.labelFemaleCount.Text = "0";
             // 
-            // panel6
+            // panelGrades
             // 
-            this.panel6.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel6.BackgroundImage")));
-            this.panel6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel6.Location = new System.Drawing.Point(63, 98);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(89, 85);
-            this.panel6.TabIndex = 2;
+            this.panelGrades.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panelGrades.Controls.Add(this.labelGradesTitle);
+            this.panelGrades.Controls.Add(this.labelG11Title);
+            this.panelGrades.Controls.Add(this.labelCountG11);
+            this.panelGrades.Controls.Add(this.labelG12Title);
+            this.panelGrades.Controls.Add(this.labelCountG12);
+            this.panelGrades.Location = new System.Drawing.Point(0, 200);
+            this.panelGrades.Name = "panelGrades";
+            this.panelGrades.Size = new System.Drawing.Size(724, 120);
+            this.panelGrades.TabIndex = 2;
             // 
-            // totalno
+            // labelGradesTitle
             // 
-            this.totalno.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.totalno.AutoSize = true;
-            this.totalno.Font = new System.Drawing.Font("Microsoft Tai Le", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.totalno.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.totalno.Location = new System.Drawing.Point(172, 50);
-            this.totalno.Name = "totalno";
-            this.totalno.Size = new System.Drawing.Size(79, 34);
-            this.totalno.TabIndex = 1;
-            this.totalno.Text = "1000";
-            this.totalno.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.totalno.Click += new System.EventHandler(this.label4_Click);
+            this.labelGradesTitle.AutoSize = true;
+            this.labelGradesTitle.Font = new System.Drawing.Font("Microsoft Tai Le", 14F, System.Drawing.FontStyle.Bold);
+            this.labelGradesTitle.Location = new System.Drawing.Point(300, 10);
+            this.labelGradesTitle.Name = "labelGradesTitle";
+            this.labelGradesTitle.Size = new System.Drawing.Size(72, 23);
+            this.labelGradesTitle.TabIndex = 0;
+            this.labelGradesTitle.Text = "Grades";
             // 
-            // panel5
+            // labelG11Title
             // 
-            this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(32)))), ((int)(((byte)(133)))));
-            this.panel5.Location = new System.Drawing.Point(208, 98);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(4, 139);
-            this.panel5.TabIndex = 1;
-            this.panel5.Paint += new System.Windows.Forms.PaintEventHandler(this.panel5_Paint);
+            this.labelG11Title.AutoSize = true;
+            this.labelG11Title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.labelG11Title.Location = new System.Drawing.Point(220, 50);
+            this.labelG11Title.Name = "labelG11Title";
+            this.labelG11Title.Size = new System.Drawing.Size(89, 20);
+            this.labelG11Title.TabIndex = 1;
+            this.labelG11Title.Text = "Grade 11:";
             // 
-            // panel4
+            // labelCountG11
             // 
-            this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(32)))), ((int)(((byte)(133)))));
-            this.panel4.Controls.Add(this.label3);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel4.Location = new System.Drawing.Point(0, 0);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(418, 47);
-            this.panel4.TabIndex = 0;
+            this.labelCountG11.AutoSize = true;
+            this.labelCountG11.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold);
+            this.labelCountG11.Location = new System.Drawing.Point(310, 50);
+            this.labelCountG11.Name = "labelCountG11";
+            this.labelCountG11.Size = new System.Drawing.Size(19, 21);
+            this.labelCountG11.TabIndex = 2;
+            this.labelCountG11.Text = "0";
             // 
-            // label3
+            // labelG12Title
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Tai Le", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label3.Location = new System.Drawing.Point(93, 10);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(242, 34);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "TOTAL ENROLLED";
+            this.labelG12Title.AutoSize = true;
+            this.labelG12Title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.labelG12Title.Location = new System.Drawing.Point(220, 80);
+            this.labelG12Title.Name = "labelG12Title";
+            this.labelG12Title.Size = new System.Drawing.Size(89, 20);
+            this.labelG12Title.TabIndex = 3;
+            this.labelG12Title.Text = "Grade 12:";
             // 
-            // label9
+            // labelCountG12
             // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Microsoft Tai Le", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(23, 297);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(81, 31);
-            this.label9.TabIndex = 4;
-            this.label9.Text = "Notes";
+            this.labelCountG12.AutoSize = true;
+            this.labelCountG12.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold);
+            this.labelCountG12.Location = new System.Drawing.Point(310, 80);
+            this.labelCountG12.Name = "labelCountG12";
+            this.labelCountG12.Size = new System.Drawing.Size(19, 21);
+            this.labelCountG12.TabIndex = 4;
+            this.labelCountG12.Text = "0";
             // 
-            // panel2
+            // panelTracks
             // 
-            this.panel2.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.panel2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.panel2.Location = new System.Drawing.Point(19, 331);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(688, 2);
-            this.panel2.TabIndex = 5;
+            this.panelTracks.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panelTracks.Controls.Add(this.labelTrackTitle);
+            this.panelTracks.Controls.Add(this.labelSTEMTitle);
+            this.panelTracks.Controls.Add(this.labelSTEMCount);
+            this.panelTracks.Controls.Add(this.labelGASTitle);
+            this.panelTracks.Controls.Add(this.labelGASCount);
+            this.panelTracks.Controls.Add(this.labelHETitle);
+            this.panelTracks.Controls.Add(this.labelHECount);
+            this.panelTracks.Controls.Add(this.labelAgriTitle);
+            this.panelTracks.Controls.Add(this.labelAgriCount);
+            this.panelTracks.Location = new System.Drawing.Point(0, 320);
+            this.panelTracks.Name = "panelTracks";
+            this.panelTracks.Size = new System.Drawing.Size(724, 150);
+            this.panelTracks.TabIndex = 3;
             // 
-            // textBox1
+            // labelTrackTitle
             // 
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox1.Location = new System.Drawing.Point(29, 351);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(665, 275);
-            this.textBox1.TabIndex = 6;
+            this.labelTrackTitle.AutoSize = true;
+            this.labelTrackTitle.Font = new System.Drawing.Font("Microsoft Tai Le", 14F, System.Drawing.FontStyle.Bold);
+            this.labelTrackTitle.Location = new System.Drawing.Point(300, 10);
+            this.labelTrackTitle.Name = "labelTrackTitle";
+            this.labelTrackTitle.Size = new System.Drawing.Size(67, 23);
+            this.labelTrackTitle.TabIndex = 0;
+            this.labelTrackTitle.Text = "Tracks";
+            // 
+            // labelSTEMTitle
+            // 
+            this.labelSTEMTitle.AutoSize = true;
+            this.labelSTEMTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
+            this.labelSTEMTitle.Location = new System.Drawing.Point(150, 50);
+            this.labelSTEMTitle.Name = "labelSTEMTitle";
+            this.labelSTEMTitle.Size = new System.Drawing.Size(59, 18);
+            this.labelSTEMTitle.TabIndex = 1;
+            this.labelSTEMTitle.Text = "STEM:";
+            // 
+            // labelSTEMCount
+            // 
+            this.labelSTEMCount.AutoSize = true;
+            this.labelSTEMCount.Font = new System.Drawing.Font("Microsoft Tai Le", 11F, System.Drawing.FontStyle.Bold);
+            this.labelSTEMCount.Location = new System.Drawing.Point(210, 50);
+            this.labelSTEMCount.Name = "labelSTEMCount";
+            this.labelSTEMCount.Size = new System.Drawing.Size(18, 19);
+            this.labelSTEMCount.TabIndex = 2;
+            this.labelSTEMCount.Text = "0";
+            // 
+            // labelGASTitle
+            // 
+            this.labelGASTitle.AutoSize = true;
+            this.labelGASTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
+            this.labelGASTitle.Location = new System.Drawing.Point(380, 50);
+            this.labelGASTitle.Name = "labelGASTitle";
+            this.labelGASTitle.Size = new System.Drawing.Size(47, 18);
+            this.labelGASTitle.TabIndex = 3;
+            this.labelGASTitle.Text = "GAS:";
+            // 
+            // labelGASCount
+            // 
+            this.labelGASCount.AutoSize = true;
+            this.labelGASCount.Font = new System.Drawing.Font("Microsoft Tai Le", 11F, System.Drawing.FontStyle.Bold);
+            this.labelGASCount.Location = new System.Drawing.Point(430, 50);
+            this.labelGASCount.Name = "labelGASCount";
+            this.labelGASCount.Size = new System.Drawing.Size(18, 19);
+            this.labelGASCount.TabIndex = 4;
+            this.labelGASCount.Text = "0";
+            // 
+            // labelHETitle
+            // 
+            this.labelHETitle.AutoSize = true;
+            this.labelHETitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
+            this.labelHETitle.Location = new System.Drawing.Point(150, 90);
+            this.labelHETitle.Name = "labelHETitle";
+            this.labelHETitle.Size = new System.Drawing.Size(46, 18);
+            this.labelHETitle.TabIndex = 5;
+            this.labelHETitle.Text = "H.E.:";
+            // 
+            // labelHECount
+            // 
+            this.labelHECount.AutoSize = true;
+            this.labelHECount.Font = new System.Drawing.Font("Microsoft Tai Le", 11F, System.Drawing.FontStyle.Bold);
+            this.labelHECount.Location = new System.Drawing.Point(210, 90);
+            this.labelHECount.Name = "labelHECount";
+            this.labelHECount.Size = new System.Drawing.Size(18, 19);
+            this.labelHECount.TabIndex = 6;
+            this.labelHECount.Text = "0";
+            // 
+            // labelAgriTitle
+            // 
+            this.labelAgriTitle.AutoSize = true;
+            this.labelAgriTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
+            this.labelAgriTitle.Location = new System.Drawing.Point(380, 90);
+            this.labelAgriTitle.Name = "labelAgriTitle";
+            this.labelAgriTitle.Size = new System.Drawing.Size(52, 18);
+            this.labelAgriTitle.TabIndex = 7;
+            this.labelAgriTitle.Text = "AGRI:";
+            // 
+            // labelAgriCount
+            // 
+            this.labelAgriCount.AutoSize = true;
+            this.labelAgriCount.Font = new System.Drawing.Font("Microsoft Tai Le", 11F, System.Drawing.FontStyle.Bold);
+            this.labelAgriCount.Location = new System.Drawing.Point(430, 90);
+            this.labelAgriCount.Name = "labelAgriCount";
+            this.labelAgriCount.Size = new System.Drawing.Size(18, 19);
+            this.labelAgriCount.TabIndex = 8;
+            this.labelAgriCount.Text = "0";
+            // 
+            // panelStatus
+            // 
+            this.panelStatus.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panelStatus.Controls.Add(this.labelStatusTitle);
+            this.panelStatus.Controls.Add(this.labelEnrolledTitle);
+            this.panelStatus.Controls.Add(this.labelEnrolledCount);
+            this.panelStatus.Controls.Add(this.labelGraduatedTitle);
+            this.panelStatus.Controls.Add(this.labelGraduatedCount);
+            this.panelStatus.Location = new System.Drawing.Point(0, 470);
+            this.panelStatus.Name = "panelStatus";
+            this.panelStatus.Size = new System.Drawing.Size(724, 182);
+            this.panelStatus.TabIndex = 4;
+            // 
+            // labelStatusTitle
+            // 
+            this.labelStatusTitle.AutoSize = true;
+            this.labelStatusTitle.Font = new System.Drawing.Font("Microsoft Tai Le", 14F, System.Drawing.FontStyle.Bold);
+            this.labelStatusTitle.Location = new System.Drawing.Point(300, 10);
+            this.labelStatusTitle.Name = "labelStatusTitle";
+            this.labelStatusTitle.Size = new System.Drawing.Size(168, 23);
+            this.labelStatusTitle.TabIndex = 0;
+            this.labelStatusTitle.Text = "Enrollment Status";
+            // 
+            // labelEnrolledTitle
+            // 
+            this.labelEnrolledTitle.AutoSize = true;
+            this.labelEnrolledTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.labelEnrolledTitle.Location = new System.Drawing.Point(220, 60);
+            this.labelEnrolledTitle.Name = "labelEnrolledTitle";
+            this.labelEnrolledTitle.Size = new System.Drawing.Size(80, 20);
+            this.labelEnrolledTitle.TabIndex = 1;
+            this.labelEnrolledTitle.Text = "Enrolled:";
+            // 
+            // labelEnrolledCount
+            // 
+            this.labelEnrolledCount.AutoSize = true;
+            this.labelEnrolledCount.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold);
+            this.labelEnrolledCount.Location = new System.Drawing.Point(320, 60);
+            this.labelEnrolledCount.Name = "labelEnrolledCount";
+            this.labelEnrolledCount.Size = new System.Drawing.Size(19, 21);
+            this.labelEnrolledCount.TabIndex = 2;
+            this.labelEnrolledCount.Text = "0";
+            // 
+            // labelGraduatedTitle
+            // 
+            this.labelGraduatedTitle.AutoSize = true;
+            this.labelGraduatedTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.labelGraduatedTitle.Location = new System.Drawing.Point(220, 100);
+            this.labelGraduatedTitle.Name = "labelGraduatedTitle";
+            this.labelGraduatedTitle.Size = new System.Drawing.Size(100, 20);
+            this.labelGraduatedTitle.TabIndex = 3;
+            this.labelGraduatedTitle.Text = "Graduated:";
+            // 
+            // labelGraduatedCount
+            // 
+            this.labelGraduatedCount.AutoSize = true;
+            this.labelGraduatedCount.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold);
+            this.labelGraduatedCount.Location = new System.Drawing.Point(320, 100);
+            this.labelGraduatedCount.Name = "labelGraduatedCount";
+            this.labelGraduatedCount.Size = new System.Drawing.Size(19, 21);
+            this.labelGraduatedCount.TabIndex = 4;
+            this.labelGraduatedCount.Text = "0";
             // 
             // Dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.panel2);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.panel3);
-            this.Controls.Add(this.panel1);
+            this.BackColor = System.Drawing.Color.Gainsboro;
+            this.Controls.Add(this.panelTop);
+            this.Controls.Add(this.panelOverall);
+            this.Controls.Add(this.panelGrades);
+            this.Controls.Add(this.panelTracks);
+            this.Controls.Add(this.panelStatus);
             this.Name = "Dashboard";
             this.Size = new System.Drawing.Size(724, 652);
             this.Load += new System.EventHandler(this.Dashboard_Load);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
-            this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
+            this.panelTop.ResumeLayout(false);
+            this.panelTop.PerformLayout();
+            this.panelOverall.ResumeLayout(false);
+            this.panelOverall.PerformLayout();
+            this.panelGrades.ResumeLayout(false);
+            this.panelGrades.PerformLayout();
+            this.panelTracks.ResumeLayout(false);
+            this.panelTracks.PerformLayout();
+            this.panelStatus.ResumeLayout(false);
+            this.panelStatus.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.MonthCalendar monthCalendar2;
-        private System.Windows.Forms.Label datenow;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.Label totalno;
-        private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.Panel panel7;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label maleno;
-        private System.Windows.Forms.Label femaleno;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.TextBox textBox1;
     }
 }

@@ -12,6 +12,8 @@ namespace Certificate_Maker_System.Resources
     public partial class CertificateGenerator : UserControl
     {
         private const string connectionString = "Server=localhost;Database=certificatemaker;User ID=root;Password=;";
+        public string OutputPath { get; set; }
+
         public string selectedTemplate;
         private MySqlConnection connection;
 

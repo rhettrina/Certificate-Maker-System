@@ -53,6 +53,7 @@
             this.firstnameuser = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.settingsbtn = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -96,6 +97,7 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panel2.Controls.Add(this.settingsbtn);
             this.panel2.Controls.Add(this.birthdayuser);
             this.panel2.Controls.Add(this.positionuser);
             this.panel2.Controls.Add(this.genderuser);
@@ -309,6 +311,19 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Personal Information";
             // 
+            // settingsbtn
+            // 
+            this.settingsbtn.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.settingsbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.settingsbtn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.settingsbtn.Location = new System.Drawing.Point(478, 12);
+            this.settingsbtn.Name = "settingsbtn";
+            this.settingsbtn.Size = new System.Drawing.Size(94, 26);
+            this.settingsbtn.TabIndex = 26;
+            this.settingsbtn.Text = "SETTINGS";
+            this.settingsbtn.UseVisualStyleBackColor = false;
+            this.settingsbtn.Click += new System.EventHandler(this.settingsbtn_Click);
+            // 
             // UserManage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -353,5 +368,6 @@
         public System.Windows.Forms.TextBox positionuser;
         public System.Windows.Forms.TextBox genderuser;
         public System.Windows.Forms.TextBox lastuser;
+        private System.Windows.Forms.Button settingsbtn;
     }
 }
