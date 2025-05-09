@@ -39,6 +39,7 @@ namespace Certificate_Maker_System.Resources
 
             // Initialize the HTML preview control
             InitializePreviewControl();
+            InitializeDatabase();
 
             // Set up a timer to trigger preview generation after typing stops
             previewTimer = new Timer
@@ -52,6 +53,111 @@ namespace Certificate_Maker_System.Resources
             };
         }
 
+        // At the top of the CertificateGenerator class, add:
+        private void LoadAppSettings()
+        {
+            try
+            {
+                using (var conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = "SELECT output_path FROM app_settings WHERE id = 1";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        object result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
+                        {
+                            OutputPath = result.ToString();
+                        }
+                        else
+                        {
+                            // Default path if not set in database
+                            OutputPath = Path.Combine(Environment.GetFolderPath(
+                                Environment.SpecialFolder.MyDocuments), "Generated_Certificates");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading application settings: " + ex.Message,
+                    "Settings Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // Default path if database fails
+                OutputPath = Path.Combine(Environment.GetFolderPath(
+                    Environment.SpecialFolder.MyDocuments), "Generated_Certificates");
+            }
+        }
+
+        private void LoadSectionsFromDatabase()
+        {
+            try
+            {
+                gradebox.Items.Clear();
+
+                using (var conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = "SELECT section_name FROM sections ORDER BY section_name";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                gradebox.Items.Add(reader["section_name"].ToString());
+                            }
+                        }
+                    }
+                }
+
+                // Select first item if available
+                if (gradebox.Items.Count > 0)
+                    gradebox.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading sections: " + ex.Message,
+                    "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadTracksFromDatabase()
+        {
+            try
+            {
+                trackbox.Items.Clear();
+
+                using (var conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = "SELECT track_name FROM tracks ORDER BY track_name";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                trackbox.Items.Add(reader["track_name"].ToString());
+                            }
+                        }
+                    }
+                }
+
+                // Select first item if available
+                if (trackbox.Items.Count > 0)
+                    trackbox.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading tracks: " + ex.Message,
+                    "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void CertificateGenerator_Load(object sender, EventArgs e)
         {
             // Initialize dropdowns, default text, etc.
@@ -61,6 +167,13 @@ namespace Certificate_Maker_System.Resources
                 types.Items.Add("Certificate of Enrolment");
                 types.Items.Add("Good Moral");
                 types.Items.Add("Graduate");
+
+                // Load settings from database
+                LoadAppSettings();
+
+                // Load sections and tracks from database
+                LoadSectionsFromDatabase();
+                LoadTracksFromDatabase();
 
                 semesterBox.SelectedIndex = 0;
                 startYearCombo.SelectedIndex = 0;
@@ -156,8 +269,8 @@ namespace Certificate_Maker_System.Resources
         private void button1_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(lrn.Text) ||
-                string.IsNullOrWhiteSpace(selectedTemplate) ||
-                string.IsNullOrWhiteSpace(namebox.Text))
+        string.IsNullOrWhiteSpace(selectedTemplate) ||
+        string.IsNullOrWhiteSpace(namebox.Text))
             {
                 MessageBox.Show("Please fill in all required fields.", "Validation Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -178,16 +291,16 @@ namespace Certificate_Maker_System.Resources
                 }
 
                 // 2. Create output directory if it doesn't exist
-                string outputDir = Path.Combine(Environment.GetFolderPath(
-                    Environment.SpecialFolder.MyDocuments), "Generated_Certificates");
+                // Use the path from database settings instead of hardcoded path
+                string outputDir = OutputPath;
                 Directory.CreateDirectory(outputDir);
 
-                // 3. Generate unique filename for output
+                // Rest of your existing code remains the same...
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
                 string safeName = new string(namebox.Text.Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray());
                 string outputDoc = Path.Combine(outputDir, $"{safeName}_{timestamp}.docx");
 
-                // 4. Copy template to output location
+                // Continue with file generation as before...
                 File.Copy(templatePath, outputDoc);
 
                 // 5. Determine gender prefix based on name or other logic
@@ -280,6 +393,136 @@ namespace Certificate_Maker_System.Resources
             {
                 MessageBox.Show($"Error generating certificate: {ex.Message}",
                     "Generation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Add this method to help with initial database setup
+        public void InitializeDatabase()
+        {
+            try
+            {
+                using (var conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    // Create tables if they don't exist (just in case)
+                    string createAppSettingsTable = @"
+                CREATE TABLE IF NOT EXISTS app_settings (
+                    id INT PRIMARY KEY,
+                    output_path VARCHAR(255)
+                );";
+
+                    string createSectionsTable = @"
+                CREATE TABLE IF NOT EXISTS sections (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    section_name VARCHAR(255) NOT NULL UNIQUE
+                );";
+
+                    string createTracksTable = @"
+                CREATE TABLE IF NOT EXISTS tracks (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    track_name VARCHAR(255) NOT NULL UNIQUE
+                );";
+
+                    // Execute the create table statements
+                    using (var cmd = new MySqlCommand(createAppSettingsTable, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    using (var cmd = new MySqlCommand(createSectionsTable, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    using (var cmd = new MySqlCommand(createTracksTable, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // Insert default output path if not exists
+                    string checkSettings = "SELECT COUNT(*) FROM app_settings WHERE id = 1";
+                    int settingsCount = 0;
+
+                    using (var cmd = new MySqlCommand(checkSettings, conn))
+                    {
+                        settingsCount = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+
+                    if (settingsCount == 0)
+                    {
+                        string defaultPath = Path.Combine(Environment.GetFolderPath(
+                            Environment.SpecialFolder.MyDocuments), "Generated_Certificates");
+
+                        string insertSettings = "INSERT INTO app_settings (id, output_path) VALUES (1, @path)";
+
+                        using (var cmd = new MySqlCommand(insertSettings, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@path", defaultPath);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    // Add sample sections if table is empty
+                    string checkSections = "SELECT COUNT(*) FROM sections";
+                    int sectionsCount = 0;
+
+                    using (var cmd = new MySqlCommand(checkSections, conn))
+                    {
+                        sectionsCount = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+
+                    if (sectionsCount == 0)
+                    {
+                        string[] defaultSections = {
+                    "12 - A", "12 - B", "12 - C",
+                    "11 - A", "11 - B", "11 - C"
+                };
+
+                        foreach (string section in defaultSections)
+                        {
+                            string insertSection = "INSERT INTO sections (section_name) VALUES (@name)";
+
+                            using (var cmd = new MySqlCommand(insertSection, conn))
+                            {
+                                cmd.Parameters.AddWithValue("@name", section);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                    }
+
+                    // Add sample tracks if table is empty
+                    string checkTracks = "SELECT COUNT(*) FROM tracks";
+                    int tracksCount = 0;
+
+                    using (var cmd = new MySqlCommand(checkTracks, conn))
+                    {
+                        tracksCount = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+
+                    if (tracksCount == 0)
+                    {
+                        string[] defaultTracks = {
+                    "ABM", "HUMSS", "STEM", "TVL-ICT", "TVL-HE", "SPORTS"
+                };
+
+                        foreach (string track in defaultTracks)
+                        {
+                            string insertTrack = "INSERT INTO tracks (track_name) VALUES (@name)";
+
+                            using (var cmd = new MySqlCommand(insertTrack, conn))
+                            {
+                                cmd.Parameters.AddWithValue("@name", track);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error initializing database: " + ex.Message,
+                    "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

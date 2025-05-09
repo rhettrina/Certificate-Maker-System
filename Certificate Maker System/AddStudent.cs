@@ -32,15 +32,188 @@ namespace Certificate_Maker_System
 
         private void AddStudent_Load(object sender, EventArgs e)
         {
+            // Set grade options directly instead of loading from database
+            gradebox.Items.Clear();
             gradebox.Items.Add("Grade 11");
             gradebox.Items.Add("Grade 12");
-            sectionbox.Items.Add("Sampaguita");
-            sectionbox.Items.Add("Adelfa");
-            sectionbox.Items.Add("Bougainvillea");
-            trackbox.Items.Add("GAS");
-            trackbox.Items.Add("STEM");
-            trackbox.Items.Add("AGRICULTURE");
-            trackbox.Items.Add("HOME ECONOMICS");
+
+            // Default to Grade 11
+            if (gradebox.Items.Count > 0)
+                gradebox.SelectedIndex = 0;
+
+            // Load other data from database
+            LoadSectionsFromDatabase();
+            LoadTracksFromDatabase();
+
+            // Grade selection change event
+            gradebox.SelectedIndexChanged += gradebox_SelectedIndexChanged;
+        }
+
+        // Method to load sections from database
+        private void LoadSectionsFromDatabase()
+        {
+            try
+            {
+                sectionbox.Items.Clear();
+
+                using (var conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = "SELECT section_name FROM sections ORDER BY section_name";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                sectionbox.Items.Add(reader["section_name"].ToString());
+                            }
+                        }
+                    }
+                }
+
+                // Add defaults if no items were loaded
+                if (sectionbox.Items.Count == 0)
+                {
+                    sectionbox.Items.Add("Sampaguita");
+                    sectionbox.Items.Add("Adelfa");
+                    sectionbox.Items.Add("Bougainvillea");
+                }
+
+                // Select first item if available
+                if (sectionbox.Items.Count > 0)
+                    sectionbox.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading sections: " + ex.Message,
+                    "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // Fallback to hardcoded values if database fails
+                sectionbox.Items.Add("Sampaguita");
+                sectionbox.Items.Add("Adelfa");
+                sectionbox.Items.Add("Bougainvillea");
+            }
+        }
+
+        // Method to load tracks from database
+        private void LoadTracksFromDatabase()
+        {
+            try
+            {
+                trackbox.Items.Clear();
+
+                using (var conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = "SELECT track_name FROM tracks ORDER BY track_name";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                trackbox.Items.Add(reader["track_name"].ToString());
+                            }
+                        }
+                    }
+                }
+
+                // Add defaults if no items were loaded
+                if (trackbox.Items.Count == 0)
+                {
+                    trackbox.Items.Add("GAS");
+                    trackbox.Items.Add("STEM");
+                    trackbox.Items.Add("AGRICULTURE");
+                    trackbox.Items.Add("HOME ECONOMICS");
+                }
+
+                // Select first item if available
+                if (trackbox.Items.Count > 0)
+                    trackbox.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading tracks: " + ex.Message,
+                    "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // Fallback to hardcoded values if database fails
+                trackbox.Items.Add("GAS");
+                trackbox.Items.Add("STEM");
+                trackbox.Items.Add("AGRICULTURE");
+                trackbox.Items.Add("HOME ECONOMICS");
+            }
+        }
+
+        // Event handler for when grade selection changes
+        private void gradebox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Load sections based on selected grade (optional feature)
+            LoadSectionsByGrade(gradebox.SelectedItem?.ToString());
+        }
+
+        // Optional method to load sections filtered by grade
+        private void LoadSectionsByGrade(string selectedGrade)
+        {
+            if (string.IsNullOrEmpty(selectedGrade))
+                return;
+
+            try
+            {
+                sectionbox.Items.Clear();
+
+                using (var conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    // This query assumes there's a grade_section table that maps grades to sections
+                    // If you don't have such a relationship, you can modify or remove this
+                    string query = @"
+                        SELECT s.section_name
+                        FROM sections s
+                        JOIN grade_section gs ON s.id = gs.section_id
+                        WHERE gs.grade = @grade
+                        ORDER BY s.section_name";
+
+                    // If you don't have a grade_section relationship table, fall back to all sections
+                    bool useRelationshipTable = false; // Set to true if you implement the relationship
+
+                    if (!useRelationshipTable)
+                    {
+                        query = "SELECT section_name FROM sections ORDER BY section_name";
+                    }
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        if (useRelationshipTable)
+                        {
+                            cmd.Parameters.AddWithValue("@grade", selectedGrade);
+                        }
+
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                sectionbox.Items.Add(reader["section_name"].ToString());
+                            }
+                        }
+                    }
+                }
+
+                // Select first item if available
+                if (sectionbox.Items.Count > 0)
+                    sectionbox.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading sections for grade: " + ex.Message,
+                    "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // Load all sections as fallback
+                LoadSectionsFromDatabase();
+            }
         }
 
         private void cancelbtn(object sender, EventArgs e)
