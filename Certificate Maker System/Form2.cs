@@ -187,6 +187,7 @@ namespace Certificate_Maker_System
         private void close(object sender, EventArgs e)
         {
             this.Close();
+            Application.Exit();
         }
 
         private void minimize(object sender, EventArgs e)
