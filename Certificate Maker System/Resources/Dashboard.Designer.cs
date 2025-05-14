@@ -1,54 +1,17 @@
-﻿namespace Certificate_Maker_System.Resources
+﻿
+namespace Certificate_Maker_System.Resources
 {
     partial class Dashboard
     {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        // Top panel: date label + Add Student button
-        private System.Windows.Forms.Panel panelTop;
-        private System.Windows.Forms.Label labelDate;
-        private System.Windows.Forms.Button btnAddStudent;
-
-        // Panel: Overall counts
-        private System.Windows.Forms.Panel panelOverall;
-        private System.Windows.Forms.Label labelOverallTitle;
-        private System.Windows.Forms.Label labelTotalCount;
-        private System.Windows.Forms.Label labelMaleTitle;
-        private System.Windows.Forms.Label labelMaleCount;
-        private System.Windows.Forms.Label labelFemaleTitle;
-        private System.Windows.Forms.Label labelFemaleCount;
-
-        // Panel: Grade counts
-        private System.Windows.Forms.Panel panelGrades;
-        private System.Windows.Forms.Label labelGradesTitle;
-        private System.Windows.Forms.Label labelG11Title;
-        private System.Windows.Forms.Label labelG12Title;
-        private System.Windows.Forms.Label labelCountG11;
-        private System.Windows.Forms.Label labelCountG12;
-
-        // Panel: Track counts
-        private System.Windows.Forms.Panel panelTracks;
-        private System.Windows.Forms.Label labelTrackTitle;
-        private System.Windows.Forms.Label labelSTEMTitle;
-        private System.Windows.Forms.Label labelSTEMCount;
-        private System.Windows.Forms.Label labelGASTitle;
-        private System.Windows.Forms.Label labelGASCount;
-        private System.Windows.Forms.Label labelHETitle;
-        private System.Windows.Forms.Label labelHECount;
-        private System.Windows.Forms.Label labelAgriTitle;
-        private System.Windows.Forms.Label labelAgriCount;
-
-        // Panel: Enrollment status (Enrolled, Graduated, etc.)
-        private System.Windows.Forms.Panel panelStatus;
-        private System.Windows.Forms.Label labelStatusTitle;
-        private System.Windows.Forms.Label labelEnrolledTitle;
-        private System.Windows.Forms.Label labelGraduatedTitle;
-        private System.Windows.Forms.Label labelEnrolledCount;
-        private System.Windows.Forms.Label labelGraduatedCount;
-
         /// <summary> 
-        /// Disposes resources.
+        /// Clean up any resources being used.
         /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -60,421 +23,344 @@
 
         #region Component Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support.
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
-            this.panelTop = new System.Windows.Forms.Panel();
-            this.labelDate = new System.Windows.Forms.Label();
-            this.btnAddStudent = new System.Windows.Forms.Button();
-            this.panelOverall = new System.Windows.Forms.Panel();
-            this.labelOverallTitle = new System.Windows.Forms.Label();
-            this.labelTotalCount = new System.Windows.Forms.Label();
-            this.labelMaleTitle = new System.Windows.Forms.Label();
-            this.labelMaleCount = new System.Windows.Forms.Label();
-            this.labelFemaleTitle = new System.Windows.Forms.Label();
-            this.labelFemaleCount = new System.Windows.Forms.Label();
-            this.panelGrades = new System.Windows.Forms.Panel();
-            this.labelGradesTitle = new System.Windows.Forms.Label();
-            this.labelG11Title = new System.Windows.Forms.Label();
-            this.labelCountG11 = new System.Windows.Forms.Label();
-            this.labelG12Title = new System.Windows.Forms.Label();
-            this.labelCountG12 = new System.Windows.Forms.Label();
-            this.panelTracks = new System.Windows.Forms.Panel();
-            this.labelTrackTitle = new System.Windows.Forms.Label();
-            this.labelSTEMTitle = new System.Windows.Forms.Label();
-            this.labelSTEMCount = new System.Windows.Forms.Label();
-            this.labelGASTitle = new System.Windows.Forms.Label();
-            this.labelGASCount = new System.Windows.Forms.Label();
-            this.labelHETitle = new System.Windows.Forms.Label();
-            this.labelHECount = new System.Windows.Forms.Label();
-            this.labelAgriTitle = new System.Windows.Forms.Label();
-            this.labelAgriCount = new System.Windows.Forms.Label();
-            this.panelStatus = new System.Windows.Forms.Panel();
-            this.labelStatusTitle = new System.Windows.Forms.Label();
-            this.labelEnrolledTitle = new System.Windows.Forms.Label();
-            this.labelEnrolledCount = new System.Windows.Forms.Label();
-            this.labelGraduatedTitle = new System.Windows.Forms.Label();
-            this.labelGraduatedCount = new System.Windows.Forms.Label();
-            this.panelTop.SuspendLayout();
-            this.panelOverall.SuspendLayout();
-            this.panelGrades.SuspendLayout();
-            this.panelTracks.SuspendLayout();
-            this.panelStatus.SuspendLayout();
+
+
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dashboard));
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.femaleno = new System.Windows.Forms.Label();
+            this.maleno = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.panel7 = new System.Windows.Forms.Panel();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.totalno = new System.Windows.Forms.Label();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.stubyprog = new System.Windows.Forms.Button();
+            this.certrends = new System.Windows.Forms.Button();
+            this.stuacadstat = new System.Windows.Forms.Button();
+            this.stusection = new System.Windows.Forms.Button();
+            this.datetext = new System.Windows.Forms.Label();
+            this.timetext = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.panel3.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panelTop
+            // panel3
             // 
-            this.panelTop.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.panelTop.Controls.Add(this.labelDate);
-            this.panelTop.Controls.Add(this.btnAddStudent);
-            this.panelTop.Location = new System.Drawing.Point(0, 0);
-            this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(724, 60);
-            this.panelTop.TabIndex = 0;
+            this.panel3.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panel3.Controls.Add(this.femaleno);
+            this.panel3.Controls.Add(this.maleno);
+            this.panel3.Controls.Add(this.label6);
+            this.panel3.Controls.Add(this.label5);
+            this.panel3.Controls.Add(this.panel7);
+            this.panel3.Controls.Add(this.panel6);
+            this.panel3.Controls.Add(this.totalno);
+            this.panel3.Controls.Add(this.panel5);
+            this.panel3.Controls.Add(this.panel4);
+            this.panel3.Location = new System.Drawing.Point(19, 16);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(418, 266);
+            this.panel3.TabIndex = 3;
             // 
-            // labelDate
+            // femaleno
             // 
-            this.labelDate.AutoSize = true;
-            this.labelDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.labelDate.Location = new System.Drawing.Point(20, 20);
-            this.labelDate.Name = "labelDate";
-            this.labelDate.Size = new System.Drawing.Size(181, 20);
-            this.labelDate.TabIndex = 0;
-            this.labelDate.Text = "Friday, September 01";
+            this.femaleno.AutoSize = true;
+            this.femaleno.Font = new System.Drawing.Font("Microsoft Tai Le", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.femaleno.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.femaleno.Location = new System.Drawing.Point(275, 210);
+            this.femaleno.Name = "femaleno";
+            this.femaleno.Size = new System.Drawing.Size(79, 34);
+            this.femaleno.TabIndex = 7;
+            this.femaleno.Text = "1389";
             // 
-            // btnAddStudent
+            // maleno
             // 
-            this.btnAddStudent.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.btnAddStudent.Location = new System.Drawing.Point(560, 10);
-            this.btnAddStudent.Name = "btnAddStudent";
-            this.btnAddStudent.Size = new System.Drawing.Size(150, 40);
-            this.btnAddStudent.TabIndex = 1;
-            this.btnAddStudent.Text = "Add New Student";
-            this.btnAddStudent.UseVisualStyleBackColor = true;
-            this.btnAddStudent.Click += new System.EventHandler(this.btnAddStudent_Click);
+            this.maleno.AutoSize = true;
+            this.maleno.Font = new System.Drawing.Font("Microsoft Tai Le", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.maleno.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.maleno.Location = new System.Drawing.Point(68, 212);
+            this.maleno.Name = "maleno";
+            this.maleno.Size = new System.Drawing.Size(79, 34);
+            this.maleno.TabIndex = 6;
+            this.maleno.Text = "1200";
+            this.maleno.Click += new System.EventHandler(this.label7_Click);
             // 
-            // panelOverall
+            // label6
             // 
-            this.panelOverall.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(32)))), ((int)(((byte)(133)))));
-            this.panelOverall.Controls.Add(this.labelOverallTitle);
-            this.panelOverall.Controls.Add(this.labelTotalCount);
-            this.panelOverall.Controls.Add(this.labelMaleTitle);
-            this.panelOverall.Controls.Add(this.labelMaleCount);
-            this.panelOverall.Controls.Add(this.labelFemaleTitle);
-            this.panelOverall.Controls.Add(this.labelFemaleCount);
-            this.panelOverall.Location = new System.Drawing.Point(16, 60);
-            this.panelOverall.Name = "panelOverall";
-            this.panelOverall.Size = new System.Drawing.Size(694, 140);
-            this.panelOverall.TabIndex = 1;
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Tai Le", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label6.Location = new System.Drawing.Point(272, 185);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(81, 23);
+            this.label6.TabIndex = 5;
+            this.label6.Text = "FEMALE";
             // 
-            // labelOverallTitle
+            // label5
             // 
-            this.labelOverallTitle.AutoSize = true;
-            this.labelOverallTitle.Font = new System.Drawing.Font("Microsoft Tai Le", 16F, System.Drawing.FontStyle.Bold);
-            this.labelOverallTitle.ForeColor = System.Drawing.Color.White;
-            this.labelOverallTitle.Location = new System.Drawing.Point(310, 10);
-            this.labelOverallTitle.Name = "labelOverallTitle";
-            this.labelOverallTitle.Size = new System.Drawing.Size(87, 29);
-            this.labelOverallTitle.TabIndex = 0;
-            this.labelOverallTitle.Text = "Overall";
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Tai Le", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label5.Location = new System.Drawing.Point(76, 186);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(61, 23);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "MALE";
             // 
-            // labelTotalCount
+            // panel7
             // 
-            this.labelTotalCount.AutoSize = true;
-            this.labelTotalCount.Font = new System.Drawing.Font("Microsoft Tai Le", 15.75F, System.Drawing.FontStyle.Bold);
-            this.labelTotalCount.ForeColor = System.Drawing.Color.White;
-            this.labelTotalCount.Location = new System.Drawing.Point(315, 50);
-            this.labelTotalCount.Name = "labelTotalCount";
-            this.labelTotalCount.Size = new System.Drawing.Size(86, 27);
-            this.labelTotalCount.TabIndex = 1;
-            this.labelTotalCount.Text = "Total: 0";
+            this.panel7.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel7.BackgroundImage")));
+            this.panel7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel7.Location = new System.Drawing.Point(267, 98);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(89, 85);
+            this.panel7.TabIndex = 3;
             // 
-            // labelMaleTitle
+            // panel6
             // 
-            this.labelMaleTitle.AutoSize = true;
-            this.labelMaleTitle.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold);
-            this.labelMaleTitle.ForeColor = System.Drawing.Color.White;
-            this.labelMaleTitle.Location = new System.Drawing.Point(200, 90);
-            this.labelMaleTitle.Name = "labelMaleTitle";
-            this.labelMaleTitle.Size = new System.Drawing.Size(52, 21);
-            this.labelMaleTitle.TabIndex = 2;
-            this.labelMaleTitle.Text = "Male:";
+            this.panel6.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel6.BackgroundImage")));
+            this.panel6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel6.Location = new System.Drawing.Point(63, 98);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(89, 85);
+            this.panel6.TabIndex = 2;
             // 
-            // labelMaleCount
+            // totalno
             // 
-            this.labelMaleCount.AutoSize = true;
-            this.labelMaleCount.Font = new System.Drawing.Font("Microsoft Tai Le", 14F, System.Drawing.FontStyle.Bold);
-            this.labelMaleCount.ForeColor = System.Drawing.Color.White;
-            this.labelMaleCount.Location = new System.Drawing.Point(250, 88);
-            this.labelMaleCount.Name = "labelMaleCount";
-            this.labelMaleCount.Size = new System.Drawing.Size(21, 23);
-            this.labelMaleCount.TabIndex = 3;
-            this.labelMaleCount.Text = "0";
+            this.totalno.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.totalno.AutoSize = true;
+            this.totalno.Font = new System.Drawing.Font("Microsoft Tai Le", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.totalno.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.totalno.Location = new System.Drawing.Point(172, 50);
+            this.totalno.Name = "totalno";
+            this.totalno.Size = new System.Drawing.Size(79, 34);
+            this.totalno.TabIndex = 1;
+            this.totalno.Text = "1000";
+            this.totalno.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.totalno.Click += new System.EventHandler(this.label4_Click);
             // 
-            // labelFemaleTitle
+            // panel5
             // 
-            this.labelFemaleTitle.AutoSize = true;
-            this.labelFemaleTitle.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold);
-            this.labelFemaleTitle.ForeColor = System.Drawing.Color.White;
-            this.labelFemaleTitle.Location = new System.Drawing.Point(400, 90);
-            this.labelFemaleTitle.Name = "labelFemaleTitle";
-            this.labelFemaleTitle.Size = new System.Drawing.Size(69, 21);
-            this.labelFemaleTitle.TabIndex = 4;
-            this.labelFemaleTitle.Text = "Female:";
+            this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(32)))), ((int)(((byte)(133)))));
+            this.panel5.Location = new System.Drawing.Point(208, 98);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(4, 139);
+            this.panel5.TabIndex = 1;
+            this.panel5.Paint += new System.Windows.Forms.PaintEventHandler(this.panel5_Paint);
             // 
-            // labelFemaleCount
+            // panel4
             // 
-            this.labelFemaleCount.AutoSize = true;
-            this.labelFemaleCount.Font = new System.Drawing.Font("Microsoft Tai Le", 14F, System.Drawing.FontStyle.Bold);
-            this.labelFemaleCount.ForeColor = System.Drawing.Color.White;
-            this.labelFemaleCount.Location = new System.Drawing.Point(480, 88);
-            this.labelFemaleCount.Name = "labelFemaleCount";
-            this.labelFemaleCount.Size = new System.Drawing.Size(21, 23);
-            this.labelFemaleCount.TabIndex = 5;
-            this.labelFemaleCount.Text = "0";
+            this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(32)))), ((int)(((byte)(133)))));
+            this.panel4.Controls.Add(this.label3);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel4.Location = new System.Drawing.Point(0, 0);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(418, 47);
+            this.panel4.TabIndex = 0;
             // 
-            // panelGrades
+            // label3
             // 
-            this.panelGrades.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.panelGrades.Controls.Add(this.labelGradesTitle);
-            this.panelGrades.Controls.Add(this.labelG11Title);
-            this.panelGrades.Controls.Add(this.labelCountG11);
-            this.panelGrades.Controls.Add(this.labelG12Title);
-            this.panelGrades.Controls.Add(this.labelCountG12);
-            this.panelGrades.Location = new System.Drawing.Point(0, 200);
-            this.panelGrades.Name = "panelGrades";
-            this.panelGrades.Size = new System.Drawing.Size(724, 120);
-            this.panelGrades.TabIndex = 2;
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Tai Le", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label3.Location = new System.Drawing.Point(93, 10);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(242, 34);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "TOTAL ENROLLED";
             // 
-            // labelGradesTitle
+            // label9
             // 
-            this.labelGradesTitle.AutoSize = true;
-            this.labelGradesTitle.Font = new System.Drawing.Font("Microsoft Tai Le", 14F, System.Drawing.FontStyle.Bold);
-            this.labelGradesTitle.Location = new System.Drawing.Point(300, 10);
-            this.labelGradesTitle.Name = "labelGradesTitle";
-            this.labelGradesTitle.Size = new System.Drawing.Size(72, 23);
-            this.labelGradesTitle.TabIndex = 0;
-            this.labelGradesTitle.Text = "Grades";
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Tai Le", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(23, 297);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(0, 31);
+            this.label9.TabIndex = 4;
             // 
-            // labelG11Title
+            // panel2
             // 
-            this.labelG11Title.AutoSize = true;
-            this.labelG11Title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.labelG11Title.Location = new System.Drawing.Point(220, 50);
-            this.labelG11Title.Name = "labelG11Title";
-            this.labelG11Title.Size = new System.Drawing.Size(89, 20);
-            this.labelG11Title.TabIndex = 1;
-            this.labelG11Title.Text = "Grade 11:";
+            this.panel2.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.panel2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.panel2.Location = new System.Drawing.Point(19, 297);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(688, 2);
+            this.panel2.TabIndex = 5;
             // 
-            // labelCountG11
+            // panel1
             // 
-            this.labelCountG11.AutoSize = true;
-            this.labelCountG11.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold);
-            this.labelCountG11.Location = new System.Drawing.Point(310, 50);
-            this.labelCountG11.Name = "labelCountG11";
-            this.labelCountG11.Size = new System.Drawing.Size(19, 21);
-            this.labelCountG11.TabIndex = 2;
-            this.labelCountG11.Text = "0";
+            this.panel1.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.panel1.Location = new System.Drawing.Point(29, 350);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(665, 278);
+            this.panel1.TabIndex = 6;
             // 
-            // labelG12Title
+            // stubyprog
             // 
-            this.labelG12Title.AutoSize = true;
-            this.labelG12Title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.labelG12Title.Location = new System.Drawing.Point(220, 80);
-            this.labelG12Title.Name = "labelG12Title";
-            this.labelG12Title.Size = new System.Drawing.Size(89, 20);
-            this.labelG12Title.TabIndex = 3;
-            this.labelG12Title.Text = "Grade 12:";
+            this.stubyprog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(32)))), ((int)(((byte)(133)))));
+            this.stubyprog.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.stubyprog.Location = new System.Drawing.Point(29, 305);
+            this.stubyprog.Name = "stubyprog";
+            this.stubyprog.Size = new System.Drawing.Size(150, 39);
+            this.stubyprog.TabIndex = 7;
+            this.stubyprog.Text = "Student by Track";
+            this.stubyprog.UseVisualStyleBackColor = false;
+            this.stubyprog.Click += new System.EventHandler(this.stubyprog_Click);
             // 
-            // labelCountG12
+            // certrends
             // 
-            this.labelCountG12.AutoSize = true;
-            this.labelCountG12.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold);
-            this.labelCountG12.Location = new System.Drawing.Point(310, 80);
-            this.labelCountG12.Name = "labelCountG12";
-            this.labelCountG12.Size = new System.Drawing.Size(19, 21);
-            this.labelCountG12.TabIndex = 4;
-            this.labelCountG12.Text = "0";
+            this.certrends.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(32)))), ((int)(((byte)(133)))));
+            this.certrends.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.certrends.Location = new System.Drawing.Point(544, 305);
+            this.certrends.Name = "certrends";
+            this.certrends.Size = new System.Drawing.Size(150, 39);
+            this.certrends.TabIndex = 8;
+            this.certrends.Text = "Certified Trends";
+            this.certrends.UseVisualStyleBackColor = false;
+            this.certrends.Click += new System.EventHandler(this.certrends_Click);
             // 
-            // panelTracks
+            // stuacadstat
             // 
-            this.panelTracks.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.panelTracks.Controls.Add(this.labelTrackTitle);
-            this.panelTracks.Controls.Add(this.labelSTEMTitle);
-            this.panelTracks.Controls.Add(this.labelSTEMCount);
-            this.panelTracks.Controls.Add(this.labelGASTitle);
-            this.panelTracks.Controls.Add(this.labelGASCount);
-            this.panelTracks.Controls.Add(this.labelHETitle);
-            this.panelTracks.Controls.Add(this.labelHECount);
-            this.panelTracks.Controls.Add(this.labelAgriTitle);
-            this.panelTracks.Controls.Add(this.labelAgriCount);
-            this.panelTracks.Location = new System.Drawing.Point(0, 320);
-            this.panelTracks.Name = "panelTracks";
-            this.panelTracks.Size = new System.Drawing.Size(724, 150);
-            this.panelTracks.TabIndex = 3;
+            this.stuacadstat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(32)))), ((int)(((byte)(133)))));
+            this.stuacadstat.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.stuacadstat.Location = new System.Drawing.Point(197, 305);
+            this.stuacadstat.Name = "stuacadstat";
+            this.stuacadstat.Size = new System.Drawing.Size(150, 39);
+            this.stuacadstat.TabIndex = 9;
+            this.stuacadstat.Text = "Students by Academic Status";
+            this.stuacadstat.UseVisualStyleBackColor = false;
+            this.stuacadstat.Click += new System.EventHandler(this.stuacadstat_Click);
             // 
-            // labelTrackTitle
+            // stusection
             // 
-            this.labelTrackTitle.AutoSize = true;
-            this.labelTrackTitle.Font = new System.Drawing.Font("Microsoft Tai Le", 14F, System.Drawing.FontStyle.Bold);
-            this.labelTrackTitle.Location = new System.Drawing.Point(300, 10);
-            this.labelTrackTitle.Name = "labelTrackTitle";
-            this.labelTrackTitle.Size = new System.Drawing.Size(67, 23);
-            this.labelTrackTitle.TabIndex = 0;
-            this.labelTrackTitle.Text = "Tracks";
+            this.stusection.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(32)))), ((int)(((byte)(133)))));
+            this.stusection.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.stusection.Location = new System.Drawing.Point(373, 305);
+            this.stusection.Name = "stusection";
+            this.stusection.Size = new System.Drawing.Size(150, 39);
+            this.stusection.TabIndex = 10;
+            this.stusection.Text = "Student by Section";
+            this.stusection.UseVisualStyleBackColor = false;
+            this.stusection.Click += new System.EventHandler(this.stusection_Click);
             // 
-            // labelSTEMTitle
+            // datetext
             // 
-            this.labelSTEMTitle.AutoSize = true;
-            this.labelSTEMTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
-            this.labelSTEMTitle.Location = new System.Drawing.Point(150, 50);
-            this.labelSTEMTitle.Name = "labelSTEMTitle";
-            this.labelSTEMTitle.Size = new System.Drawing.Size(59, 18);
-            this.labelSTEMTitle.TabIndex = 1;
-            this.labelSTEMTitle.Text = "STEM:";
+            this.datetext.AutoSize = true;
+            this.datetext.Font = new System.Drawing.Font("Microsoft Tai Le", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.datetext.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.datetext.Location = new System.Drawing.Point(443, 26);
+            this.datetext.Name = "datetext";
+            this.datetext.Size = new System.Drawing.Size(227, 26);
+            this.datetext.TabIndex = 1;
+            this.datetext.Text = "Day, Month Date, Year";
             // 
-            // labelSTEMCount
+            // timetext
             // 
-            this.labelSTEMCount.AutoSize = true;
-            this.labelSTEMCount.Font = new System.Drawing.Font("Microsoft Tai Le", 11F, System.Drawing.FontStyle.Bold);
-            this.labelSTEMCount.Location = new System.Drawing.Point(210, 50);
-            this.labelSTEMCount.Name = "labelSTEMCount";
-            this.labelSTEMCount.Size = new System.Drawing.Size(18, 19);
-            this.labelSTEMCount.TabIndex = 2;
-            this.labelSTEMCount.Text = "0";
+            this.timetext.AutoSize = true;
+            this.timetext.Font = new System.Drawing.Font("Microsoft Tai Le", 13F, System.Drawing.FontStyle.Bold);
+            this.timetext.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.timetext.Location = new System.Drawing.Point(445, 54);
+            this.timetext.Name = "timetext";
+            this.timetext.Size = new System.Drawing.Size(173, 23);
+            this.timetext.TabIndex = 11;
+            this.timetext.Text = "HH:MM:SS AM/PM";
             // 
-            // labelGASTitle
+            // button4
             // 
-            this.labelGASTitle.AutoSize = true;
-            this.labelGASTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
-            this.labelGASTitle.Location = new System.Drawing.Point(380, 50);
-            this.labelGASTitle.Name = "labelGASTitle";
-            this.labelGASTitle.Size = new System.Drawing.Size(47, 18);
-            this.labelGASTitle.TabIndex = 3;
-            this.labelGASTitle.Text = "GAS:";
+            this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(32)))), ((int)(((byte)(133)))));
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.button4.Location = new System.Drawing.Point(449, 114);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(258, 61);
+            this.button4.TabIndex = 12;
+            this.button4.Text = "ADD NEW STUDENTS";
+            this.button4.UseVisualStyleBackColor = false;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // labelGASCount
+            // button5
             // 
-            this.labelGASCount.AutoSize = true;
-            this.labelGASCount.Font = new System.Drawing.Font("Microsoft Tai Le", 11F, System.Drawing.FontStyle.Bold);
-            this.labelGASCount.Location = new System.Drawing.Point(430, 50);
-            this.labelGASCount.Name = "labelGASCount";
-            this.labelGASCount.Size = new System.Drawing.Size(18, 19);
-            this.labelGASCount.TabIndex = 4;
-            this.labelGASCount.Text = "0";
-            // 
-            // labelHETitle
-            // 
-            this.labelHETitle.AutoSize = true;
-            this.labelHETitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
-            this.labelHETitle.Location = new System.Drawing.Point(150, 90);
-            this.labelHETitle.Name = "labelHETitle";
-            this.labelHETitle.Size = new System.Drawing.Size(46, 18);
-            this.labelHETitle.TabIndex = 5;
-            this.labelHETitle.Text = "H.E.:";
-            // 
-            // labelHECount
-            // 
-            this.labelHECount.AutoSize = true;
-            this.labelHECount.Font = new System.Drawing.Font("Microsoft Tai Le", 11F, System.Drawing.FontStyle.Bold);
-            this.labelHECount.Location = new System.Drawing.Point(210, 90);
-            this.labelHECount.Name = "labelHECount";
-            this.labelHECount.Size = new System.Drawing.Size(18, 19);
-            this.labelHECount.TabIndex = 6;
-            this.labelHECount.Text = "0";
-            // 
-            // labelAgriTitle
-            // 
-            this.labelAgriTitle.AutoSize = true;
-            this.labelAgriTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
-            this.labelAgriTitle.Location = new System.Drawing.Point(380, 90);
-            this.labelAgriTitle.Name = "labelAgriTitle";
-            this.labelAgriTitle.Size = new System.Drawing.Size(52, 18);
-            this.labelAgriTitle.TabIndex = 7;
-            this.labelAgriTitle.Text = "AGRI:";
-            // 
-            // labelAgriCount
-            // 
-            this.labelAgriCount.AutoSize = true;
-            this.labelAgriCount.Font = new System.Drawing.Font("Microsoft Tai Le", 11F, System.Drawing.FontStyle.Bold);
-            this.labelAgriCount.Location = new System.Drawing.Point(430, 90);
-            this.labelAgriCount.Name = "labelAgriCount";
-            this.labelAgriCount.Size = new System.Drawing.Size(18, 19);
-            this.labelAgriCount.TabIndex = 8;
-            this.labelAgriCount.Text = "0";
-            // 
-            // panelStatus
-            // 
-            this.panelStatus.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.panelStatus.Controls.Add(this.labelStatusTitle);
-            this.panelStatus.Controls.Add(this.labelEnrolledTitle);
-            this.panelStatus.Controls.Add(this.labelEnrolledCount);
-            this.panelStatus.Controls.Add(this.labelGraduatedTitle);
-            this.panelStatus.Controls.Add(this.labelGraduatedCount);
-            this.panelStatus.Location = new System.Drawing.Point(0, 470);
-            this.panelStatus.Name = "panelStatus";
-            this.panelStatus.Size = new System.Drawing.Size(724, 182);
-            this.panelStatus.TabIndex = 4;
-            // 
-            // labelStatusTitle
-            // 
-            this.labelStatusTitle.AutoSize = true;
-            this.labelStatusTitle.Font = new System.Drawing.Font("Microsoft Tai Le", 14F, System.Drawing.FontStyle.Bold);
-            this.labelStatusTitle.Location = new System.Drawing.Point(300, 10);
-            this.labelStatusTitle.Name = "labelStatusTitle";
-            this.labelStatusTitle.Size = new System.Drawing.Size(168, 23);
-            this.labelStatusTitle.TabIndex = 0;
-            this.labelStatusTitle.Text = "Enrollment Status";
-            // 
-            // labelEnrolledTitle
-            // 
-            this.labelEnrolledTitle.AutoSize = true;
-            this.labelEnrolledTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.labelEnrolledTitle.Location = new System.Drawing.Point(220, 60);
-            this.labelEnrolledTitle.Name = "labelEnrolledTitle";
-            this.labelEnrolledTitle.Size = new System.Drawing.Size(80, 20);
-            this.labelEnrolledTitle.TabIndex = 1;
-            this.labelEnrolledTitle.Text = "Enrolled:";
-            // 
-            // labelEnrolledCount
-            // 
-            this.labelEnrolledCount.AutoSize = true;
-            this.labelEnrolledCount.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold);
-            this.labelEnrolledCount.Location = new System.Drawing.Point(320, 60);
-            this.labelEnrolledCount.Name = "labelEnrolledCount";
-            this.labelEnrolledCount.Size = new System.Drawing.Size(19, 21);
-            this.labelEnrolledCount.TabIndex = 2;
-            this.labelEnrolledCount.Text = "0";
-            // 
-            // labelGraduatedTitle
-            // 
-            this.labelGraduatedTitle.AutoSize = true;
-            this.labelGraduatedTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.labelGraduatedTitle.Location = new System.Drawing.Point(220, 100);
-            this.labelGraduatedTitle.Name = "labelGraduatedTitle";
-            this.labelGraduatedTitle.Size = new System.Drawing.Size(100, 20);
-            this.labelGraduatedTitle.TabIndex = 3;
-            this.labelGraduatedTitle.Text = "Graduated:";
-            // 
-            // labelGraduatedCount
-            // 
-            this.labelGraduatedCount.AutoSize = true;
-            this.labelGraduatedCount.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold);
-            this.labelGraduatedCount.Location = new System.Drawing.Point(320, 100);
-            this.labelGraduatedCount.Name = "labelGraduatedCount";
-            this.labelGraduatedCount.Size = new System.Drawing.Size(19, 21);
-            this.labelGraduatedCount.TabIndex = 4;
-            this.labelGraduatedCount.Text = "0";
+            this.button5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(32)))), ((int)(((byte)(133)))));
+            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.button5.Location = new System.Drawing.Point(448, 202);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(258, 61);
+            this.button5.TabIndex = 13;
+            this.button5.Text = "GENERATE CERTIFICATE";
+            this.button5.UseVisualStyleBackColor = false;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // Dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Gainsboro;
-            this.Controls.Add(this.panelTop);
-            this.Controls.Add(this.panelOverall);
-            this.Controls.Add(this.panelGrades);
-            this.Controls.Add(this.panelTracks);
-            this.Controls.Add(this.panelStatus);
+            this.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.Controls.Add(this.button5);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.timetext);
+            this.Controls.Add(this.datetext);
+            this.Controls.Add(this.stusection);
+            this.Controls.Add(this.stuacadstat);
+            this.Controls.Add(this.certrends);
+            this.Controls.Add(this.stubyprog);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.panel3);
             this.Name = "Dashboard";
             this.Size = new System.Drawing.Size(724, 652);
             this.Load += new System.EventHandler(this.Dashboard_Load);
-            this.panelTop.ResumeLayout(false);
-            this.panelTop.PerformLayout();
-            this.panelOverall.ResumeLayout(false);
-            this.panelOverall.PerformLayout();
-            this.panelGrades.ResumeLayout(false);
-            this.panelGrades.PerformLayout();
-            this.panelTracks.ResumeLayout(false);
-            this.panelTracks.PerformLayout();
-            this.panelStatus.ResumeLayout(false);
-            this.panelStatus.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.Label totalno;
+        private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.Panel panel7;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label maleno;
+        private System.Windows.Forms.Label femaleno;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button stubyprog;
+        private System.Windows.Forms.Button certrends;
+        private System.Windows.Forms.Button stuacadstat;
+        private System.Windows.Forms.Button stusection;
+        private System.Windows.Forms.Label datetext;
+        private System.Windows.Forms.Label timetext;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button5;
+        
+
     }
 }

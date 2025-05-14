@@ -1,6 +1,15 @@
-﻿using MySql.Data.MySqlClient;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Certificate_Maker_System.Resources
 {
@@ -11,36 +20,161 @@ namespace Certificate_Maker_System.Resources
         public Dashboard()
         {
             InitializeComponent();
+            DateTime currentDate = DateTime.Now;
+
+            // Format the date as "dddd, MMMM dd" (day of the week, full month name, day of the month)
+            string formattedDate = currentDate.ToString("dddd, MMMM dd");
+
+            // Set the formatted date to the TextBox
+            UpdateGenderCounts();
+            // Set the date (e.g., "Wednesday, May 14, 2025")
+            datetext.Text = DateTime.Now.ToString("dddd, MMMM dd, yyyy");
+
+            // Set up a timer to update timetext every second
+            Timer timer = new Timer();
+            timer.Interval = 1000; // 1 second
+            timer.Tick += Timer_Tick;
+            timer.Start();
+            stubyprog_Click(null, null);
+        }
+
+        private void UpdateGenderCounts()
+        {
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // Count males
+                    string maleCountQuery = "SELECT COUNT(*) FROM students WHERE gender = 'male' COLLATE utf8mb4_general_ci";
+                    using (MySqlCommand maleCommand = new MySqlCommand(maleCountQuery, connection))
+                    {
+                        int maleCount = Convert.ToInt32(maleCommand.ExecuteScalar());
+
+                        // Count females
+                        string femaleCountQuery = "SELECT COUNT(*) FROM students WHERE gender = 'female' COLLATE utf8mb4_general_ci";
+                        using (MySqlCommand femaleCommand = new MySqlCommand(femaleCountQuery, connection))
+                        {
+                            int femaleCount = Convert.ToInt32(femaleCommand.ExecuteScalar());
+
+                            int totalCount = maleCount + femaleCount;
+                            totalno.Text = totalCount.ToString();
+                            // Update TextBoxes with counts
+                            maleno.Text = maleCount.ToString();
+                            femaleno.Text = femaleCount.ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions (e.g., display an error message)
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            // Update the time in HH:MM:SS AM/PM format
+            timetext.Text = DateTime.Now.ToString("hh:mm:ss tt");
+        }
+
+        private void monthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
+        {
         }
 
         private void Dashboard_Load(object sender, EventArgs e)
         {
-            // Show today's date
-            labelDate.Text = DateTime.Now.ToString("dddd, MMMM dd");
-
-            // Load stats from the database
-            CountGender();
-            CountGrades();
-            CountTracks();
-            CountEnrollmentStatus();
         }
 
-        /// <summary>
-        /// Button event to open AddStudent form.
-        /// </summary>
-        private void btnAddStudent_Click(object sender, EventArgs e)
+        private void guna2Panel1_Paint(object sender, PaintEventArgs e)
         {
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void panel5_Paint(object sender, PaintEventArgs e)
+        {
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            // Create a new AddStudent form instance
             AddStudent addStudentForm = new AddStudent(null);
-            addStudentForm.Show();
+            // If you need to pass a StudentList instance, replace null with the actual parent
+            addStudentForm.ShowDialog();
+            // This will open the AddStudent Form as a dialog.
         }
 
-        /// <summary>
-        /// Counts total students, plus male/female, from "students" table.
-        /// </summary>
-        private void CountGender()
+        private void button5_Click(object sender, EventArgs e)
         {
-            int maleCount = 0;
-            int femaleCount = 0;
+            // Create a new Form to host the CertificateGenerator user control
+            Form certificateForm = new Form();
+            certificateForm.Text = "Generate Certificate";
+            certificateForm.Size = new Size(724, 652); // Adjust as needed
+
+            // Center the form on the screen
+            certificateForm.StartPosition = FormStartPosition.CenterScreen;
+
+            // Create the user control
+            CertificateGenerator generator = new CertificateGenerator();
+            generator.Dock = DockStyle.Fill;
+
+            // Add the user control to the form
+            certificateForm.Controls.Add(generator);
+
+            // Show as a modal dialog
+            certificateForm.ShowDialog();
+        }
+
+        private void stubyprog_Click(object sender, EventArgs e)
+        {
+            // Clear any existing controls in panel1
+            panel1.Controls.Clear();
+
+            // Create a new Chart control
+            Chart trackChart = new Chart
+            {
+                Dock = DockStyle.Fill
+            };
+
+            // Create and add a ChartArea
+            ChartArea chartArea = new ChartArea("ChartArea1");
+            trackChart.ChartAreas.Add(chartArea);
+
+            // Create a Series to display the count of students per track
+            Series series = new Series("Students by Track")
+            {
+                ChartType = SeriesChartType.Column,
+                XValueType = ChartValueType.String
+            };
+
+            // Notice we exclude rows where track is 'Grade 11' or 'Grade 12'
+            string query = @"
+        SELECT track, COUNT(*) AS total_students
+        FROM student_academic
+        WHERE track NOT IN ('Grade 11', 'Grade 12')
+        GROUP BY track;
+    ";
 
             try
             {
@@ -48,162 +182,248 @@ namespace Certificate_Maker_System.Resources
                 {
                     connection.Open();
 
-                    // Count Males
-                    string sqlMale = "SELECT COUNT(*) FROM students WHERE gender = 'male' COLLATE utf8mb4_general_ci";
-                    using (MySqlCommand cmdMale = new MySqlCommand(sqlMale, connection))
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
-                        maleCount = Convert.ToInt32(cmdMale.ExecuteScalar());
-                    }
-
-                    // Count Females
-                    string sqlFemale = "SELECT COUNT(*) FROM students WHERE gender = 'female' COLLATE utf8mb4_general_ci";
-                    using (MySqlCommand cmdFemale = new MySqlCommand(sqlFemale, connection))
-                    {
-                        femaleCount = Convert.ToInt32(cmdFemale.ExecuteScalar());
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string trackName = reader["track"].ToString();
+                                int count = Convert.ToInt32(reader["total_students"]);
+                                series.Points.AddXY(trackName, count);
+                            }
+                        }
                     }
                 }
-
-                int total = maleCount + femaleCount;
-                labelTotalCount.Text = $"Total: {total}";
-                labelMaleCount.Text = maleCount.ToString();
-                labelFemaleCount.Text = femaleCount.ToString();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error counting students by gender: " + ex.Message);
+                MessageBox.Show("Error retrieving data: " + ex.Message);
             }
+
+            // Add the series to the chart
+            trackChart.Series.Add(series);
+
+            // Show data labels on each bar
+            series.IsValueShownAsLabel = true;
+
+            // Set axis titles
+            chartArea.AxisX.Title = "Track";
+            chartArea.AxisY.Title = "Number of Students";
+
+            // Add the chart to panel1
+            panel1.Controls.Add(trackChart);
         }
 
-        /// <summary>
-        /// Counts how many are Grade 11 and Grade 12 in "student_academic".
-        /// </summary>
-        private void CountGrades()
+        private void stuacadstat_Click(object sender, EventArgs e)
         {
-            int grade11Count = 0;
-            int grade12Count = 0;
+            // Clear any existing controls in panel1
+            panel1.Controls.Clear();
+
+            // Create a new Chart control
+            Chart chart = new Chart
+            {
+                Dock = DockStyle.Fill
+            };
+
+            // Create and add a ChartArea
+            ChartArea chartArea = new ChartArea("ChartArea1");
+            chart.ChartAreas.Add(chartArea);
+
+            // Create a Series for displaying the academic status counts
+            Series series = new Series("Students by Status")
+            {
+                ChartType = SeriesChartType.Column,
+                XValueType = ChartValueType.String
+            };
+
+            // Query to count students by status (Enrolled vs. Graduated)
+            string query = @"
+        SELECT status, COUNT(*) AS total_students
+        FROM student_academic
+        GROUP BY status;
+    ";
 
             try
             {
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
-
-                    // Grade 11
-                    string sqlG11 = "SELECT COUNT(*) FROM student_academic WHERE grade = 'Grade 11'";
-                    using (MySqlCommand cmdG11 = new MySqlCommand(sqlG11, connection))
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
-                        grade11Count = Convert.ToInt32(cmdG11.ExecuteScalar());
-                    }
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                // status = "Enrolled" or "Graduated"
+                                string statusName = reader["status"].ToString();
+                                int count = Convert.ToInt32(reader["total_students"]);
 
-                    // Grade 12
-                    string sqlG12 = "SELECT COUNT(*) FROM student_academic WHERE grade = 'Grade 12'";
-                    using (MySqlCommand cmdG12 = new MySqlCommand(sqlG12, connection))
-                    {
-                        grade12Count = Convert.ToInt32(cmdG12.ExecuteScalar());
+                                // Add data points to the series
+                                series.Points.AddXY(statusName, count);
+                            }
+                        }
                     }
                 }
-
-                labelCountG11.Text = grade11Count.ToString();
-                labelCountG12.Text = grade12Count.ToString();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error counting grade 11/12: " + ex.Message);
+                MessageBox.Show("Error retrieving data: " + ex.Message);
             }
+
+            // Add the series to the chart
+            chart.Series.Add(series);
+
+            // Show data labels on each bar
+            series.IsValueShownAsLabel = true;
+
+            // Set axis titles for clarity
+            chartArea.AxisX.Title = "Academic Status";
+            chartArea.AxisY.Title = "Number of Students";
+
+            // Add the chart to panel1
+            panel1.Controls.Add(chart);
         }
 
-        /// <summary>
-        /// Counts how many students are in each track (STEM, GAS, HOME ECONOMICS, AGRICULTURE).
-        /// </summary>
-        private void CountTracks()
+        private void stusection_Click(object sender, EventArgs e)
         {
-            int stemCount = 0;
-            int gasCount = 0;
-            int heCount = 0;
-            int agriCount = 0;
+            // Clear any existing controls in panel1
+            panel1.Controls.Clear();
+
+            // Create a new Chart control
+            Chart sectionChart = new Chart
+            {
+                Dock = DockStyle.Fill
+            };
+
+            // Create and add a ChartArea
+            ChartArea chartArea = new ChartArea("ChartArea1");
+            sectionChart.ChartAreas.Add(chartArea);
+
+            // Create a Series for displaying the count of students per section
+            Series series = new Series("Students by Section")
+            {
+                ChartType = SeriesChartType.Column,
+                XValueType = ChartValueType.String
+            };
+
+            // Query to count how many students per section
+            string query = @"
+        SELECT section, COUNT(*) AS total_students
+        FROM student_academic
+        GROUP BY section";
 
             try
             {
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
-
-                    // STEM
-                    string sqlSTEM = "SELECT COUNT(*) FROM student_academic WHERE track = 'STEM'";
-                    using (MySqlCommand cmdSTEM = new MySqlCommand(sqlSTEM, connection))
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
-                        stemCount = Convert.ToInt32(cmdSTEM.ExecuteScalar());
-                    }
-
-                    // GAS
-                    string sqlGAS = "SELECT COUNT(*) FROM student_academic WHERE track = 'GAS'";
-                    using (MySqlCommand cmdGAS = new MySqlCommand(sqlGAS, connection))
-                    {
-                        gasCount = Convert.ToInt32(cmdGAS.ExecuteScalar());
-                    }
-
-                    // HOME ECONOMICS
-                    string sqlHE = "SELECT COUNT(*) FROM student_academic WHERE track = 'HOME ECONOMICS'";
-                    using (MySqlCommand cmdHE = new MySqlCommand(sqlHE, connection))
-                    {
-                        heCount = Convert.ToInt32(cmdHE.ExecuteScalar());
-                    }
-
-                    // AGRICULTURE
-                    string sqlAgri = "SELECT COUNT(*) FROM student_academic WHERE track = 'AGRICULTURE'";
-                    using (MySqlCommand cmdAgri = new MySqlCommand(sqlAgri, connection))
-                    {
-                        agriCount = Convert.ToInt32(cmdAgri.ExecuteScalar());
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string sectionName = reader["section"].ToString();
+                                int count = Convert.ToInt32(reader["total_students"]);
+                                series.Points.AddXY(sectionName, count);
+                            }
+                        }
                     }
                 }
-
-                labelSTEMCount.Text = stemCount.ToString();
-                labelGASCount.Text = gasCount.ToString();
-                labelHECount.Text = heCount.ToString();
-                labelAgriCount.Text = agriCount.ToString();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error counting tracks: " + ex.Message);
+                MessageBox.Show("Error retrieving data: " + ex.Message);
             }
+
+            // Show data labels inside each bar
+            sectionChart.Series.Add(series);
+            series.IsValueShownAsLabel = true;
+            series["LabelStyle"] = "Center";  // Attempt to position label in the center
+                                              // For contrast, set label color white (if bars are a dark color)
+            series.LabelForeColor = Color.White;
+
+            // Configure axis titles for clarity
+            chartArea.AxisX.Title = "Section";
+            chartArea.AxisY.Title = "Number of Students";
+
+            // Add the chart to panel1
+            panel1.Controls.Add(sectionChart);
         }
 
-        /// <summary>
-        /// Counts how many are Enrolled vs. Graduated in "student_academic".
-        /// </summary>
-        private void CountEnrollmentStatus()
+        private void certrends_Click(object sender, EventArgs e)
         {
-            int enrolledCount = 0;
-            int graduatedCount = 0;
+            // Clear any existing controls in panel1
+            panel1.Controls.Clear();
+
+            // Create a new Chart control
+            Chart trendsChart = new Chart
+            {
+                Dock = DockStyle.Fill
+            };
+
+            // Create a ChartArea
+            ChartArea chartArea = new ChartArea("ChartArea1");
+            trendsChart.ChartAreas.Add(chartArea);
+
+            // Create a Series for displaying how many certificates were generated per day
+            Series series = new Series("Daily Certificates Generated")
+            {
+                ChartType = SeriesChartType.Line,     // Show a line chart for daily trends
+                XValueType = ChartValueType.String,   // We'll plot each day as a string label (YYYY-MM-DD)
+                BorderWidth = 3                      // Make the line thicker
+            };
+
+            // Day-by-day grouping of certificates in certificate_history
+            // "generated_date" is a DATETIME column
+            string query = @"
+        SELECT DATE_FORMAT(generated_date, '%Y-%m-%d') AS day_label,
+               COUNT(*) AS total_certificates
+        FROM certificate_history
+        GROUP BY DATE_FORMAT(generated_date, '%Y-%m-%d')
+        ORDER BY day_label;
+    ";
 
             try
             {
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
-
-                    // Enrolled
-                    string sqlEnrolled = "SELECT COUNT(*) FROM student_academic WHERE status = 'Enrolled'";
-                    using (MySqlCommand cmdEnrolled = new MySqlCommand(sqlEnrolled, connection))
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
-                        enrolledCount = Convert.ToInt32(cmdEnrolled.ExecuteScalar());
-                    }
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string dayLabel = reader["day_label"].ToString();     // e.g. "2025-05-14"
+                                int count = Convert.ToInt32(reader["total_certificates"]);
 
-                    // Graduated
-                    string sqlGraduated = "SELECT COUNT(*) FROM student_academic WHERE status = 'Graduated'";
-                    using (MySqlCommand cmdGraduated = new MySqlCommand(sqlGraduated, connection))
-                    {
-                        graduatedCount = Convert.ToInt32(cmdGraduated.ExecuteScalar());
+                                // Add data points: X = dayLabel, Y = count
+                                series.Points.AddXY(dayLabel, count);
+                            }
+                        }
                     }
                 }
-
-                labelEnrolledCount.Text = enrolledCount.ToString();
-                labelGraduatedCount.Text = graduatedCount.ToString();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error counting enrollment status: " + ex.Message);
+                MessageBox.Show("Error retrieving certificate trends: " + ex.Message);
             }
+
+            // Add the series to the chart
+            trendsChart.Series.Add(series);
+
+            // Show numeric labels on each data point
+            series.IsValueShownAsLabel = true;
+            series.LabelForeColor = Color.Black;
+
+            // Configure axis titles
+            chartArea.AxisX.Title = "Day (YYYY-MM-DD)";
+            chartArea.AxisY.Title = "Certificates Generated";
+
+            // Finally, add the chart to panel1
+            panel1.Controls.Add(trendsChart);
         }
     }
 }

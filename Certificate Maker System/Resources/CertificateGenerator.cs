@@ -839,8 +839,8 @@ namespace Certificate_Maker_System.Resources
             // Add school header text
             html += $@"
             <div class='header-text'>
-                <p class='school-name'>JOSE P. NUVAL NATIONAL HIGH SCHOOL</p>
-                <p class='school-address'>Calumpit, Bulacan</p>
+                <p class='school-name'>JOSE PANGANIBAN NATIONAL HIGH SCHOOL</p>
+                <p class='school-address'>Jose Panganiban, Camarines Norte</p>
                 <p class='school-address'>Senior High School Department</p>
             </div>
         </div>
