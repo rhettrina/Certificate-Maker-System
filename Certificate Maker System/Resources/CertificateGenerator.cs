@@ -51,6 +51,8 @@ namespace Certificate_Maker_System.Resources
                 previewTimer.Stop();
                 UpdatePreview();
             };
+            // At the end of CertificateGenerator_Load
+            UpdatePreview();
         }
 
         private void lrn_KeyPress(object sender, KeyPressEventArgs e)
@@ -241,6 +243,12 @@ namespace Certificate_Maker_System.Resources
         {
             selectedTemplate = types.SelectedItem?.ToString() ?? "";
 
+            // If no template selected and dropdown has items, show message
+            if (string.IsNullOrEmpty(selectedTemplate) && types.Items.Count > 0)
+            {
+                UpdatePreview(); // This will show the "no selection" message
+                return;
+            }
             if (selectedTemplate == "Certificate of Enrolment")
             {
                 // Toggle UI controls
@@ -290,9 +298,17 @@ namespace Certificate_Maker_System.Resources
         // Add this method to generate the actual document
         private void button1_Click(object sender, EventArgs e)
         {
+            // Check if output path is configured and valid
+            if (string.IsNullOrWhiteSpace(OutputPath) || !Directory.Exists(OutputPath))
+            {
+                MessageBox.Show("Output path is not configured or doesn't exist. Please set a valid output path in Settings.",
+                    "Output Path Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(lrn.Text) ||
-        string.IsNullOrWhiteSpace(selectedTemplate) ||
-        string.IsNullOrWhiteSpace(namebox.Text))
+                string.IsNullOrWhiteSpace(selectedTemplate) ||
+                string.IsNullOrWhiteSpace(namebox.Text))
             {
                 MessageBox.Show("Please fill in all required fields.", "Validation Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -359,6 +375,7 @@ namespace Certificate_Maker_System.Resources
                 ("##ISSUE_YEAR##", issueDateValue.ToString("yyyy")),
                 ("##REGISTRAR_NAME##", registrar ?? ""),
                 ("##PRINCIPAL##", principal ?? ""),
+                ("##PRINCIPAL_NAME##", principal ?? ""), // Added this for graduate template
                 ("##GENDER_PREFIX##", genderPrefix)
             };
 
@@ -693,9 +710,54 @@ namespace Certificate_Maker_System.Resources
         /// </summary>
         private void UpdatePreview()
         {
-            if (string.IsNullOrWhiteSpace(selectedTemplate))
-                return;
+            // Check if no template type is selected or if the dropdown is empty
+            if (string.IsNullOrWhiteSpace(selectedTemplate) || types.Items.Count == 0)
+            {
+                // Create simple HTML with centered message
+                string noSelectionHtml = @"
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {
+                    font-family: 'Segoe UI', Arial, sans-serif;
+                    background-color: #f5f5f5;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    margin: 0;
+                }
+                .message {
+                    text-align: center;
+                    padding: 20px;
+                    background-color: white;
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                }
+                h3 {
+                    color: #555;
+                    margin-bottom: 10px;
+                }
+                p {
+                    color: #777;
+                }
+            </style>
+        </head>
+        <body>
+            <div class='message'>
+                <h3>No Certificate Type Available</h3>
+                <p>Please select a certificate type or check if certificate types are configured.</p>
+            </div>
+        </body>
+        </html>";
 
+                webPreview.DocumentText = noSelectionHtml;
+                return;
+            }
+
+            // The rest of your existing preview generation code...
             string html = GeneratePreviewHtml();
             webPreview.DocumentText = html;
         }
@@ -737,8 +799,8 @@ namespace Certificate_Maker_System.Resources
             string registrar = registrarBox.Text.Trim();
             string principal = principalBox.Text.Trim();
 
-            // Use a simple relative path for the logo - it will be relative to the HTML file
-            string logoPath = "@Resources\\jpnhs_logo.png";
+            // Use a simple relative path for the logo
+            string logoPath = "Resources/jpnhs_logo.png";
 
             // Base HTML with styles
             string html = $@"
@@ -748,11 +810,13 @@ namespace Certificate_Maker_System.Resources
     <meta charset='utf-8'>
     <title>Certificate Preview</title>
     <style>
+        @page {{ size: 8.5in 11in; margin: 1in; }}
         body {{
-            font-family: 'Times New Roman', serif;
+            font-family: 'Times New Roman', Times, serif;
             margin: 0;
             padding: 20px;
             background-color: #f5f5f5;
+            line-height: 1.5;
         }}
         .preview-container {{
             width: 100%;
@@ -762,11 +826,11 @@ namespace Certificate_Maker_System.Resources
             padding: 40px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             min-height: 800px;
+            position: relative;
         }}
         .header {{
             text-align: center;
             margin-bottom: 30px;
-            border-bottom: 2px solid #000;
             padding-bottom: 15px;
         }}
         .header-logo {{
@@ -774,33 +838,31 @@ namespace Certificate_Maker_System.Resources
             height: auto;
             margin-bottom: 10px;
         }}
-        .header-text {{
+        .doc-header p {{
             margin: 0;
             padding: 0;
-        }}
-        .school-name {{
-            font-size: 18px;
-            font-weight: bold;
-            margin: 0;
-            text-transform: uppercase;
-        }}
-        .school-address {{
-            font-size: 12px;
-            margin: 5px 0;
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.3;
         }}
         h1 {{
             text-align: center;
-            font-size: 24px;
+            font-size: 16px;
             font-weight: bold;
-            margin-bottom: 30px;
-            margin-top: 30px;
-            letter-spacing: 3px;
+            margin: 30px 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }}
+        .content {{
+            margin-top: 20px;
         }}
         p {{
-            line-height: 1.6;
-            font-size: 14px;
+            font-size: 12px;
             text-align: justify;
-            margin-bottom: 10px;
+            margin: 0 0 10px 0;
+        }}
+        .indent {{
+            text-indent: 40px;
         }}
         .signature {{
             margin-top: 60px;
@@ -810,20 +872,22 @@ namespace Certificate_Maker_System.Resources
             font-weight: bold;
             text-transform: uppercase;
             margin-bottom: 0;
+            font-size: 14px;
         }}
         .signatory-title {{
-            font-style: italic;
             margin-top: 0;
-        }}
-        .indent {{
-            text-indent: 40px;
+            font-size: 12px;
         }}
         .seal-notice {{
-            margin-top: 80px;
-            font-style: italic;
-            font-size: 12px;
-            position: relative;
+            position: absolute;
             left: 40px;
+            bottom: 100px;
+            font-style: italic;
+            font-size: 11px;
+            text-align: center;
+        }}
+        .main-content {{
+            margin-bottom: 150px;
         }}
     </style>
 </head>
@@ -845,6 +909,8 @@ namespace Certificate_Maker_System.Resources
                 <p>JOSE PANGANIBAN NATIONAL HIGH SCHOOL</p>
                 <p>Jose Panganiban, Camarines Norte</p>
             </div>
+        </div>
+        <div class='main-content'>
 ";
 
             // Different content based on template type
@@ -854,18 +920,22 @@ namespace Certificate_Maker_System.Resources
                 html += $@"
         <h1>CERTIFICATE OF ENROLMENT</h1>
 
-        <p>To Whom It May Concern:</p>
+        <div class='content'>
+            <p>To Whom It May Concern:</p>
 
-        <p class='indent'>This is to certify that {studentName} with Learners Reference Number {studentLRN} is enrolled as Grade {gradeSection} {track} in this school, this {semester} SY {schoolYear}.</p>
+            <p class='indent'>This is to certify that {studentName} with Learners Reference Number {studentLRN} is enrolled as Grade {gradeSection} {track} in this school, this {semester} SY {schoolYear}.</p>
 
-        <p class='indent'>Issued this {issueDay} day of {issueMonth} {issueYear} upon request of the party concerned for {purpose}.</p>
+            <p class='indent'>Issued this {issueDay} day of {issueMonth} {issueYear} upon request of the party concerned for {purpose}.</p>
 
-        <div class='signature'>
-            <p class='signatory-name'>{registrar}</p>
-            <p class='signatory-title'>Registrar I</p>
+            <div class='signature'>
+                <p class='signatory-name'>{registrar}</p>
+                <p class='signatory-title'>Registrar I</p>
+            </div>
         </div>
 
-        <p class='seal-notice'>Not Valid without<br>JPNHS Official Seal</p>
+        <div class='seal-notice'>
+            <p>Not Valid without<br>JPNHS Official Seal</p>
+        </div>
 ";
             }
             else if (selectedTemplate == "Good Moral")
@@ -874,42 +944,50 @@ namespace Certificate_Maker_System.Resources
                 html += $@"
         <h1>CERTIFICATE OF GOOD MORAL CHARACTER</h1>
 
-        <p>To Whom It May Concern:</p>
+        <div class='content'>
+            <p>To Whom It May Concern:</p>
 
-        <p class='indent'>This is to certify that {studentName} with LRN {studentLRN} is a graduate of {track} in this school under the K to 12 Curriculum, this SY {schoolYear}.</p>
+            <p class='indent'>This is to certify that {studentName} with LRN {studentLRN} is a graduate of {track} in this school under the K to 12 Curriculum, this SY {schoolYear}.</p>
 
-        <p class='indent'>{heOrShe} is known to be a student with good moral character and has no record of misdemeanor.</p>
+            <p class='indent'>{heOrShe} is known to be a student with good moral character and has no record of misdemeanor.</p>
 
-        <p class='indent'>Issued this {issueDay} day of {issueMonth} {issueYear} upon request of the party concerned for whatever legal purpose/s this may serve.</p>
+            <p class='indent'>Issued this {issueDay} day of {issueMonth} {issueYear} upon request of the party concerned for whatever legal purpose/s this may serve.</p>
 
-        <div class='signature'>
-            <p class='signatory-name'>{principal}</p>
-            <p class='signatory-title'>School Principal III</p>
+            <div class='signature'>
+                <p class='signatory-name'>{principal}</p>
+                <p class='signatory-title'>School Principal III</p>
+            </div>
         </div>
 
-        <p class='seal-notice'>Not valid without JPNHS<br>Official Seal</p>
+        <div class='seal-notice'>
+            <p>Not valid without JPNHS<br>Official Seal</p>
+        </div>
 ";
             }
             else if (selectedTemplate == "Graduate")
             {
-                // Based on graduate.docx template - Exact match to document
+                // Based on graduate.docx template - Exact match to document with proper spacing
                 html += $@"
-        <h1>C  E  R  T  I  F  I  C  A  T  I  O  N</h1>
+        <h1 style='letter-spacing: 5px;'>C  E  R  T  I  F  I  C  A  T  I  O  N</h1>
 
-        <p>To Whom It May Concern:</p>
+        <div class='content'>
+            <p>To Whom It May Concern:</p>
 
-        <p class='indent'>This is to certify that {studentName} with LRN {studentLRN} graduated Senior High School in this institution, during the School Year {schoolYear} under the K to 12 Curriculum.</p>
+            <p class='indent'>This is to certify that {studentName} with LRN {studentLRN} graduated Senior High School in this institution, during the School Year {schoolYear} under the K to 12 Curriculum.</p>
 
-        <p class='indent'>This further certifies that {studentName} completed the course {track}</p>
+            <p class='indent'>This further certifies that {studentName} completed the course {track}</p>
 
-        <p class='indent'>Issued this {issueDay} day of {issueMonth}, {issueYear} upon the request of the party concerned for whatever legal purpose this may serve.</p>
+            <p class='indent'>Issued this {issueDay} day of {issueMonth}, {issueYear} upon the request of the party concerned for whatever legal purpose this may serve.</p>
 
-        <div class='signature'>
-            <p class='signatory-name'>{principal}</p>
-            <p class='signatory-title'>School Principal III</p>
+            <div class='signature'>
+                <p class='signatory-name'>{principal}</p>
+                <p class='signatory-title'>School Principal III</p>
+            </div>
         </div>
 
-        <p class='seal-notice'>Not Valid without<br>JPNHS Official Seal</p>
+        <div class='seal-notice'>
+            <p>Not Valid without<br>JPNHS Official Seal</p>
+        </div>
 ";
             }
             else
@@ -919,6 +997,7 @@ namespace Certificate_Maker_System.Resources
             }
 
             html += @"
+        </div>
     </div>
 </body>
 </html>";

@@ -2,15 +2,11 @@
 {
     partial class StudentList
     {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary> 
-        /// Clean up any resources being used.
+        /// Disposes resources.
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,13 +18,10 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle rowStyle = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle headerStyle = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StudentList));
             this.studentTable = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
@@ -43,30 +36,55 @@
             // 
             // studentTable
             // 
-            this.studentTable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.studentTable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top
+                                                | System.Windows.Forms.AnchorStyles.Bottom)
+                                                | System.Windows.Forms.AnchorStyles.Left)
+                                                | System.Windows.Forms.AnchorStyles.Right)));
             this.studentTable.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.studentTable.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
-            this.studentTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.studentTable.DefaultCellStyle = dataGridViewCellStyle3;
             this.studentTable.Location = new System.Drawing.Point(19, 41);
             this.studentTable.Name = "studentTable";
             this.studentTable.Size = new System.Drawing.Size(685, 524);
             this.studentTable.TabIndex = 0;
-            this.studentTable.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.studentTable_CellContentClick);
+
+            // Make table read-only and non-resizable
+            this.studentTable.ReadOnly = true;
+            this.studentTable.RowHeadersVisible = false;
+            this.studentTable.AllowUserToResizeColumns = false;
+            this.studentTable.AllowUserToResizeRows = false;
+
+            // Disable default auto-formatting of headers to allow custom colors
+            this.studentTable.EnableHeadersVisualStyles = false;
+            this.studentTable.ColumnHeadersHeightSizeMode =
+                System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.studentTable.ColumnHeadersHeight = 35;
+
+            // Header style (blue background, white text, bold font)
+            headerStyle.BackColor = System.Drawing.Color.FromArgb(0, 32, 133);
+            headerStyle.ForeColor = System.Drawing.Color.White;
+            headerStyle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            headerStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            headerStyle.SelectionBackColor = System.Drawing.Color.FromArgb(0, 42, 173);
+            headerStyle.SelectionForeColor = System.Drawing.Color.White;
+            this.studentTable.ColumnHeadersDefaultCellStyle = headerStyle;
+
+            // Row style (white background, black text, custom selection color)
+            rowStyle.BackColor = System.Drawing.Color.White;
+            rowStyle.ForeColor = System.Drawing.Color.Black;
+            rowStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
+            rowStyle.SelectionBackColor = System.Drawing.Color.FromArgb(0, 42, 173);
+            rowStyle.SelectionForeColor = System.Drawing.Color.White;
+            this.studentTable.DefaultCellStyle = rowStyle;
+
+            this.studentTable.CellContentClick +=
+                new System.Windows.Forms.DataGridViewCellEventHandler(this.studentTable_CellContentClick);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F,
+                                        System.Drawing.FontStyle.Bold,
+                                        System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(15, 14);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(118, 24);
@@ -76,10 +94,14 @@
             // button1
             // 
             this.button1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(32)))), ((int)(((byte)(133)))));
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))),
+                                                                   ((int)(((byte)(32)))),
+                                                                   ((int)(((byte)(133)))));
             this.button1.FlatAppearance.BorderSize = 0;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F,
+                                        System.Drawing.FontStyle.Regular,
+                                        System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.button1.Location = new System.Drawing.Point(19, 586);
             this.button1.Name = "button1";
@@ -91,7 +113,8 @@
             // 
             // button2
             // 
-            this.button2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button2.BackgroundImage")));
+            this.button2.BackgroundImage =
+                ((System.Drawing.Image)(resources.GetObject("button2.BackgroundImage")));
             this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button2.FlatAppearance.BorderSize = 0;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -104,7 +127,8 @@
             // 
             // button3
             // 
-            this.button3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button3.BackgroundImage")));
+            this.button3.BackgroundImage =
+                ((System.Drawing.Image)(resources.GetObject("button3.BackgroundImage")));
             this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button3.FlatAppearance.BorderSize = 0;
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -130,7 +154,9 @@
             this.btnMarkAsGraduate.BackColor = System.Drawing.Color.Green;
             this.btnMarkAsGraduate.FlatAppearance.BorderSize = 0;
             this.btnMarkAsGraduate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMarkAsGraduate.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMarkAsGraduate.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F,
+                                                   System.Drawing.FontStyle.Regular,
+                                                   System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMarkAsGraduate.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.btnMarkAsGraduate.Location = new System.Drawing.Point(351, 586);
             this.btnMarkAsGraduate.Name = "btnMarkAsGraduate";
@@ -146,7 +172,9 @@
             this.buttonBulkAdd.BackColor = System.Drawing.Color.DimGray;
             this.buttonBulkAdd.FlatAppearance.BorderSize = 0;
             this.buttonBulkAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonBulkAdd.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonBulkAdd.Font = new System.Drawing.Font("Microsoft Tai Le", 9.75F,
+                                                System.Drawing.FontStyle.Regular,
+                                                System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonBulkAdd.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonBulkAdd.Location = new System.Drawing.Point(184, 586);
             this.buttonBulkAdd.Name = "buttonBulkAdd";
@@ -175,7 +203,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.studentTable)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion

@@ -2,15 +2,11 @@
 {
     partial class ManageButton
     {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary> 
-        /// Clean up any resources being used.
+        /// Dispose resources.
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,28 +18,31 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageButton));
+            System.ComponentModel.ComponentResourceManager resources =
+                new System.ComponentModel.ComponentResourceManager(typeof(ManageButton));
+            System.Windows.Forms.DataGridViewCellStyle headerStyle = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle rowStyle = new System.Windows.Forms.DataGridViewCellStyle();
+
             this.button1 = new System.Windows.Forms.Button();
             this.managetable = new System.Windows.Forms.DataGridView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+
             ((System.ComponentModel.ISupportInitialize)(this.managetable)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(32)))), ((int)(((byte)(133)))));
+            this.button1.BackColor = System.Drawing.Color.FromArgb(0, 32, 133);
             this.button1.FlatAppearance.BorderSize = 0;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F,
+                                System.Drawing.FontStyle.Bold,
+                                System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.button1.Location = new System.Drawing.Point(570, 603);
             this.button1.Name = "button1";
@@ -55,11 +54,51 @@
             // 
             // managetable
             // 
-            this.managetable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.managetable.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.managetable.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.managetable.Location = new System.Drawing.Point(23, 67);
             this.managetable.Name = "managetable";
             this.managetable.Size = new System.Drawing.Size(685, 513);
             this.managetable.TabIndex = 6;
+
+            // 1) Make the table read-only
+            this.managetable.ReadOnly = true;
+            // 2) Hide the row header (left edge)
+            this.managetable.RowHeadersVisible = false;
+            // 3) Disallow users from resizing columns/rows
+            this.managetable.AllowUserToResizeColumns = false;
+            this.managetable.AllowUserToResizeRows = false;
+            // 4) Use full-row selection mode, so a single click selects the entire row
+            this.managetable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.managetable.MultiSelect = false;
+
+            // Disable default header styling for custom theme
+            this.managetable.EnableHeadersVisualStyles = false;
+            this.managetable.ColumnHeadersHeightSizeMode =
+                System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.managetable.ColumnHeadersHeight = 35;
+
+            // Header styling (blue background, white text, bold font)
+            headerStyle.BackColor = System.Drawing.Color.FromArgb(0, 32, 133);
+            headerStyle.ForeColor = System.Drawing.Color.White;
+            headerStyle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            headerStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            headerStyle.SelectionBackColor = System.Drawing.Color.FromArgb(0, 42, 173);
+            headerStyle.SelectionForeColor = System.Drawing.Color.White;
+            this.managetable.ColumnHeadersDefaultCellStyle = headerStyle;
+
+            // Row styling (white background, black text, highlight on selection)
+            rowStyle.BackColor = System.Drawing.Color.White;
+            rowStyle.ForeColor = System.Drawing.Color.Black;
+            rowStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
+            rowStyle.SelectionBackColor = System.Drawing.Color.FromArgb(0, 42, 173);
+            rowStyle.SelectionForeColor = System.Drawing.Color.White;
+            this.managetable.DefaultCellStyle = rowStyle;
+
+            // You can handle the row click here if desired
+            // e.g., CellClick or CellContentClick
+            // this.managetable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.managetable_CellClick);
+
             // 
             // panel1
             // 
@@ -72,7 +111,9 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Tai Le", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Tai Le", 18F,
+                                System.Drawing.FontStyle.Bold,
+                                System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(17, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(175, 31);
@@ -94,7 +135,8 @@
             // 
             // button2
             // 
-            this.button2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button2.BackgroundImage")));
+            this.button2.BackgroundImage =
+                ((System.Drawing.Image)(resources.GetObject("button2.BackgroundImage")));
             this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button2.FlatAppearance.BorderSize = 0;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -121,7 +163,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.managetable)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion
