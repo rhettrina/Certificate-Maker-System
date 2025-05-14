@@ -47,6 +47,7 @@
         // New batch generate button
         private System.Windows.Forms.Button buttonBatchGenerate;
 
+
         /// <summary> 
         /// Clean up resources.
         /// </summary>
@@ -63,6 +64,7 @@
 
         private void InitializeComponent()
         {
+
             this.panelPreview = new System.Windows.Forms.Panel();
             this.searchbox = new System.Windows.Forms.TextBox();
             this.buttonSearch = new System.Windows.Forms.Button();
@@ -160,6 +162,12 @@
             this.labelLRN.Size = new System.Drawing.Size(35, 18);
             this.labelLRN.TabIndex = 4;
             this.labelLRN.Text = "LRN";
+            // ...
+            this.lrn.MaxLength = 11;
+            this.lrn.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.lrn_KeyPress);
+            this.lrn.Leave += new System.EventHandler(this.lrn_Leave);
+            // ...
+
             // 
             // lrn
             // 

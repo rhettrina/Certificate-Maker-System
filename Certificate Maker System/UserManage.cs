@@ -147,7 +147,8 @@ namespace Certificate_Maker_System
             // Open the Settings form, passing in the current generator
             using (SettingsForm sf = new SettingsForm(generator))
             {
-                sf.ShowDialog();
+                sf.StartPosition = FormStartPosition.CenterParent; // Center the form relative to the parent
+                sf.ShowDialog(this); // Pass the current form as the owner
             }
         }
     }

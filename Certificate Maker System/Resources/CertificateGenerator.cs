@@ -53,6 +53,28 @@ namespace Certificate_Maker_System.Resources
             };
         }
 
+        private void lrn_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Only allow control keys (like Backspace) and digits 0-9
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void lrn_Leave(object sender, EventArgs e)
+        {
+            // On leaving, confirm exactly 11 digits were entered
+            if (lrn.Text.Length != 11)
+            {
+                MessageBox.Show("LRN must be exactly 11 digits.",
+                                "LRN Validation Error",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                lrn.Focus();
+            }
+        }
+
         // At the top of the CertificateGenerator class, add:
         private void LoadAppSettings()
         {
@@ -715,23 +737,8 @@ namespace Certificate_Maker_System.Resources
             string registrar = registrarBox.Text.Trim();
             string principal = principalBox.Text.Trim();
 
-            // Base path for resources (adjust as needed)
-            string logoPath = Path.Combine(Application.StartupPath, "Resources", "jpnhs_logo.png");
-            // Create a data URI for the logo if file exists
-            string logoDataUri = "";
-            if (File.Exists(logoPath))
-            {
-                try
-                {
-                    byte[] logoBytes = File.ReadAllBytes(logoPath);
-                    logoDataUri = $"data:image/png;base64,{Convert.ToBase64String(logoBytes)}";
-                }
-                catch
-                {
-                    // Fallback if image cannot be loaded
-                    logoDataUri = "";
-                }
-            }
+            // Use a simple relative path for the logo - it will be relative to the HTML file
+            string logoPath = "@Resources\\jpnhs_logo.png";
 
             // Base HTML with styles
             string html = $@"
@@ -825,31 +832,25 @@ namespace Certificate_Maker_System.Resources
         <div class='header'>
 ";
 
-            // Add logo if we have it
-            if (!string.IsNullOrEmpty(logoDataUri))
-            {
-                html += $@"<img src='{logoDataUri}' class='header-logo' alt='School Logo'><br>";
-            }
-            else
-            {
-                // Text-based fallback if no logo is available
-                html += $@"<div style='width:80px;height:80px;border:1px solid #ccc;margin:0 auto;display:flex;align-items:center;justify-content:center;'>LOGO</div><br>";
-            }
+            // Add logo with a simple relative path
+            html += $@"<img src='{logoPath}' class='header-logo' alt='School Logo' onerror='this.style.display=""none""'><br>";
 
             // Add school header text
-            html += $@"
-            <div class='header-text'>
-                <p class='school-name'>JOSE PANGANIBAN NATIONAL HIGH SCHOOL</p>
-                <p class='school-address'>Jose Panganiban, Camarines Norte</p>
-                <p class='school-address'>Senior High School Department</p>
+            html += @"
+            <div class='doc-header'>
+                <p>Republic of the Philippines</p>
+                <p>Department of Education</p>
+                <p>Region V – Bicol</p>
+                <p>SCHOOLS DIVISION OFFICE OF CAMARINES NORTE</p>
+                <p>JOSE PANGANIBAN NATIONAL HIGH SCHOOL</p>
+                <p>Jose Panganiban, Camarines Norte</p>
             </div>
-        </div>
 ";
 
             // Different content based on template type
             if (selectedTemplate == "Certificate of Enrolment")
             {
-                // Based on enrolment.docx template
+                // Based on enrolment.docx template - Exact match to document
                 html += $@"
         <h1>CERTIFICATE OF ENROLMENT</h1>
 
@@ -869,7 +870,7 @@ namespace Certificate_Maker_System.Resources
             }
             else if (selectedTemplate == "Good Moral")
             {
-                // Based on good moral.docx template
+                // Based on good moral.docx template - Exact match to document
                 html += $@"
         <h1>CERTIFICATE OF GOOD MORAL CHARACTER</h1>
 
@@ -891,9 +892,9 @@ namespace Certificate_Maker_System.Resources
             }
             else if (selectedTemplate == "Graduate")
             {
-                // Based on graduate.docx template
+                // Based on graduate.docx template - Exact match to document
                 html += $@"
-        <h1>C E R T I F I C A T I O N</h1>
+        <h1>C  E  R  T  I  F  I  C  A  T  I  O  N</h1>
 
         <p>To Whom It May Concern:</p>
 
